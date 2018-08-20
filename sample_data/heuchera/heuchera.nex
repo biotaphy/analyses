@@ -1,0 +1,76 @@
+#NEXUS
+
+BEGIN TAXA;
+    DIMENSIONS NTAX=64;
+    TAXLABELS
+        Peltoboykinia_watanabei
+        Heuchera_richardsonii
+        Heuchera_caroliniana
+        Heuchera_pubescens
+        Heuchera_alba
+        Heuchera_longiflora
+        Heuchera_americana
+        Heuchera_parvifolia
+        Heuchera_wootonii
+        Heuchera_inconstans
+        Heuchera_soltisii
+        Heuchera_novomexicana
+        Heuchera_glomerulata
+        Heuchera_eastwoodiae
+        Heuchera_woodsiaphila
+        Heuchera_bracteata
+        Heuchera_hallii
+        Heuchera_mexicana
+        Heuchera_longipetala
+        Heuchera_acutifolia
+        Heuchera_hirsutissima
+        Heuchera_caespitosa
+        Heuchera_abramsii
+        Heuchera_elegans
+        Heuchera_parishii
+        Heuchera_brevistaminea
+        Heuchera_rosendahlii
+        Heuchera_wellsiae
+        Heuchera_sanguinea
+        Heuchera_versicolor
+        Heuchera_pulchella
+        Heuchera_rubescens
+        Heuchera_merriamii
+        Heuchera_grossulariifolia
+        Heuchera_pilosissima
+        Heuchera_maxima
+        Heuchera_micrantha
+        Heuchera_glabra
+        Heuchera_villosa
+        Heuchera_puberula
+        Heuchera_missouriensis
+        Heuchera_parviflora
+        Heuchera_chlorantha
+        Heuchera_cylindrica
+        menziesii
+        diplomenziesii
+        Tellima_grandiflora
+        Mitella_pentandra
+        Mitella_stylosa
+        Mitella_furusei
+        Mitella_pauciflora
+        Mitella_japonica
+        Mitella_breweri
+        Mitella_ovalis
+        Bensoniella_oregona
+        Lithophragma_parviflorum
+        Mitella_nuda
+        Mitella_diphylla
+        Tiarella_polyphylla
+        Elmera_racemosa
+        Mitella_caulescens
+        Conimitella_williamsii
+        Mitella_stauropetala
+        Telesonix_jamesii
+  ;
+END;
+
+BEGIN TREES;
+    TREE 1 = ((peltoboykinia_watanabei:17.7616558596,((((((Heuchera_richardsonii:1.59667580986,(Heuchera_caroliniana:1.25045275727,((Heuchera_pubescens:0.6012456036,Heuchera_alba:0.6012456036)'Node_13':0.307630228026,(Heuchera_longiflora:0.678578784091,Heuchera_americana:0.678578784091)'Node_16':0.230297047535)'Node_12':0.341576925645)'Node_10':0.346223052593)'Node_8':0.455037436176,(Heuchera_parvifolia:1.57983930474,(Heuchera_wootonii:1.03733670369,(Heuchera_inconstans:0.806678945231,(((Heuchera_soltisii:0.368017442136,Heuchera_novomexicana:0.368017442136)'Node_27':0.113213409433,Heuchera_glomerulata:0.481230851569)'Node_26':0.200196385551,Heuchera_eastwoodiae:0.681427237119)'Node_25':0.125251708112)'Node_23':0.23065775846)'Node_21':0.542502601047)'Node_19':0.471873941302)'Node_7':1.17677859772,((Heuchera_woodsiaphila:2.26765108241,((Heuchera_bracteata:1.11223623101,Heuchera_hallii:1.11223623101)'Node_36':0.799972223411,(((Heuchera_mexicana:1.00985960274,(Heuchera_longipetala:0.672702201725,Heuchera_acutifolia:0.672702201725)'Node_43':0.337157401018)'Node_41':0.452796325447,(((Heuchera_hirsutissima:0.908985338716,((Heuchera_caespitosa:0.492761287085,Heuchera_abramsii:0.492761287085)'Node_51':0.217512119899,(Heuchera_elegans:0.570276420827,Heuchera_parishii:0.570276420827)'Node_54':0.139996986157)'Node_50':0.198711931733)'Node_48':0.152249046392,Heuchera_brevistaminea:1.06123438511)'Node_47':0.23571097096,(((Heuchera_rosendahlii:0.436237554309,Heuchera_wellsiae:0.436237554309)'Node_60':0.481744506695,Heuchera_sanguinea:0.917982061004)'Node_59':0.18098598279,Heuchera_versicolor:1.09896804379)'Node_58':0.197977312275)'Node_46':0.165710572121)'Node_40':0.211113420755,(Heuchera_pulchella:1.19380805918,Heuchera_rubescens:1.19380805918)'Node_65':0.479961289764)'Node_39':0.238439105472)'Node_35':0.355442627994)'Node_33':0.472005667159,(Heuchera_merriamii:2.38905826701,Heuchera_grossulariifolia:2.38905826701)'Node_68':0.350598482559)'Node_32':0.48883509419)'Node_6':0.61160272986,(((Heuchera_pilosissima:0.47153892037,Heuchera_maxima:0.47153892037)'Node_73':0.554782803323,Heuchera_micrantha:1.02632172369)'Node_72':2.51457414479,(Heuchera_glabra:3.22414919189,(((Heuchera_villosa:0.981506873297,Heuchera_puberula:0.981506873297)'Node_81':0.507115394285,(Heuchera_missouriensis:0.942214782098,Heuchera_parviflora:0.942214782098)'Node_84':0.546407485484)'Node_80':1.18263380777,(Heuchera_chlorantha:1.74505145726,Heuchera_cylindrica:1.74505145726)'Node_87':0.926204618094)'Node_79':0.552893116534)'Node_77':0.316746676598)'Node_71':0.299198705132)'Node_5':2.27176201455,((menziesii:1.84479470104,diplomenziesii:1.84479470104)'Node_91':3.90021276384,((Tellima_grandiflora:4.63906336711,(Mitella_pentandra:4.09770275642,((Mitella_stylosa:0.638709303912,(Mitella_furusei:0.344251767186,Mitella_pauciflora:0.344251767186)'Node_102':0.294457536726)'Node_100':0.564868364663,Mitella_japonica:1.20357766858)'Node_99':2.89412508785)'Node_97':0.54136061069)'Node_95':0.731361706037,(((Mitella_breweri:1.53688075103,Mitella_ovalis:1.53688075103)'Node_108':2.97988329947,Bensoniella_oregona:4.5167640505)'Node_107':0.503874826255,(Lithophragma_parviflorum:4.44492705346,(Mitella_nuda:2.76219772512,Mitella_diphylla:2.76219772512)'Node_114':1.68272932833)'Node_112':0.5757118233)'Node_106':0.349786196394)'Node_94':0.374582391731)'Node_90':0.366849123291)'Node_4':0.305415140583,(Tiarella_polyphylla:5.93681616118,((Elmera_racemosa:3.27000742488,Mitella_caulescens:3.27000742488)'Node_120':1.2373578646,(Conimitella_williamsii:3.00554587516,Mitella_stauropetala:3.00554587516)'Node_123':1.50181941431)'Node_119':1.42945087171)'Node_117':0.480455567573)'Node_3':11.3443841308)'Node_1':2.29974099235,Telesonix_jamesii:20.0613968519)'Node_0';
+END;
+
