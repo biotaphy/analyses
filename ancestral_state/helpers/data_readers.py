@@ -14,6 +14,23 @@ import sys
 from ancestral_state.helpers.sequence import Sequence
 
 # .............................................................................
+def create_sequence_list_from_dict(values_dict):
+    """
+    @summary: Creates a list of sequences from a dictionary
+    @note: The dictionary should have structure:
+              {
+               "{taxon_name}" : [{values}]
+              }
+    """
+    headers = None
+    sequence_list = []
+    for name, values in values_dict.iteritems():
+       seq = Sequence(name=name)
+       seq.set_cont_values(values)
+       sequence_list.append(seq)
+    return sequence_list, headers
+
+# .............................................................................
 def read_csv_alignment_file(csv_filename):
     """
     @summary: Read a CSV file and return a list of sequences and headers
@@ -68,23 +85,6 @@ def read_json_alignment_file(json_filename):
        vals = [float(v) for v in val_dict['values']]
        seq = Sequence(name=name)
        seq.set_cont_values(vals)
-       sequence_list.append(seq)
-    return sequence_list, headers
-
-# .............................................................................
-def create_sequence_list_from_dict(values_dict):
-    """
-    @summary: Creates a list of sequences from a dictionary
-    @note: The dictionary should have structure:
-              {
-               "{taxon_name}" : [{values}]
-              }
-    """
-    headers = None
-    sequence_list = []
-    for name, values in values_dict.iteritems():
-       seq = Sequence(name=name)
-       seq.set_cont_values(values)
        sequence_list.append(seq)
     return sequence_list, headers
 
