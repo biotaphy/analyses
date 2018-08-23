@@ -185,7 +185,10 @@ def print_plots_to_file(tree,x_grid,args,outd):
             plt.plot(x_grid,i.data['cont_values_high'],'--',alpha=0.55,)
             plt.plot(x_grid,i.data['cont_values_low'],'--',alpha=0.55,)
         plt.grid(True)
-        #plt.savefig(outd+str(i.label)+'.png')
+        if i.label == None:
+            plt.savefig(outd+str(i.taxon.label)+'.png')
+        else:
+            plt.savefig(outd+str(i.label)+'.png')
         plt.close()
 
 def main():
@@ -263,7 +266,7 @@ def main():
 
     if args.printplots:
         print_plots_to_file(tree,x_grid,args,outd)
-        ts = tree.as_string("newick")+";\n"
+        ts = tree.as_string("newick")
         outf = open(outd+"treefile_labeled.tre","w")
         outf.write(ts)
         outf.close()

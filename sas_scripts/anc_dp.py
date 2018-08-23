@@ -90,7 +90,7 @@ if __name__ == "__main__":
         print "python "+sys.argv[0]+" newick.tre dataasphy"
         sys.exit(0)
     tree = dp.Tree.get(path=sys.argv[1],schema="newick")    
-    seqs = aln_reader.read_phylip_cont_file(sys.argv[2])
+    seqs = aln_reader.read_phylip_cont_file(open(sys.argv[2],"r"))
     match_tips_and_cont_values(tree,seqs)
     sqch = calc_cont_anc_states(tree)
     outfile = open("contanc_dp.tre","w")
