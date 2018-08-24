@@ -32,6 +32,8 @@ def create_sequence_list_from_dict(values_dict):
     headers = None
     sequence_list = []
     for name, values in values_dict.iteritems():
+        if not isinstance(values, list):
+            raise AlignmentIOError('Values must be a list')
         seq = Sequence(name=name)
         seq.set_cont_values(values)
         sequence_list.append(seq)
