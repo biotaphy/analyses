@@ -5,13 +5,14 @@
 @note: If you want to read an alignment in fasta format, just use the fasta
           reader in the seq_reader.py
 @todo: FASTA reader?
+@todo: Use file-like objects
 """
 import csv
 import json
 import os
 import sys
 
-from ancestral_state.helpers.sequence import Sequence
+from ancestral_reconstruction.helpers.sequence import Sequence
 
 # .............................................................................
 def create_sequence_list_from_dict(values_dict):
@@ -31,28 +32,28 @@ def create_sequence_list_from_dict(values_dict):
     return sequence_list, headers
 
 # .............................................................................
-def read_csv_alignment_file(csv_filename):
+def read_csv_alignment_flo(csv_flo):
     """
-    @summary: Read a CSV file and return a list of sequences and headers
-    @param csv_filename: A file location of a CSV file with alignment data
+    @summary: Read a CSV file-like object and return a list of sequences and 
+                 headers
+    @param csv_flo: A file-like object with CSV alignment data
     """
     headers = None
     seqence_list = []
     
-    with open(csv_filename) as in_file:
-       has_header = csv.Sniffer().has_header(in_file.read(5000))
-       in_file.seek(0)
-       
-       for line in in_file:
-           parts = line.strip().split(',')
-           if has_header and headers is None:
-               headers = parts[1:]
-           else:
-               name = parts[0]
-               vals = [float(i) for i in parts[1:]]
-               seq = Sequence(name=name)
-               seq.set_cont_values(vals)
-               sequence_list.append(seq)
+    has_header = csv.Sniffer().has_header(csv_flo.read(5000))
+    csv_flo.seek(0)
+    
+    for line in csv_flo:
+        parts = line.strip().split(',')
+        if has_header and headers is None:
+            headers = parts[1:]
+        else:
+            name = parts[0]
+            vals = [float(i) for i in parts[1:]]
+            seq = Sequence(name=name)
+            seq.set_cont_values(vals)
+            sequence_list.append(seq)
     return sequence_list, headers
 
 # .............................................................................
