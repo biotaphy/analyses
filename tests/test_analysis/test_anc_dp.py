@@ -86,10 +86,12 @@ def test_calculate_continuous_ancestral_states(data_files):
 
         labels1 = []
         for k in tree.postorder_edge_iter():
-            labels1.append(k.head_node.label)
+            if k.head_node.label is not None:
+                labels1.append(k.head_node.label)
         labels2 = []
         for k in result_tree.postorder_edge_iter():
-            labels2.append(k.head_node.label)
+            if k.head_node.label is not None:
+                labels2.append(k.head_node.label)
         assert len(labels1) == len(labels2)
         for i in range(len(labels1)):
             try:
