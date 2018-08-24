@@ -23,11 +23,33 @@ class Test_create_sequence_list_from_dict(object):
     """
     # .....................................
     def test_invalid_dict(self):
-        pass
+        """
+        @summary: Test that function fails with a dictionary that has the
+                     wrong structure
+        """
+        test_dict = {
+            "name1": [1, 2, 3],
+            "name2": "bad value"
+        }
+        with pytest.raises(dr.AlignmentIOError):
+            dr.create_sequence_list_from_dict(test_dict)
 
     # .....................................
     def test_valid_dict(self):
-        pass
+        """
+        @summary: Test that the function operates correctly with a dictionary
+                     with the expected format
+        """
+        test_dict = {
+            "A": [0.9, 0.2, 0.2, 0.3, 0.4, 0.4],
+            "B": [0.01, 0.1, 0.2, 0.3, 0.4, 0.4],
+            "C": [0.8, 0.1, 0.2, 0.3, 0.4, 0.4],
+            "D": [0.3, 0.1, 0.2, 0.3, 0.4, 0.4],
+            "E": [0.001, 0.1, 0.2, 0.3, 0.4, 0.4],
+            "F": [0.11, 0.1, 0.2, 0.3, 0.4, 0.4],
+            "G": [0.99, 0.2, 0.2, 0.3, 0.4, 0.4]
+        }
+        dr.create_sequence_list_from_dict(test_dict)
 
 
 # .............................................................................
