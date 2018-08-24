@@ -15,6 +15,10 @@ import sys
 from ancestral_reconstruction.helpers.sequence import Sequence
 
 # .............................................................................
+class AlignmentIOError(Exception):
+   pass
+
+# .............................................................................
 def create_sequence_list_from_dict(values_dict):
     """
     @summary: Creates a list of sequences from a dictionary
@@ -57,10 +61,11 @@ def read_csv_alignment_flo(csv_flo):
     return sequence_list, headers
 
 # .............................................................................
-def read_json_alignment_file(json_filename):
+def read_json_alignment_flo(json_flo):
     """
-    @summary: Read a JSON file and return a list of sequences and headers
-    @param json_filename: A file location of a JSON file with alignment data
+    @summary: Read a JSON file-like object and return a list of sequences and 
+                 headers
+    @param json_flo: A file-like object with JSON alignment data
     @note: File should have structure: 
                {
                 "headers" : [{header_names}],
@@ -72,8 +77,7 @@ def read_json_alignment_file(json_filename):
                            ]
                }
     """
-    with open(json_filename) as json_file:
-        json_vals = json.load(json_file)
+    json_vals = json.load(json_flo)
         
     if json_vals.has_key('headers'):
         headers = json_vals['headers']
@@ -90,11 +94,11 @@ def read_json_alignment_file(json_filename):
     return sequence_list, headers
 
 # .............................................................................
-def read_phylip_file(infilename):
+def read_phylip_alignment_flo(phylip_flo):
     """
-    @summary: This will read a phylip alignment file and return the list of 
-                 sequences contained
-    @param infilename: The phylip input file
+    @summary: This will read a phylip alignment file-like object and return the 
+                 list of sequences contained
+    @param phylip_flo: The phylip file-like object
     @note: We assume that the phylip files are extended and not strict (in 
               terms of how many characters for taxon names)
     @note: The phylip file is in the format:
@@ -102,20 +106,18 @@ def read_phylip_file(infilename):
               seqlabel sequence
               seqlabel sequence
     """
-    infile = open(infilename,"r")
     seqlist = []
     # first line is the number of taxa and num of sites
     # we don't really even need to read this line, 
     # so let's just skip it
-    i = infile.readline()
-    for i in infile:
+    i = phylip_flo.readline()
+    for i in phylip_flo:
         if len(i) > 2:
             spls = i.strip().split()
             name = spls[0].strip()
             seq = spls[1].strip()
-            tseq = Sequence(name=name,seq=seq)
+            tseq = Sequence(name=name, seq=seq)
             seqlist.append(tseq)
-    infile.close()
     return seqlist
 
 # .............................................................................
@@ -148,9 +150,13 @@ def read_phylip_cont_file(infile):
     return seqlist
 
 # .............................................................................
-def read_table_cont_file(infile):
+def read_table_alignment_flo(table_flo):
+    """
+    @summary: Read a table from a file-like object
+    @param table_flo: A file-like object containing table data
+    """
     seqlist = []
-    for i in infile:
+    for i in table_flo:
         if len(i) > 2:
             spls = i.strip().split("\t")
             name = spls[0].strip()
@@ -160,6 +166,4 @@ def read_table_cont_file(infile):
             tseq.set_cont_values(seq)
             seqlist.append(tseq)
     return seqlist
-
-
 

@@ -7,12 +7,13 @@ import numpy as np
 import scipy.linalg as la
 import sys
 
-#import aln_reader
-
 """
 sq_change which produces the same results as ML without SE
 """
 def calc_cont_anc_states(tree):
+    """
+    @summary: Calculate continuous ancestral states for tree nodes
+    """
     df = 0
     nodenum = {}
     count = 0

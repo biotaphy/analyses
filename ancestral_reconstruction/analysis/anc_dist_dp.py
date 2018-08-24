@@ -1,18 +1,23 @@
-import sys,os
+"""
+@summary: Module containing code for calculating ancestral distributions
+"""
+import argparse
+from datetime import datetime
+import dendropy as dp
 import math
-import math
+from matplotlib import rcParams
+import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import gaussian_kde as kde
+import os
 from scipy import stats
 import scipy.linalg as la
-from datetime import datetime
-import argparse
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
+from scipy.stats import gaussian_kde as kde
+import sys
+
+import aln_reader
+
 rcParams.update({'figure.autolayout': True})
 plt.style.use('fivethirtyeight')
-import dendropy as dp
-import aln_reader
 
 def generate_argparser():
     parser = argparse.ArgumentParser(
