@@ -77,6 +77,7 @@ def calc_cont_anc_states(tree):
     return 0
 
 
+# .............................................................................
 def match_tips_and_cont_values(tree, seqs):
     for i in tree:
         i.data = {}
