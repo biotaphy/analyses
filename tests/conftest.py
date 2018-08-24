@@ -37,6 +37,33 @@ class SampleDataFiles(object):
                                   self._get_format_extension(fmt)))
 
     # .....................................
+    def get_packages(self):
+        """
+        @summary: Get a list of the available packages for testing
+        @note: All packages are assumed to be correct as of now
+        @note: Will return list of (tree, alignment, results) tuples
+        """
+        PACKAGES_PATH = os.path.join(SAMPLE_DATA_PATH, PACKAGES_DIR)
+        packages = []
+        package_dirs = glob.glob(os.path.join(PACKAGES_PATH, '*'))
+        for pkg_dir in package_dirs:
+            tree_fn = None
+            align_fn = None
+            results_fn = None
+            for fn in glob.glob(os.path.join(pkg_dir, '*')):
+                basename = os.path.basename(fn)
+                if basename.lower().startswith('tree'):
+                    tree_fn = fn
+                elif basename.lower().startswith('align'):
+                    align_fn = fn
+                elif basename.lower().startswith('result'):
+                    results_fn = fn
+            if tree_fn is not None and align_fn is not None and \
+                    results_fn is not None:
+                packages.append((tree_fn, align_fn, results_fn))
+        return packages
+
+    # .....................................
     def get_trees(self, fmt, is_valid):
         """
         @summary: Get an alignment file from the sample data
