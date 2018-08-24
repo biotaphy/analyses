@@ -91,7 +91,7 @@ def test_calculate_continuous_ancestral_states(data_files):
         for k in result_tree.postorder_edge_iter():
             labels2.append(k.head_node.label)
         assert len(labels1) == len(labels2)
-        for i in xrange(len(labels1)):
+        for i in range(len(labels1)):
             try:
                 l1 = round(float(labels1[i]), 6)
                 l2 = round(float(labels2[i]), 6)
