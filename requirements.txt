@@ -2,5 +2,5 @@ dendropy>=4.0.0
 scipy>=1.0.0
 numpy>=1.11.0
 python-coveralls
-python-pytest-cov
+pytest-cov
 pytest
