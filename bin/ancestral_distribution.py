@@ -2,4 +2,4 @@
 
 import numpy
 
-print 'Ancestral distribution test'
+print('Ancestral distribution test')

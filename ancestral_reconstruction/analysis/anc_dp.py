@@ -56,12 +56,12 @@ def calc_cont_anc_states(tree):
         i = k.head_node
         if len(i.child_nodes()) != 0:
             i.data['val'] = mle[nodenum[i]]
-            # print i.data['val']
+            # print(i.data['val'])
             i.label = str(mle[nodenum[i]])
             for j in i.child_nodes():
                 temp = (i.data['val'] - j.data['val'])
                 sos += temp*temp / j.edge_length
-    # print "Square Length: ",sos
+    # print("Square Length: {}".format(sos))
     # calcSE
     """
     for i in tree.iternodes(order="postorder"):
@@ -88,7 +88,7 @@ def match_tips_and_cont_values(tree, seqs):
                     i.data['cont_values'] = j.cont_values
                     break
             if not test:
-                print "can't find "+i.taxon.label+" in cont_values"
+                print('Can\'t find {} in cont_values'.format(i.taxon.label))
                 return False
 
 
@@ -142,12 +142,12 @@ def calculate_continuous_ancestral_states(tree, sequences):
         i = k.head_node
         if len(i.child_nodes()) != 0:
             i.data['val'] = mle[nodenum[i]]
-            # print i.data['val']
+            # print(i.data['val'])
             i.label = str(mle[nodenum[i]])
             for j in i.child_nodes():
                 temp = (i.data['val'] - j.data['val'])
                 sos += temp*temp / j.edge_length
-    # print "Square Length: ",sos
+    # print("Square Length: {}".format(sos))
     # calcSE
     """
     for i in tree.iternodes(order="postorder"):
@@ -165,7 +165,7 @@ def calculate_continuous_ancestral_states(tree, sequences):
 # .............................................................................
 # if __name__ == "__main__":
 #     if len(sys.argv) != 3:
-#         print "python "+sys.argv[0]+" newick.tre dataasphy"
+#         print("python "+sys.argv[0]+" newick.tre dataasphy")
 #         sys.exit(0)
 #     tree = dp.Tree.get(path=sys.argv[1], schema="newick")
 #     seqs = aln_reader.read_phylip_cont_file(open(sys.argv[2], "r"))

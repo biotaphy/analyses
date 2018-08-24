@@ -101,9 +101,9 @@ def calc_cont_anc_states_bin(tree, char):
         if len(i.child_nodes()) > 0:
             i.data['val'] = mle[nodenum[i]]
             i.data['cont_values'].append(mle[nodenum[i]])
-            # print i.data['val']
+            # print(i.data['val'])
             # i.label = str(mle[nodenum[i]])
-            # print i.get_newick_repr(False), mle[nodenum[i]]
+            # print(i.get_newick_repr(False), mle[nodenum[i]])
             for j in i.child_nodes():
                 temp = (i.data['val'] - j.data['val'])
                 sos += temp*temp / j.edge_length
@@ -120,7 +120,7 @@ def calc_cont_anc_states_bin(tree, char):
             tempse = qpq - np.inner(tm1[:, nodenum[i]], sol)
             i.data['valse'] = math.sqrt(2*sos/(df*tempse))
             i.data['cont_values_se'].append(i.data['valse'])
-            # print i.data['valse']
+            # print(i.data['valse'])
 
 
 # .............................................................................
@@ -236,7 +236,7 @@ def main():
     outd = args.outdir[0]
     if outd[-1] != "/":
         outd += "/"
-    print "out dir:", outd
+    print("out dir: {}".format(outd))
     if not os.path.isdir(outd):
         os.makedirs(outd)
 
@@ -262,14 +262,14 @@ def main():
     if not args.precut:
         for i in range(args.ncats+1):
             cats.append(low + (i*(float(high-low)/args.ncats)))
-    print "low range:", low
-    print "high range:", high
-    print "cats:", cats
+    print("low range: {}".format(low))
+    print("high range:{}".format(high))
+    print("cats:{}".format(cats))
 
     # Calculate the kernel densities
-    print "calculating densisties"
+    print("calculating densisties")
     x_grid = calculate_densities(seqs, low, high, args)
-    print "finished calculating densities"
+    print("finished calculating densities")
     match_tips_and_cont_values(tree, seqs)
 
     # prepare the tree
@@ -281,13 +281,13 @@ def main():
 
     # Conduct the analyses
     rates = []
-    print "calculating anc states"
+    print("calculating anc states")
     for i in range(args.ncats):
-        print " cat:"+str(i)
+        print(" cat:"+str(i))
         calc_cont_anc_states_bin(tree, i)
         # estrate = sigsqML(tree)
         # rates.append(estrate)
-    print "\nfinished calculation"
+    print("\nfinished calculation")
 
     # plot the estimated rates
     if args.printrates:
@@ -297,7 +297,7 @@ def main():
     scale_and_se(tree, args)
 
     end = datetime.now()
-    print "runtime for analysis (H:M:S): "+str(end-start)
+    print("runtime for analysis (H:M:S): "+str(end-start))
 
     if args.printplots:
         print_plots_to_file(tree, x_grid, args, outd)

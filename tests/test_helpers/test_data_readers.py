@@ -59,7 +59,7 @@ class Test_read_csv_alignment_flo(object):
                         assert isinstance(i.name, basestring)
                         assert len(i.cont_values) > 0
                 except Exception as e:
-                    print 'Raised exception:', str(e)
+                    print('Raised exception: {}'.format(str(e)))
                     assert False
 
     # .....................................
@@ -101,7 +101,7 @@ class Test_read_csv_alignment_flo(object):
                         assert isinstance(i.name, basestring)
                         assert len(i.cont_values) > 0
                 except Exception as e:
-                    print 'Raised exception:', str(e)
+                    print('Raised exception: {}'.format(str(e)))
                     assert False
 
 
