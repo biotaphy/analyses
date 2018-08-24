@@ -4,7 +4,11 @@
 @note: Uses pytest style testing
 """
 import pytest
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except:
+    # Python 3
+    from io import StringIO
 
 import ancestral_reconstruction.helpers.data_readers as dr
 from ancestral_reconstruction.helpers.sequence import Sequence
