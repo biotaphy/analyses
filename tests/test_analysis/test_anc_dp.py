@@ -75,9 +75,21 @@ def test_calculate_continuous_ancestral_states(data_files):
             raise Exception(
                 'Cannot handle tree with extension: {}'.format(out_tree_ext))
         out_tree_string = tree.as_string(schema=out_tree_schema)
+        result_tree = dendropy.Tree.get(path=results_filename,
+                                        schema=out_tree_schema)
 
         # Compare with results
         with open(results_filename) as results_file:
             results_string = results_file.read()
 
-        assert out_tree_string.strip() == results_string.strip()
+        # assert out_tree_string.strip() == results_string.strip()
+
+        labels1 = []
+        for k in tree.postorder_edge_iter():
+            labels1.append(k.head_node.label)
+        labels2 = []
+        for k in result_tree.postorder_edge_iter():
+            labels2.append(k.head_node.label)
+        assert len(labels1) == len(labels2)
+        for i in xrange(len(labels1)):
+            assert labels1[i] == labels2[i]
