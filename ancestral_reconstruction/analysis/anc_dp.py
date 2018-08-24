@@ -7,12 +7,12 @@ import numpy as np
 import scipy.linalg as la
 import sys
 
-"""
-sq_change which produces the same results as ML without SE
-"""
+
+# .............................................................................
 def calc_cont_anc_states(tree):
     """
     @summary: Calculate continuous ancestral states for tree nodes
+    @note: sq_change which produces the same results as ML without SE
     """
     df = 0
     nodenum = {}
@@ -29,8 +29,8 @@ def calc_cont_anc_states(tree):
             i.data['val'] = 0.
             i.data['valse'] = 0.
     df -= 1
-    #compute the mlest of the root
-    fullMcp = np.zeros((df+1,df+1))
+    # compute the mlest of the root
+    fullMcp = np.zeros((df+1, df+1))
     fullVcp = np.zeros(df+1)
     count = 0
     for k in tree.postorder_edge_iter():
@@ -39,30 +39,30 @@ def calc_cont_anc_states(tree):
             nni = nodenum[i]
             for j in i.child_nodes():
                 tbl = 2./j.edge_length
-                fullMcp[nni][nni] += tbl;
+                fullMcp[nni][nni] += tbl
                 if len(j.child_nodes()) == 0:
                     fullVcp[nni] += (j.data['val'] * tbl)
                 else:
                     nnj = nodenum[j]
-                    fullMcp[nni][nnj] -= tbl;
-                    fullMcp[nnj][nni] -= tbl;
-                    fullMcp[nnj][nnj] += tbl;
+                    fullMcp[nni][nnj] -= tbl
+                    fullMcp[nnj][nni] -= tbl
+                    fullMcp[nnj][nnj] += tbl
             count += 1
     b = la.cho_factor(fullMcp)
-    #these are the ML estimates for the ancestral states
-    mle = la.cho_solve(b,fullVcp)
+    # these are the ML estimates for the ancestral states
+    mle = la.cho_solve(b, fullVcp)
     sos = 0
     for k in tree.postorder_edge_iter():
         i = k.head_node
         if len(i.child_nodes()) != 0:
             i.data['val'] = mle[nodenum[i]]
-            #print i.data['val']
+            # print i.data['val']
             i.label = str(mle[nodenum[i]])
             for j in i.child_nodes():
                 temp = (i.data['val'] - j.data['val'])
                 sos += temp*temp / j.edge_length
-    #print "Square Length: ",sos
-    #calcSE
+    # print "Square Length: ",sos
+    # calcSE
     """
     for i in tree.iternodes(order="postorder"):
         if i.istip == False:
@@ -77,8 +77,7 @@ def calc_cont_anc_states(tree):
     return 0
 
 
-
-def match_tips_and_cont_values(tree,seqs):
+def match_tips_and_cont_values(tree, seqs):
     for i in tree:
         i.data = {}
         if len(i.child_nodes()) == 0:
@@ -88,9 +87,10 @@ def match_tips_and_cont_values(tree,seqs):
                     test = True
                     i.data['cont_values'] = j.cont_values
                     break
-            if test == False:
+            if not test:
                 print "can't find "+i.taxon.label+" in cont_values"
                 return False
+
 
 # .............................................................................
 def calculate_continuous_ancestral_states(tree, sequences):
@@ -115,8 +115,8 @@ def calculate_continuous_ancestral_states(tree, sequences):
             i.data['val'] = 0.
             i.data['valse'] = 0.
     df -= 1
-    #compute the mlest of the root
-    fullMcp = np.zeros((df+1,df+1))
+    # compute the mlest of the root
+    fullMcp = np.zeros((df+1, df+1))
     fullVcp = np.zeros(df+1)
     count = 0
     for k in tree.postorder_edge_iter():
@@ -125,30 +125,30 @@ def calculate_continuous_ancestral_states(tree, sequences):
             nni = nodenum[i]
             for j in i.child_nodes():
                 tbl = 2./j.edge_length
-                fullMcp[nni][nni] += tbl;
+                fullMcp[nni][nni] += tbl
                 if len(j.child_nodes()) == 0:
                     fullVcp[nni] += (j.data['val'] * tbl)
                 else:
                     nnj = nodenum[j]
-                    fullMcp[nni][nnj] -= tbl;
-                    fullMcp[nnj][nni] -= tbl;
-                    fullMcp[nnj][nnj] += tbl;
+                    fullMcp[nni][nnj] -= tbl
+                    fullMcp[nnj][nni] -= tbl
+                    fullMcp[nnj][nnj] += tbl
             count += 1
     b = la.cho_factor(fullMcp)
-    #these are the ML estimates for the ancestral states
-    mle = la.cho_solve(b,fullVcp)
+    # these are the ML estimates for the ancestral states
+    mle = la.cho_solve(b, fullVcp)
     sos = 0
     for k in tree.postorder_edge_iter():
         i = k.head_node
         if len(i.child_nodes()) != 0:
             i.data['val'] = mle[nodenum[i]]
-            #print i.data['val']
+            # print i.data['val']
             i.label = str(mle[nodenum[i]])
             for j in i.child_nodes():
                 temp = (i.data['val'] - j.data['val'])
                 sos += temp*temp / j.edge_length
-    #print "Square Length: ",sos
-    #calcSE
+    # print "Square Length: ",sos
+    # calcSE
     """
     for i in tree.iternodes(order="postorder"):
         if i.istip == False:
@@ -162,16 +162,15 @@ def calculate_continuous_ancestral_states(tree, sequences):
     """
     return 0
 
-
-
-#if __name__ == "__main__":
-#    if len(sys.argv) != 3:
-#        print "python "+sys.argv[0]+" newick.tre dataasphy"
-#        sys.exit(0)
-#    tree = dp.Tree.get(path=sys.argv[1],schema="newick")    
-#    seqs = aln_reader.read_phylip_cont_file(open(sys.argv[2],"r"))
-#    match_tips_and_cont_values(tree,seqs)
-#    sqch = calc_cont_anc_states(tree)
-#    outfile = open("contanc_dp.tre","w")
-#    outfile.write(tree.as_string(schema="newick"))
-#    outfile.close()
+# .............................................................................
+# if __name__ == "__main__":
+#     if len(sys.argv) != 3:
+#         print "python "+sys.argv[0]+" newick.tre dataasphy"
+#         sys.exit(0)
+#     tree = dp.Tree.get(path=sys.argv[1], schema="newick")
+#     seqs = aln_reader.read_phylip_cont_file(open(sys.argv[2], "r"))
+#     match_tips_and_cont_values(tree,seqs)
+#     sqch = calc_cont_anc_states(tree)
+#     outfile = open("contanc_dp.tre","w")
+#     outfile.write(tree.as_string(schema="newick"))
+#     outfile.close()

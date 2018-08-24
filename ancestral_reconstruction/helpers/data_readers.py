@@ -1,5 +1,5 @@
 """
-@summary: This module contains functions for reading data files in various 
+@summary: This module contains functions for reading data files in various
              formats.  This is for reading some common alignment files.  Each
              function returns a list of sequences
 @note: If you want to read an alignment in fasta format, just use the fasta
@@ -14,9 +14,11 @@ import sys
 
 from ancestral_reconstruction.helpers.sequence import Sequence
 
+
 # .............................................................................
 class AlignmentIOError(Exception):
-   pass
+    pass
+
 
 # .............................................................................
 def create_sequence_list_from_dict(values_dict):
@@ -30,24 +32,25 @@ def create_sequence_list_from_dict(values_dict):
     headers = None
     sequence_list = []
     for name, values in values_dict.iteritems():
-       seq = Sequence(name=name)
-       seq.set_cont_values(values)
-       sequence_list.append(seq)
+        seq = Sequence(name=name)
+        seq.set_cont_values(values)
+        sequence_list.append(seq)
     return sequence_list, headers
+
 
 # .............................................................................
 def read_csv_alignment_flo(csv_flo):
     """
-    @summary: Read a CSV file-like object and return a list of sequences and 
+    @summary: Read a CSV file-like object and return a list of sequences and
                  headers
     @param csv_flo: A file-like object with CSV alignment data
     """
     headers = None
     seqence_list = []
-    
+
     has_header = csv.Sniffer().has_header(csv_flo.read(5000))
     csv_flo.seek(0)
-    
+
     for line in csv_flo:
         parts = line.strip().split(',')
         if has_header and headers is None:
@@ -60,13 +63,14 @@ def read_csv_alignment_flo(csv_flo):
             sequence_list.append(seq)
     return sequence_list, headers
 
+
 # .............................................................................
 def read_json_alignment_flo(json_flo):
     """
-    @summary: Read a JSON file-like object and return a list of sequences and 
+    @summary: Read a JSON file-like object and return a list of sequences and
                  headers
     @param json_flo: A file-like object with JSON alignment data
-    @note: File should have structure: 
+    @note: File should have structure:
                {
                 "headers" : [{header_names}],
                 "values" : [
@@ -78,28 +82,29 @@ def read_json_alignment_flo(json_flo):
                }
     """
     json_vals = json.load(json_flo)
-        
-    if json_vals.has_key('headers'):
+
+    if 'headers' in json_vals.keys():
         headers = json_vals['headers']
     else:
         headers = None
-    
+
     sequence_list = []
     for val_dict in json_vals['values']:
-       name = val_dict['name']
-       vals = [float(v) for v in val_dict['values']]
-       seq = Sequence(name=name)
-       seq.set_cont_values(vals)
-       sequence_list.append(seq)
+        name = val_dict['name']
+        vals = [float(v) for v in val_dict['values']]
+        seq = Sequence(name=name)
+        seq.set_cont_values(vals)
+        sequence_list.append(seq)
     return sequence_list, headers
+
 
 # .............................................................................
 def read_phylip_alignment_flo(phylip_flo):
     """
-    @summary: This will read a phylip alignment file-like object and return the 
+    @summary: This will read a phylip alignment file-like object and return the
                  list of sequences contained
     @param phylip_flo: The phylip file-like object
-    @note: We assume that the phylip files are extended and not strict (in 
+    @note: We assume that the phylip files are extended and not strict (in
               terms of how many characters for taxon names)
     @note: The phylip file is in the format:
               numoftaxa numofsites
@@ -108,7 +113,7 @@ def read_phylip_alignment_flo(phylip_flo):
     """
     seqlist = []
     # first line is the number of taxa and num of sites
-    # we don't really even need to read this line, 
+    # we don't really even need to read this line,
     # so let's just skip it
     i = phylip_flo.readline()
     for i in phylip_flo:
@@ -120,13 +125,14 @@ def read_phylip_alignment_flo(phylip_flo):
             seqlist.append(tseq)
     return seqlist
 
+
 # .............................................................................
 def read_phylip_cont_file(infile):
     """
-    @summary: This will read a phylip alignment file with continuous characters 
+    @summary: This will read a phylip alignment file with continuous characters
                  and return the list of seqs
-    @note: We assume that the phylip files are extended and not strict (in 
-              terms of what type and how much white space and how many 
+    @note: We assume that the phylip files are extended and not strict (in
+              terms of what type and how much white space and how many
               characters for taxon names)
     @note: The phylip file is in the format:
               numoftaxa numofsites
@@ -135,7 +141,7 @@ def read_phylip_cont_file(infile):
     """
     seqlist = []
     # first line is the number of taxa and num of sites
-    # we don't really even need to read this line, 
+    # we don't really even need to read this line,
     # so let's just skip it
     i = infile.readline()
     for i in infile:
@@ -148,6 +154,7 @@ def read_phylip_cont_file(infile):
             tseq.set_cont_values(seq)
             seqlist.append(tseq)
     return seqlist
+
 
 # .............................................................................
 def read_table_alignment_flo(table_flo):
@@ -166,4 +173,3 @@ def read_table_alignment_flo(table_flo):
             tseq.set_cont_values(seq)
             seqlist.append(tseq)
     return seqlist
-
