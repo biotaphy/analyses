@@ -95,7 +95,8 @@ def test_calculate_continuous_ancestral_states(data_files):
             try:
                 l1 = round(float(labels1[i]), 6)
                 l2 = round(float(labels2[i]), 6)
-            except:
+            except Exception as e:
+                print(str(e))
                 l1 = labels1[i]
                 l2 = labels2[i]
             assert labels1[i] == labels2[i]
