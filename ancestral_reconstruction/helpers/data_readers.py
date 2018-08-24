@@ -46,10 +46,13 @@ def read_csv_alignment_flo(csv_flo):
     @param csv_flo: A file-like object with CSV alignment data
     """
     headers = None
-    seqence_list = []
+    sequence_list = []
 
-    has_header = csv.Sniffer().has_header(csv_flo.read(5000))
-    csv_flo.seek(0)
+    try:
+        has_header = csv.Sniffer().has_header(csv_flo.read(5000))
+        csv_flo.seek(0)
+    except Exception, e:
+        raise AlignmentIOError('Could not sniff header: {}'.format(str(e)))
 
     for line in csv_flo:
         parts = line.strip().split(',')
@@ -85,6 +88,9 @@ def read_json_alignment_flo(json_flo):
 
     if 'headers' in json_vals.keys():
         headers = json_vals['headers']
+        if not isinstance(headers, list):
+            raise AlignmentIOError(
+                'If headers are provided, they must be a list')
     else:
         headers = None
 
@@ -117,12 +123,15 @@ def read_phylip_alignment_flo(phylip_flo):
     # so let's just skip it
     i = phylip_flo.readline()
     for i in phylip_flo:
-        if len(i) > 2:
-            spls = i.strip().split()
-            name = spls[0].strip()
-            seq = spls[1].strip()
-            tseq = Sequence(name=name, seq=seq)
-            seqlist.append(tseq)
+        try:
+            if len(i) > 2:
+                spls = i.strip().split()
+                name = spls[0].strip()
+                seq = spls[1].strip()
+                tseq = Sequence(name=name, seq=seq)
+                seqlist.append(tseq)
+        except Exception, e:
+            raise AlignmentIOError(str(e))
     return seqlist
 
 
@@ -165,11 +174,14 @@ def read_table_alignment_flo(table_flo):
     seqlist = []
     for i in table_flo:
         if len(i) > 2:
-            spls = i.strip().split("\t")
-            name = spls[0].strip()
-            seq = spls[1].strip().split(" ")
-            seq = [float(j) for j in seq]
-            tseq = Sequence(name=name)
-            tseq.set_cont_values(seq)
-            seqlist.append(tseq)
+            try:
+                spls = i.strip().split("\t")
+                name = spls[0].strip()
+                seq = spls[1].strip().split(" ")
+                seq = [float(j) for j in seq]
+                tseq = Sequence(name=name)
+                tseq.set_cont_values(seq)
+                seqlist.append(tseq)
+            except Exception, e:
+                raise AlignmentIOError(str(e))
     return seqlist
