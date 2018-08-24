@@ -6,9 +6,11 @@
 import pytest
 try:
     from StringIO import StringIO
+    string_formats = (basestring)
 except:
     # Python 3
     from io import StringIO
+    string_formats = (str)
 
 import ancestral_reconstruction.helpers.data_readers as dr
 from ancestral_reconstruction.helpers.sequence import Sequence
@@ -60,7 +62,7 @@ class Test_read_csv_alignment_flo(object):
                     assert len(sequence_list) > 0
                     for i in sequence_list:
                         assert isinstance(i, Sequence)
-                        assert isinstance(i.name, basestring)
+                        assert isinstance(i.name, string_formats)
                         assert len(i.cont_values) > 0
                 except Exception as e:
                     print('Raised exception: {}'.format(str(e)))
@@ -102,7 +104,7 @@ class Test_read_csv_alignment_flo(object):
                     assert len(sequence_list) > 0
                     for i in sequence_list:
                         assert isinstance(i, Sequence)
-                        assert isinstance(i.name, basestring)
+                        assert isinstance(i.name, string_formats)
                         assert len(i.cont_values) > 0
                 except Exception as e:
                     print('Raised exception: {}'.format(str(e)))
