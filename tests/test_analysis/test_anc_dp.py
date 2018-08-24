@@ -92,4 +92,10 @@ def test_calculate_continuous_ancestral_states(data_files):
             labels2.append(k.head_node.label)
         assert len(labels1) == len(labels2)
         for i in xrange(len(labels1)):
+            try:
+                l1 = round(float(labels1[i]), 6)
+                l2 = round(float(labels2[i]), 6)
+            except:
+                l1 = labels1[i]
+                l2 = labels2[i]
             assert labels1[i] == labels2[i]
