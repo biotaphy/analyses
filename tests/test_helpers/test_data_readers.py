@@ -49,7 +49,11 @@ class Test_create_sequence_list_from_dict(object):
             "F": [0.11, 0.1, 0.2, 0.3, 0.4, 0.4],
             "G": [0.99, 0.2, 0.2, 0.3, 0.4, 0.4]
         }
-        dr.create_sequence_list_from_dict(test_dict)
+        sequence_list, headers = dr.create_sequence_list_from_dict(test_dict)
+        for i in sequence_list:
+            assert isinstance(i, Sequence)
+            assert isinstance(i.name, string_formats)
+            assert len(i.cont_values) > 0
 
 
 # .............................................................................
