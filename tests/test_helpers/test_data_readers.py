@@ -166,7 +166,8 @@ class Test_read_json_alignment_flo(object):
                 try:
                     sequence_list, headers = dr.read_json_alignment_flo(
                                                                     in_json)
-                    assert len(headers) > 0
+                    if headers is not None:
+                        assert len(headers) > 0
                     assert len(sequence_list) > 0
                     for i in sequence_list:
                         assert isinstance(i, Sequence)
@@ -208,7 +209,8 @@ class Test_read_json_alignment_flo(object):
                 try:
                     sequence_list, headers = dr.read_json_alignment_flo(
                                                                 json_stringio)
-                    assert len(headers) > 0
+                    if headers is not None:
+                        assert len(headers) > 0
                     assert len(sequence_list) > 0
                     for i in sequence_list:
                         assert isinstance(i, Sequence)
