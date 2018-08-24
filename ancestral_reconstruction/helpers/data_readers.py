@@ -51,7 +51,7 @@ def read_csv_alignment_flo(csv_flo):
     try:
         has_header = csv.Sniffer().has_header(csv_flo.read(5000))
         csv_flo.seek(0)
-    except Exception, e:
+    except Exception as e:
         raise AlignmentIOError('Could not sniff header: {}'.format(str(e)))
 
     for line in csv_flo:
@@ -130,7 +130,7 @@ def read_phylip_alignment_flo(phylip_flo):
                 seq = spls[1].strip()
                 tseq = Sequence(name=name, seq=seq)
                 seqlist.append(tseq)
-        except Exception, e:
+        except Exception as e:
             raise AlignmentIOError(str(e))
     return seqlist
 
@@ -182,6 +182,6 @@ def read_table_alignment_flo(table_flo):
                 tseq = Sequence(name=name)
                 tseq.set_cont_values(seq)
                 seqlist.append(tseq)
-            except Exception, e:
+            except Exception as e:
                 raise AlignmentIOError(str(e))
     return seqlist
