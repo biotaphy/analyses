@@ -9,10 +9,12 @@
 """
 import csv
 import json
+import numpy as np
 import os
 import sys
 
 from ancestral_reconstruction.helpers.sequence import Sequence
+from ancestral_reconstruction.lm_objects.matrix import Matrix
 
 
 # .............................................................................
@@ -38,6 +40,26 @@ def create_sequence_list_from_dict(values_dict):
         seq.set_cont_values(values)
         sequence_list.append(seq)
     return sequence_list, headers
+
+
+# .............................................................................
+def get_character_matrix_from_sequences_list(sequences, var_headers=None):
+    """
+    @summary: Convert a list of sequences into a character matrix
+    """
+    if var_headers is not None:
+        col_headers = var_headers
+    else:
+        col_headers = range(len(sequences[0].cont_values))
+    data = np.zeros((len(sequences), len(col_headers)), dtype=float)
+    row_headers = []
+    i = 0
+    for seq in sequences:
+        row_headers.append(seq.name)
+        data[i] = np.array(seq.cont_values)
+        i += 1
+    return Matrix(data, headers={'0': row_headers,
+                                 '1': col_headers})
 
 
 # .............................................................................
