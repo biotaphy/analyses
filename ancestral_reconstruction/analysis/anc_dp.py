@@ -149,7 +149,7 @@ def calculate_continuous_ancestral_states(tree, char_mtx, calc_std_err=False):
         '1': tip_col_headers,
         '2': depth_headers
         }
-    return Matrix(data, headers=mtx_headers)
+    return tree, Matrix(data, headers=mtx_headers)
 
 
 # .............................................................................
