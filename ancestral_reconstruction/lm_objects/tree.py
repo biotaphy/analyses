@@ -29,6 +29,7 @@
 @todo: Should pruning a tree collapse clades automatically?
 @todo: Add method to remove annotations
 @todo: Move label method out of internal functions
+@todo: Make tree a subclass of dendropy tree
 """
 import dendropy
 import numpy as np
@@ -60,54 +61,18 @@ class LmTreeException(Exception):
 
 
 # .............................................................................
-class LmTree(object):
+class TreeWrapper(dendropy.Tree):
     """
-    @summary: Class representing a phylogenetic tree in Lifemapper
+    @summary: Dendropy Tree wrapper that adds a little functionality and
+                improves performance of some functions
     """
     # ..............................
-    def __init__(self, filename=None, data=None, tree=None, schema=None):
-        """
-        @summary: Tree object constructor
-        @param filename: A file location with tree data
-        @param data: Tree data in string format
-        @param schema: The corresponding format of the tree data or file
-        @note: Must provide one of: 1. filename and schema,
-                                    2. data and schema,
-                                    3. a Dendropy tree object
-        """
-        if tree is not None:
-            self.tree = tree
-        elif filename is not None and schema is not None:
-            self.tree = dendropy.Tree.get(path=filename, schema=schema)
-        elif data is not None and schema is not None:
-            self.tree = dendropy.Tree.get(data=data, schema=schema)
-        else:
-            raise LmTreeException(
-              'Must provide a tree object or file or data with schema')
-
-    # ..............................
     @classmethod
-    def init_from_data(cls, data, schema):
+    def from_base_tree(cls, tree):
         """
-        @summary: Class method to create a tree object from a tree string
+        @summary: Creates a TreeWrapper object from a base dendropy.Tree
         """
-        return cls(data=data, schema=schema)
-
-    # ..............................
-    @classmethod
-    def init_from_file(cls, filename, schema):
-        """
-        @summary: Class method for constructing a tree from a file
-        """
-        return cls(filename=filename, schema=schema)
-
-    # ..............................
-    @classmethod
-    def init_from_tree(cls, tree):
-        """
-        @summary: Class method to create a Lifemapper tree from a Dendropy tree
-        """
-        return cls(tree=tree)
+        return cls.get(data=tree.as_string('nexus'), schema='nexus')
 
     # ..............................
     def add_node_labels(self, prefix=None):
@@ -116,7 +81,7 @@ class LmTree(object):
         @param prefix: If provided, this will be prepended to the node label
         @note: This labels nodes the way that R does
         """
-        self._label_tree_nodes(self.tree.seed_node, len(self.get_labels()),
+        self._label_tree_nodes(self.seed_node, len(self.get_labels()),
                                prefix=prefix)
 
     # ..............................
@@ -130,27 +95,9 @@ class LmTree(object):
         @param label_attribute: If this is provided, use this annotation
                                     attribute as the key instead of the label
         """
-        # Internal functions
-        # ....................
-        def taxon_label_method(taxon):
-            """
-            @summary: Use the taxon label for the node label
-            """
-            return taxon.label
+        label_method = self._get_label_method(label_attribute)
 
-        # ....................
-        def annotation_method(taxon):
-            """
-            @summary: Use the label_attribute as the node label
-            """
-            return taxon.annotations.get_value(label_attribute)
-
-        if label_attribute == 'label':
-            label_method = taxon_label_method
-        else:
-            label_method = annotation_method
-
-        for taxon in self.tree.taxon_namespace:
+        for taxon in self.taxon_namespace:
             try:
                 # label = getattr(taxon, labelAttribute)
                 label = label_method(taxon)
@@ -182,7 +129,7 @@ class LmTree(object):
         @param annotation_attribute: The annotation attribute to retrieve
         """
         annotations = []
-        for taxon in self.tree.taxon_namespace:
+        for taxon in self.taxon_namespace:
             try:
                 att = taxon.annotations.get_value(annotation_attribute)
                 annotations.append((taxon.label, att))
@@ -200,30 +147,12 @@ class LmTree(object):
                                     the matrix
         @param ordered_labels: If provided, use this order of labels
         """
-        # Internal functions
-        # ....................
-        def taxon_label_method(taxon):
-            """
-            @summary: Use the taxon label for the node label
-            """
-            return taxon.label
-
-        # ....................
-        def annotation_method(taxon):
-            """
-            @summary: Use the label_attribute as the node label
-            """
-            return taxon.annotations.get_value(label_attribute)
-
-        if label_attribute == 'label':
-            label_method = taxon_label_method
-        else:
-            label_method = annotation_method
+        label_method = self._get_label_method(label_attribute)
 
         # Get list of labels
         if ordered_labels is None:
             ordered_labels = []
-            for taxon in self.tree.taxon_namespace:
+            for taxon in self.taxon_namespace:
                 ordered_labels.append(label_method(taxon))
 
         label_lookup = dict([(
@@ -234,8 +163,8 @@ class LmTree(object):
 
         # Build path lookup dictionary
         path_lookups = {}
-        for taxon in self.tree.taxon_namespace:
-            n = self.tree.find_node_for_taxon(taxon)
+        for taxon in self.taxon_namespace:
+            n = self.find_node_for_taxon(taxon)
             l = []
             while n is not None:
                 if n.edge_length is not None:
@@ -245,9 +174,9 @@ class LmTree(object):
                 n = n.parent_node
             path_lookups[taxon.label] = l
 
-        num_taxa = len(self.tree.taxon_namespace)
+        num_taxa = len(self.taxon_namespace)
         for i_1 in xrange(num_taxa - 1):
-            taxon1 = self.tree.taxon_namespace[i_1]
+            taxon1 = self.taxon_namespace[i_1]
 
             label = label_method(taxon1)
             # Check for matrix index
@@ -264,7 +193,7 @@ class LmTree(object):
                     t_labels.append(label)
 
                 for i_2 in xrange(i_1, num_taxa):
-                    taxon2 = self.tree.taxon_namespace[i_2]
+                    taxon2 = self.taxon_namespace[i_2]
 
                     try:
                         idx2 = label_lookup[label_method(taxon2)]
@@ -303,30 +232,12 @@ class LmTree(object):
                                     the matrix
         @param ordered_labels: If provided, use this order of labels
         """
-        # Internal functions
-        # ....................
-        def taxon_label_method(taxon):
-            """
-            @summary: Use the taxon label for the node label
-            """
-            return taxon.label
-
-        # ....................
-        def annotation_method(taxon):
-            """
-            @summary: Use the label_attribute as the node label
-            """
-            return taxon.annotations.get_value(label_attribute)
-
-        if label_attribute == 'label':
-            label_method = taxon_label_method
-        else:
-            label_method = annotation_method
+        label_method = self._get_label_method(label_attribute)
 
         # Get list of labels
         if ordered_labels is None:
             ordered_labels = []
-            for taxon in self.tree.taxon_namespace:
+            for taxon in self.taxon_namespace:
                 ordered_labels.append(label_method(taxon))
 
         label_lookup = dict([(
@@ -335,15 +246,15 @@ class LmTree(object):
         dist_mtx = np.zeros((len(ordered_labels), len(ordered_labels)),
                             dtype=float)
 
-        pdm = self.tree.phylogenetic_distance_matrix()
+        pdm = self.phylogenetic_distance_matrix()
 
-        for taxon1 in self.tree.taxon_namespace:
+        for taxon1 in self.taxon_namespace:
             label = label_method(taxon1)
             # Check for matrix index
             try:
                 idx1 = label_lookup[label]
 
-                for taxon2 in self.tree.taxon_namespace:
+                for taxon2 in self.taxon_namespace:
                     try:
                         idx2 = label_lookup[label_method(taxon2)]
                         # mrca = pdm.mrca(taxon1, taxon2)
@@ -365,7 +276,7 @@ class LmTree(object):
         @note: Bottom-up order
         """
         labels = []
-        for taxon in self.tree.taxon_namespace:
+        for taxon in self.taxon_namespace:
             labels.append(taxon.label)
 
         labels.reverse()
@@ -386,30 +297,12 @@ class LmTree(object):
         if not self.has_branch_lengths():
             raise Exception('Cannot create VCV without branch lengths')
 
-        # Internal functions
-        # ....................
-        def taxon_label_method(taxon):
-            """
-            @summary: Use the taxon label for the node label
-            """
-            return taxon.label
-
-        # ....................
-        def annotation_method(taxon):
-            """
-            @summary: Use the label_attribute as the node label
-            """
-            return taxon.annotations.get_value(label_attribute)
-
-        if label_attribute == 'label':
-            label_method = taxon_label_method
-        else:
-            label_method = annotation_method
+        label_method = self._get_label_method(label_attribute)
 
         # Get list of labels
         if ordered_labels is None:
             ordered_labels = []
-            for taxon in self.tree.taxon_namespace:
+            for taxon in self.taxon_namespace:
                 ordered_labels.append(label_method(taxon))
 
         label_lookup = dict([(
@@ -419,7 +312,7 @@ class LmTree(object):
         vcv = np.zeros((n, n), dtype=float)
 
         edges = []
-        for edge in self.tree.postorder_edge_iter():
+        for edge in self.postorder_edge_iter():
             edges.append(edge)
 
         edges.reverse()
@@ -449,7 +342,7 @@ class LmTree(object):
                         for r in right_tips:
                             vcv[l, r] = vcv[r, l] = el
 
-            for node in self.tree.leaf_nodes():
+            for node in self.leaf_nodes():
                 idx = label_ookup[label_method(node.taxon)]
                 vcv[idx, idx] = node.distance_from_root()
 
@@ -464,7 +357,7 @@ class LmTree(object):
                       every clade
         """
         try:
-            self.tree.minmax_leaf_distance_from_root()
+            self.minmax_leaf_distance_from_root()
             return True
         except:
             return False
@@ -474,7 +367,7 @@ class LmTree(object):
         """
         @summary: Returns boolean indicating if the tree has polytomies
         """
-        for n in self.tree.nodes():
+        for n in self.nodes():
             if len(n.child_nodes()) > 2:
                 return True
         return False
@@ -485,7 +378,7 @@ class LmTree(object):
         @summary: Returns a boolean indicating if the tree is binary
         @note: Checks that every clade has either zero or two children
         """
-        for n in self.tree.nodes():
+        for n in self.nodes():
             if not len(n.child_nodes()) in [0, 2]:
                 return False
         return True
@@ -501,7 +394,7 @@ class LmTree(object):
                    equal for all tips
         """
         try:
-            min_bl, max_bl = self.tree.minmax_leaf_distance_from_root()
+            min_bl, max_bl = self.minmax_leaf_distance_from_root()
             return np.isclose(min_bl, max_bl, rtol=rel_tol)
         except:
             pass
@@ -515,7 +408,7 @@ class LmTree(object):
                       attribute
         """
         prune_taxa = []
-        for taxon in self.tree.taxon_namespace:
+        for taxon in self.taxon_namespace:
             val = None
             try:
                 val = taxon.annotations.get_value(search_attribute)
@@ -524,25 +417,27 @@ class LmTree(object):
             if val is None:
                 prune_taxa.append(taxon)
 
-        self.tree.prune_taxa(prune_taxa)
-        self.tree.purge_taxon_namespace()
+        self.prune_taxa(prune_taxa)
+        self.purge_taxon_namespace()
 
     # ..............................
-    def resolve_polytomies(self):
+    def _annotation_method(self, label_attribute):
         """
-        @summary: Resolve polytomies in a tree
+        @summary: Use the label attribute as the node label
         """
-        self.tree.resolve_polytomies()
+        def label_method(taxon):
+            return taxon.annotations.get_value(label_attribute)
+        return label_method
 
     # ..............................
-    def write_tree(self, fn, schema=DEFAULT_TREE_SCHEMA):
+    def _get_label_method(self, label_attribute):
         """
-        @summary: Writes the tree to the specified file path in the specified
-                  format
-        @param fn: The file location to write the tree
-        @param schema: The tree schema to use for writing
+        @summary: Get the function to be used for retrieving labels
         """
-        self.tree.write(path=fn, schema=schema)
+        if label_attribute.lower() == 'label':
+            return self._taxon_label_method
+        else:
+            return self._annotation_method(label_attribute)
 
     # ..............................
     def _label_tree_nodes(self, node, i, prefix=None):
@@ -564,3 +459,10 @@ class LmTree(object):
                 i = self._label_tree_nodes(child, i)
         # Return the current i value
         return i
+
+    # ..............................
+    def _taxon_label_method(self, taxon):
+        """
+        @summary: Use the taxon label for the label
+        """
+        return taxon.label
