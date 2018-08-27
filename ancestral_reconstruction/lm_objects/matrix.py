@@ -100,7 +100,7 @@ class Matrix(object):
             try:
                 data = np.load(fn)
                 return cls(data)
-            except Exception, e:
+            except Exception as e:
                 raise Exception("Cannot load file: {0}, {1}".format(fn,
                                                                     str(e)))
 
