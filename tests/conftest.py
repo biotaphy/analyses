@@ -37,7 +37,7 @@ class SampleDataFiles(object):
                                   self._get_format_extension(fmt)))
 
     # .....................................
-    def get_packages(self):
+    def get_packages(self, is_valid):
         """
         @summary: Get a list of the available packages for testing
         @note: All packages are assumed to be correct as of now
@@ -45,7 +45,8 @@ class SampleDataFiles(object):
         """
         PACKAGES_PATH = os.path.join(SAMPLE_DATA_PATH, PACKAGES_DIR)
         packages = []
-        package_dirs = glob.glob(os.path.join(PACKAGES_PATH, '*'))
+        package_dirs = glob.glob(self._get_glob_string(PACKAGES_PATH,
+                                                       is_valid, ''))
         for pkg_dir in package_dirs:
             tree_fn = None
             align_fn = None
