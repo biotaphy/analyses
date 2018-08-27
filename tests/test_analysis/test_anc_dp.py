@@ -9,6 +9,7 @@ import pytest
 
 from ancestral_reconstruction.analysis import anc_dp
 import ancestral_reconstruction.helpers.data_readers as data_readers
+from ancestral_reconstruction.lm_objects.tree import TreeWrapper
 
 
 # .............................................................................
@@ -61,9 +62,11 @@ def test_calculate_continuous_ancestral_states_invalid(data_files):
                 'Cannot handle alignments with extension: {}'.format(
                     align_ext))
 
+        char_mtx = data_readers.get_character_matrix_from_sequences_list(
+                    sequences)
         # Run analysis
         with pytest.raises(Exception):
-            anc_dp.calculate_continuous_ancestral_states(tree, sequences)
+            anc_dp.calculate_continuous_ancestral_states(tree, char_mtx)
 
 
 # .............................................................................
@@ -90,7 +93,8 @@ def test_calculate_continuous_ancestral_states_valid(data_files):
         else:
             raise Exception(
                 'Cannot handle tree with extension: {}'.format(tree_ext))
-        tree = dendropy.Tree.get(path=tree_filename, schema=tree_schema)
+        # tree = dendropy.Tree.get(path=tree_filename, schema=tree_schema)
+        tree = TreeWrapper.get(path=tree_filename, schema=tree_schema)
 
         # Process the alignment file
         _, align_ext = os.path.splitext(alignment_filename)
@@ -115,8 +119,22 @@ def test_calculate_continuous_ancestral_states_valid(data_files):
                 'Cannot handle alignments with extension: {}'.format(
                     align_ext))
 
+        char_mtx = data_readers.get_character_matrix_from_sequences_list(
+                    sequences)
         # Run analysis
-        anc_dp.calculate_continuous_ancestral_states(tree, sequences)
+        # tree.add_node_labels()
+        _, anc_mtx = anc_dp.calculate_continuous_ancestral_states(tree,
+                                                                  char_mtx)
+        # Old method
+        # anc_dp.calculate_continuous_ancestral_states_old(tree, sequences)
+
+        # Need to check the output to see if it is correct
+        row_headers = anc_mtx.get_row_headers()
+        lookup = dict([(row_headers[i], i) for i in range(len(row_headers))])
+
+        for node in tree.nodes():
+            if len(node.child_nodes()) != 0:
+                node.label = anc_mtx.data[lookup[node.label], 0, 0]
 
         # Check the output
         _, out_tree_ext = os.path.splitext(results_filename)
