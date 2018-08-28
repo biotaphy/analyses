@@ -9,7 +9,8 @@ import pytest
 # .                                 Constants                                 .
 # .............................................................................
 ALIGNMENTS_DIR = 'alignments'
-PACKAGES_DIR = 'packages'
+ANC_STATE_PACKAGES_DIR = 'ancestral_state_packages'
+ANC_DIST_PACKAGES_DIR = 'ancestral_distribution_packages'
 TREES_DIR = 'trees'
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -37,32 +38,24 @@ class SampleDataFiles(object):
                                   self._get_format_extension(fmt)))
 
     # .....................................
-    def get_packages(self, is_valid):
+    def get_ancestral_distribution_packages(self, is_valid):
         """
         @summary: Get a list of the available packages for testing
         @note: All packages are assumed to be correct as of now
         @note: Will return list of (tree, alignment, results) tuples
         """
-        PACKAGES_PATH = os.path.join(SAMPLE_DATA_PATH, PACKAGES_DIR)
-        packages = []
-        package_dirs = glob.glob(self._get_glob_string(PACKAGES_PATH,
-                                                       is_valid, ''))
-        for pkg_dir in package_dirs:
-            tree_fn = None
-            align_fn = None
-            results_fn = None
-            for fn in glob.glob(os.path.join(pkg_dir, '*')):
-                basename = os.path.basename(fn)
-                if basename.lower().startswith('tree'):
-                    tree_fn = fn
-                elif basename.lower().startswith('align'):
-                    align_fn = fn
-                elif basename.lower().startswith('result'):
-                    results_fn = fn
-            if tree_fn is not None and align_fn is not None and \
-                    results_fn is not None:
-                packages.append((tree_fn, align_fn, results_fn))
-        return packages
+        packages_path = os.path.join(SAMPLE_DATA_PATH, ANC_DIST_PACKAGES_DIR)
+        return self._get_packages(packages_path, is_valid)
+
+    # .....................................
+    def get_ancestral_state_packages(self, is_valid):
+        """
+        @summary: Get a list of the available packages for testing
+        @note: All packages are assumed to be correct as of now
+        @note: Will return list of (tree, alignment, results) tuples
+        """
+        packages_path = os.path.join(SAMPLE_DATA_PATH, ANC_STATE_PACKAGES_DIR)
+        return self._get_packages(packages_path, is_valid)
 
     # .....................................
     def get_trees(self, fmt, is_valid):
@@ -101,6 +94,33 @@ class SampleDataFiles(object):
         else:
             valid_str = 'invalid'
         return os.path.join(search_dir, '{}_*{}'.format(valid_str, fmt_ext))
+
+    # .....................................
+    def _get_packages(self, packages_path, is_valid):
+        """
+        @summary: Get a list of the available packages for testing
+        @note: All packages are assumed to be correct as of now
+        @note: Will return list of (tree, alignment, results) tuples
+        """
+        packages = []
+        package_dirs = glob.glob(self._get_glob_string(packages_path,
+                                                       is_valid, ''))
+        for pkg_dir in package_dirs:
+            tree_fn = None
+            align_fn = None
+            results_fn = None
+            for fn in glob.glob(os.path.join(pkg_dir, '*')):
+                basename = os.path.basename(fn)
+                if basename.lower().startswith('tree'):
+                    tree_fn = fn
+                elif basename.lower().startswith('align'):
+                    align_fn = fn
+                elif basename.lower().startswith('result'):
+                    results_fn = fn
+            if tree_fn is not None and align_fn is not None and \
+                    results_fn is not None:
+                packages.append((tree_fn, align_fn, results_fn))
+        return packages
 
 
 # .............................................................................
