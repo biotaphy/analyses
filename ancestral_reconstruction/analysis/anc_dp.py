@@ -24,7 +24,27 @@ def _get_node_label(node):
 
 
 # .............................................................................
-def calculate_continuous_ancestral_states(tree, char_mtx, calc_std_err=False):
+def calculate_ancestral_distributions(tree, char_mtx):
+    """
+    @summary: Calculate ancestral distributions
+    @param tree: A dendropy tree or TreeWrapper object
+    @param char_mtx: A Matrix object with character information.  Each row
+                        should represent a tip in the tree and each column
+                        should be a bin to calculate ancestral distribution
+    @return: A matrix of character data with the following dimensions:
+                rows - nodes / tips in the tree
+                columns - character variables
+                depth - first is the calculated value, second layer is
+                            standard error if desired
+    """
+    return calculate_continuous_ancestral_states(tree, char_mtx,
+                                                 sum_to_one=True,
+                                                 calc_std_err=True)
+
+
+# .............................................................................
+def calculate_continuous_ancestral_states(tree, char_mtx, sum_to_one=False,
+                                          calc_std_err=False):
     """
     @summary: Calculates the continuous ancestral states for the nodes in a
                 tree
@@ -33,20 +53,28 @@ def calculate_continuous_ancestral_states(tree, char_mtx, calc_std_err=False):
                         should represent a tip in the tree and each column
                         should be a variable to calculate ancestral state for
     @param calc_std_err: If True, calculate standard error for each variable
+    @param sum_to_one: If True, standardize the character matrix so that the
+                        values in a row sum to one
     @return: A matrix of character data with the following dimensions:
                 rows - nodes / tips in the tree
                 columns - character variables
                 depth - first is the calculated value, second layer is
                             standard error if desired
-    @todo: Standard error computations
     """
     # Wrap tree if dendropy tree
     if not isinstance(tree, TreeWrapper):
         tree = TreeWrapper.from_base_tree(tree)
 
+    # Standardize character matrix if requested
+    tip_count, num_vars = char_mtx.data.shape
+    if sum_to_one:
+        for i in range(tip_count):
+            sc = float(1.0) / np.sum(char_mtx.data[i])
+            for j in range(num_vars):
+                char_mtx.data[i, j] *= sc
+
     # Initialize data matrix
     num_nodes = len(tree.nodes())
-    num_vars = char_mtx.data.shape[1]
     data_shape = (num_nodes, num_vars, 2 if calc_std_err else 1)
     data = np.zeros(data_shape, dtype=float)
 
@@ -56,11 +84,8 @@ def calculate_continuous_ancestral_states(tree, char_mtx, calc_std_err=False):
     # Assign labels to nodes that don't have them
     tree.add_node_labels()
 
-    # TODO: Ensure that tree tips match provided character data and fill in
-    #    data matrix for tips
     tip_col_headers = char_mtx.get_column_headers()
     tip_row_headers = char_mtx.get_row_headers()
-    tip_count = len(tip_row_headers)
     tip_lookup = dict([(tip_row_headers[i], i) for i in range(tip_count)])
 
     # Get the number of internal nodes in the tree
@@ -97,12 +122,9 @@ def calculate_continuous_ancestral_states(tree, char_mtx, calc_std_err=False):
     # For each variable
     for x in range(num_vars):
         # Compute the ML estimate of the root
-        # TODO: Evaluate if this causes a memory problem
         full_mcp = np.zeros((internal_node_count, internal_node_count),
                             dtype=float)
         full_vcp = np.zeros(internal_node_count, dtype=float)
-        # full_mcp = np.zeros((num_nodes, num_nodes), dtype=float)
-        # full_vcp = np.zeros(num_nodes, dtype=float)
 
         for k in tree.postorder_edge_iter():
             i = k.head_node
@@ -132,12 +154,23 @@ def calculate_continuous_ancestral_states(tree, char_mtx, calc_std_err=False):
             node_num_i = node_index_lookup[_get_node_label(i)]
             if len(i.child_nodes()) != 0:
                 data[node_num_i, x, 0] = ml_est[node_num_i - tip_count]
-                # print(i.data['val'])
-                # i.label = str(mle[nodenum[i]])
-                # for j in i.child_nodes():
-                #     node_num_j = _get_node_label(j)
-                #     temp = (data[node_num_i, x, 0] - data[node_num_j, x, 0])
-                #     sos += temp*temp / j.edge_length
+
+                if calc_std_err:
+                    for j in i.child_nodes():
+                        node_num_j = node_index_lookup[_get_node_label(j)]
+                        temp = data[node_num_i, x, 0] - data[node_num_j, x, 0]
+                        sos += temp * temp / j.edge_length
+
+                    # nni is node_num_i adjusted for only nodes
+                    nni = node_num_i - tip_count
+                    qpq = full_mcp[nni][nni]
+                    tm1 = np.delete(full_mcp, (nni), axis=0)
+                    tm = np.delete(tm1, (nni), axis=1)
+                    b = la.cho_factor(tm)
+                    sol = la.cho_solve(b, tm1[:, nni])
+                    temp_std_err = qpq - np.inner(tm1[:, nni], sol)
+                    data[node_num_i, x, 1] = math.sqrt(2.0 * sos / (
+                        (internal_node_count - 1) * temp_std_err))
 
     depth_headers = ['maximum_likelihood']
     if calc_std_err:
@@ -149,111 +182,3 @@ def calculate_continuous_ancestral_states(tree, char_mtx, calc_std_err=False):
         '2': depth_headers
         }
     return tree, Matrix(data, headers=mtx_headers)
-
-
-# .............................................................................
-def calculate_continuous_ancestral_states_old(tree, sequences):
-    """
-    @summary: Calculates continuous ancestral states for a tree and a list of
-                 sequences
-    @note: sq_change which produces the same results as ML without SE
-    @todo: Raise a different exception
-    """
-    match_tips_and_cont_values(tree, sequences)
-    df = 0
-    nodenum = {}
-    count = 0
-    for k in tree.postorder_edge_iter():
-        i = k.head_node
-        if len(i.child_nodes()) == 0:
-            i.data['val'] = float(i.data['cont_values'][0])
-            i.data['valse'] = float(i.data['cont_values'][0])
-        else:
-            nodenum[i] = count
-            count += 1
-            df += 1
-            i.data['val'] = 0.
-            i.data['valse'] = 0.
-    df -= 1
-    # compute the mlest of the root
-    fullMcp = np.zeros((df+1, df+1))
-    fullVcp = np.zeros(df+1)
-    count = 0
-    for k in tree.postorder_edge_iter():
-        i = k.head_node
-        if len(i.child_nodes()) != 0:
-            nni = nodenum[i]
-            for j in i.child_nodes():
-                tbl = 2./j.edge_length
-                fullMcp[nni][nni] += tbl
-                if len(j.child_nodes()) == 0:
-                    fullVcp[nni] += (j.data['val'] * tbl)
-                else:
-                    nnj = nodenum[j]
-                    fullMcp[nni][nnj] -= tbl
-                    fullMcp[nnj][nni] -= tbl
-                    fullMcp[nnj][nnj] += tbl
-            count += 1
-    b = la.cho_factor(fullMcp)
-    # these are the ML estimates for the ancestral states
-    mle = la.cho_solve(b, fullVcp)
-    sos = 0
-    for k in tree.postorder_edge_iter():
-        i = k.head_node
-        if len(i.child_nodes()) != 0:
-            i.data['val'] = mle[nodenum[i]]
-            # print(i.data['val'])
-            i.label = str(mle[nodenum[i]])
-            for j in i.child_nodes():
-                temp = (i.data['val'] - j.data['val'])
-                sos += temp*temp / j.edge_length
-    # print("Square Length: {}".format(sos))
-    # calcSE
-    """
-    for i in tree.iternodes(order="postorder"):
-        if i.istip == False:
-            qpq = fullMcp[nodenum[i]][nodenum[i]]
-            tm1 = np.delete(fullMcp,(nodenum[i]),axis=0)
-            tm = np.delete(tm1,(nodenum[i]),axis=1)
-            b = cho_factor(tm)
-            sol = cho_solve(b,tm1[:,nodenum[i]])
-            tempse = qpq - np.inner(tm1[:,nodenum[i]],sol)
-            i.data['valse'] = math.sqrt(2*sos/(df*tempse))
-    """
-    return 0
-
-
-# .............................................................................
-def match_tips_and_cont_values(tree, seqs):
-    """
-    @summary: Match the tips in the tree with the values in the alignment
-    @param tree: The tree to get the tips from
-    @param seq: A list of Sequence objects to get the alignment values from
-    @todo: Raise a different exception
-    """
-    for i in tree:
-        i.data = {}
-        if len(i.child_nodes()) == 0:
-            test = False
-            for j in seqs:
-                if i.taxon.label == j.name:
-                    test = True
-                    i.data['cont_values'] = j.cont_values
-                    break
-            if not test:
-                raise Exception('Could not find {} in cont_values'.format(
-                    i.taxon.label))
-
-
-# .............................................................................
-# if __name__ == "__main__":
-#     if len(sys.argv) != 3:
-#         print("python "+sys.argv[0]+" newick.tre dataasphy")
-#         sys.exit(0)
-#     tree = dp.Tree.get(path=sys.argv[1], schema="newick")
-#     seqs = aln_reader.read_phylip_cont_file(open(sys.argv[2], "r"))
-#     match_tips_and_cont_values(tree,seqs)
-#     sqch = calc_cont_anc_states(tree)
-#     outfile = open("contanc_dp.tre","w")
-#     outfile.write(tree.as_string(schema="newick"))
-#     outfile.close()
