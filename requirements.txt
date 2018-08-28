@@ -5,3 +5,5 @@ python-coveralls
 pytest
 pytest-cov
 pytest-pep8
+python-tk
+matplotlib
