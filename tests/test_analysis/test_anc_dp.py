@@ -4,6 +4,7 @@
 @note: Uses pytest style testing
 """
 import dendropy
+import numpy as np
 import os
 import pytest
 
@@ -125,53 +126,33 @@ def test_calculate_continuous_ancestral_states_valid(data_files):
         # tree.add_node_labels()
         _, anc_mtx = anc_dp.calculate_continuous_ancestral_states(tree,
                                                                   char_mtx)
-        # Old method
-        # anc_dp.calculate_continuous_ancestral_states_old(tree, sequences)
 
-        # Need to check the output to see if it is correct
-        row_headers = anc_mtx.get_row_headers()
-        lookup = dict([(row_headers[i], i) for i in range(len(row_headers))])
-
-        for node in tree.nodes():
-            if len(node.child_nodes()) != 0:
-                node.label = anc_mtx.data[lookup[node.label], 0, 0]
-
-        # Check the output
-        _, out_tree_ext = os.path.splitext(results_filename)
-        if out_tree_ext == '.nex':
-            out_tree_schema = 'nexus'
-        elif out_tree_ext == '.xml':
-            out_tree_schema = 'nexml'
-        elif out_tree_ext == '.tre':
-            out_tree_schema = 'newick'
-        else:
-            raise Exception(
-                'Cannot handle tree with extension: {}'.format(out_tree_ext))
-        out_tree_string = tree.as_string(schema=out_tree_schema)
-        result_tree = dendropy.Tree.get(path=results_filename,
-                                        schema=out_tree_schema)
-
-        # Compare with results
+        # New testing method
+        # (For now) assume that results file is csv with row headers for node
+        #    labels and column headers for variables
+        results = []
+        h = None
         with open(results_filename) as results_file:
-            results_string = results_file.read()
+            for line in results_file:
+                if h is None:
+                    # Get headers
+                    h = line.strip().split(',')[1:]
+                else:
+                    # Add result (without label) to list
+                    node_result = [
+                        float(i) for i in line.strip().split(',')[1:]]
+                    results.append(np.array(node_result, dtype=float))
 
-        # assert out_tree_string.strip() == results_string.strip()
-
-        labels1 = []
-        for k in tree.postorder_edge_iter():
-            if k.head_node.label is not None:
-                try:
-                    labels1.append(round(float(k.head_node.label), 8))
-                except:
-                    pass
-        labels2 = []
-        for k in result_tree.postorder_edge_iter():
-            if k.head_node.label is not None:
-                try:
-                    labels2.append(round(float(k.head_node.label), 8))
-                except:
-                    pass
-        assert len(labels1) == len(labels2)
-        for i in range(len(labels1)):
-            print('{} =? {}'.format(labels1[i], labels2[i]))
-            assert labels1[i] == labels2[i]
+        # Look for all results (only maximum likelihood)
+        for row in anc_mtx.data[:, :, 0]:
+            found = False
+            for i in range(len(results)):
+                # Allow for some wiggle room with decimal precision
+                if np.all(np.isclose(row, results[i])):
+                    found = True
+                    results.pop(i)
+                    break
+            if not found:
+                raise Exception(
+                    'Could not find expected result: {} in results'.format(
+                        row))
