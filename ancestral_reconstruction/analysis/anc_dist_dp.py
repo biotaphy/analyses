@@ -180,7 +180,7 @@ def print_rates(rates, x_grid, outd):
 def calculate_densities(seqs, low, high, args):
     x_grid = np.linspace(low, high, args.ncats)
     for i in seqs:
-        if notargs.precut or args.datafile is None:
+        if not args.precut or args.datafile is None:
             density = kde(i.cont_values)
             density.covariance_factor = lambda: .25
             density._compute_covariance()
