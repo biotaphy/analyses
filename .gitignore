@@ -106,3 +106,4 @@ venv.bak/
 # Eclipse
 .project
 .pydevproject
+.settings
