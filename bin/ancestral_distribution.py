@@ -96,8 +96,24 @@ if __name__ == '__main__':
             plt.savefig(os.path.join(args.output_directory, 
                                      '{}.png'.format(node_names[i])))
             plt.close()
-            
+
+        # Add rates to output
+        # TODO: Calculate rates
+        # plt.plot(x_grid, rates)
+        # plt.ylabel('estimated rate')
+        # plt.xlabel('state space')
+        # plt.savefig(os.path.join(args.output_directory, 'rate_estimate.png'))
+
+        # Write labeled tree
+        tree.write(path=os.path.join(args.output_directory, 
+                                     'labeled_tree.tre'), schema='newick')
+
+        # Write results matrix (as csv)
+        distributions_filename = os.path.join(args.output_directory, 
+                                              'distributions.csv')
+        with open(distributions_filename, 'w') as distributions_file:
+            results.write_csv(distributions_file)
     
     # If we should print the tree, do it
     # if args.print_tree:
-    #     pass
+    #     print_tree_to_file(tree, args.output_directory)
