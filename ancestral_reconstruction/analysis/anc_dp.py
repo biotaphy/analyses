@@ -95,8 +95,7 @@ def calculate_continuous_ancestral_states(tree, char_mtx, calc_std_err=False):
     row_headers.extend(node_headers)
 
     # For each variable
-    # for x in range(num_vars):
-    for x in range(1):
+    for x in range(num_vars):
         # Compute the ML estimate of the root
         # TODO: Evaluate if this causes a memory problem
         full_mcp = np.zeros((internal_node_count, internal_node_count),
