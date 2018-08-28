@@ -273,8 +273,6 @@ class Test_ancestal_distribution(object):
             # Run analysis
             _, anc_mtx = anc_dp.calculate_ancestral_distributions(tree,
                                                                   char_mtx)
-            print anc_mtx.data[:, :, 0]
-            print anc_mtx.data[:, :, 1]
 
             # Testing method
             # Assume that the results file is a csv with row headers for node
