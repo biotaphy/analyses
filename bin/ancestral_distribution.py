@@ -14,9 +14,14 @@ from ancestral_reconstruction.helpers import data_readers
 from ancestral_reconstruction.analysis import anc_dp
 from ancestral_reconstruction.lm_objects.tree import TreeWrapper
 
+DESCRIPTION = """\
+Generates ancestral distribution estimations based on the environmental 
+distributions at the tips of the tree"""
+
+
 # .............................................................................
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
 
     parser.add_argument('in_tree_filename', type=str, 
                         help='Path to the tree file')
