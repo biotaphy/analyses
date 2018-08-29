@@ -393,14 +393,9 @@ class TreeWrapper(dendropy.Tree):
         """
         prune_taxa = []
         for taxon in self.taxon_namespace:
-            val = None
-            try:
-                val = taxon.annotations.get_value(search_attribute)
-            except:
-                pass
+            val = taxon.annotations.get_value(search_attribute)
             if val is None:
                 prune_taxa.append(taxon)
-
         self.prune_taxa(prune_taxa)
         self.purge_taxon_namespace()
 
