@@ -279,9 +279,6 @@ class TreeWrapper(dendropy.Tree):
         @param label_attribute: The attribute of the tips to use as labels for
                                     the matrix
         @param ordered_labels: If provided, use this order of labels
-        @todo: Consider using the node labeling function to get the indices.
-                    Haven't changed yet because this is producing the correct
-                    result
         """
         if not self.has_branch_lengths():
             raise LmTreeException('Cannot create VCV without branch lengths')
@@ -307,10 +304,8 @@ class TreeWrapper(dendropy.Tree):
         edges.reverse()
 
         for edge in edges:
-            try:
-                el = edge.head_node.distance_from_root()
-            except:
-                el = None
+            # TODO: Evaluate if el assignment can throw error
+            el = edge.head_node.distance_from_root()
             if el is not None:
                 child_nodes = edge.head_node.child_nodes()
                 if len(child_nodes) == 0:
