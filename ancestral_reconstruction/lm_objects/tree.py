@@ -284,7 +284,7 @@ class TreeWrapper(dendropy.Tree):
                     result
         """
         if not self.has_branch_lengths():
-            raise Exception('Cannot create VCV without branch lengths')
+            raise LmTreeException('Cannot create VCV without branch lengths')
 
         label_method = self._get_label_method(label_attribute)
 
