@@ -944,3 +944,152 @@ END;
 
         # Check the sum of the distance matrix, should be = ?
         assert ordered_matrix.data.sum() == distance_sum
+
+    # .....................................
+    def test_get_labels(self):
+        """Test the get_labels functions
+        """
+        # Set up tree
+        nexus_string = """\
+#NEXUS
+
+BEGIN TAXA;
+    DIMENSIONS NTAX=4;
+    TAXLABELS
+        Taxon_1
+[&myatt=value1]
+        Taxon_2
+[&myatt=value2]
+        Taxon_3
+[&myatt=value3]
+        Taxon_4
+[&myatt=value4]
+  ;
+END;
+
+BEGIN TREES;
+    TREE 1 = ((Taxon_1:0.2,Taxon_4:0.2):0.1,(Taxon_2:0.1,Taxon_3:0.1):0.2);
+END;
+"""
+        my_tree = tree.TreeWrapper.get(data=nexus_string, schema='nexus')
+        labels = my_tree.get_labels()
+        assert len(labels) > 0
+
+    # .....................................
+    def test_get_variance_covariance_matrix_with_attribute(self):
+        """Test get_variance_covariance_matrix using attribute labels
+        """
+        # Set up tree
+        nexus_string = """\
+#NEXUS
+
+BEGIN TAXA;
+    DIMENSIONS NTAX=4;
+    TAXLABELS
+        Taxon_1
+[&myatt=value1]
+        Taxon_2
+[&myatt=value2]
+        Taxon_3
+[&myatt=value3]
+        Taxon_4
+[&myatt=value4]
+  ;
+END;
+
+BEGIN TREES;
+    TREE 1 = ((Taxon_1:0.2,Taxon_4:0.2):0.1,(Taxon_2:0.1,Taxon_3:0.1):0.2);
+END;
+"""
+        var_cov_sum = 1.8
+        taxon_labels = ['value1', 'value2', 'value3', 'value4']
+        my_tree = tree.TreeWrapper.get(data=nexus_string, schema='nexus')
+
+        # Get default var_cov matrix
+        vcov_mtx1 = my_tree.get_variance_covariance_matrix(
+            label_attribute='myatt')
+
+        col_headers_1 = vcov_mtx1.get_column_headers()
+        row_headers_1 = vcov_mtx1.get_row_headers()
+
+        # Ensure that headers are in the same order
+        for i in range(len(taxon_labels)):
+            assert col_headers_1[i] == row_headers_1[i]
+
+        # Check the sum of the distance matrix, should be = ?
+        assert vcov_mtx1.data.sum() == var_cov_sum
+
+        # Shuffle taxon labels and use them to order return matrix
+        random.shuffle(taxon_labels)
+        # Get the ordered distance matrix
+        vcov_mtx2 = my_tree.get_variance_covariance_matrix(
+            label_attribute='myatt', ordered_labels=taxon_labels)
+
+        col_headers_2 = vcov_mtx2.get_column_headers()
+        row_headers_2 = vcov_mtx2.get_row_headers()
+
+        # Ensure that headers are in the same order
+        for i in range(len(taxon_labels)):
+            assert col_headers_2[i] == row_headers_2[i]
+
+        # Check the sum of the distance matrix, should be = ?
+        assert vcov_mtx2.data.sum() == var_cov_sum
+
+    # .....................................
+    def test_get_variance_covariance_matrix_with_label(self):
+        """Test get_variance_covariance_matrix using taxon labels
+        """
+        # Set up tree
+        nexus_string = """\
+#NEXUS
+
+BEGIN TAXA;
+    DIMENSIONS NTAX=4;
+    TAXLABELS
+        Taxon_1
+[&myatt=value1]
+        Taxon_2
+[&myatt=value2]
+        Taxon_3
+[&myatt=value3]
+        Taxon_4
+[&myatt=value4]
+  ;
+END;
+
+BEGIN TREES;
+    TREE 1 = ((Taxon_1:0.2,Taxon_4:0.2):0.1,(Taxon_2:0.1,Taxon_3:0.1):0.2);
+END;
+"""
+        var_cov_sum = 1.8
+        taxon_labels = ['Taxon 1', 'Taxon 2', 'Taxon 3', 'Taxon 4']
+        my_tree = tree.TreeWrapper.get(data=nexus_string, schema='nexus')
+
+        # Get default var_cov matrix
+        vcov_mtx1 = my_tree.get_variance_covariance_matrix()
+
+        col_headers_1 = vcov_mtx1.get_column_headers()
+        row_headers_1 = vcov_mtx1.get_row_headers()
+
+        # Ensure that headers are in the same order
+        for i in range(len(taxon_labels)):
+            assert col_headers_1[i] == row_headers_1[i]
+
+        # Check the sum of the distance matrix, should be = ?
+        assert vcov_mtx1.data.sum() == var_cov_sum
+
+        # Shuffle taxon labels and use them to order return matrix
+        random.shuffle(taxon_labels)
+        # Get the ordered distance matrix
+        vcov_mtx2 = my_tree.get_variance_covariance_matrix(
+            ordered_labels=taxon_labels)
+
+        col_headers_2 = vcov_mtx2.get_column_headers()
+        row_headers_2 = vcov_mtx2.get_row_headers()
+
+        # Ensure that headers are in the same order
+        for i in range(len(taxon_labels)):
+            assert col_headers_2[i] == row_headers_2[i]
+
+        # Check the sum of the distance matrix, should be = ?
+        assert vcov_mtx2.data.sum() == var_cov_sum
