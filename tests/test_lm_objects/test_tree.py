@@ -1044,7 +1044,7 @@ END;
 #NEXUS
 
 BEGIN TAXA;
-    DIMENSIONS NTAX=4;
+    DIMENSIONS NTAX=5;
     TAXLABELS
         Taxon_1
 [&myatt=value1]
@@ -1054,15 +1054,18 @@ BEGIN TAXA;
 [&myatt=value3]
         Taxon_4
 [&myatt=value4]
+        Taxon_5
+[&myatt=value5]
   ;
 END;
 
 BEGIN TREES;
-    TREE 1 = ((Taxon_1:0.2,Taxon_4:0.2):0.1,(Taxon_2:0.1,Taxon_3:0.1):0.2);
+    TREE 1 = (Taxon_5:0.4,((Taxon_1:0.2,Taxon_2:0.2):0.1,\
+(Taxon_3:0.2,Taxon_4:0.2):0.1):0.1);
 END;
 """
-        var_cov_sum = 1.8
-        taxon_labels = ['Taxon 1', 'Taxon 2', 'Taxon 3', 'Taxon 4']
+        var_cov_sum = 3.6
+        taxon_labels = ['Taxon 1', 'Taxon 2', 'Taxon 3', 'Taxon 4', 'Taxon 5']
         my_tree = tree.TreeWrapper.get(data=nexus_string, schema='nexus')
 
         # Get default var_cov matrix
@@ -1093,3 +1096,75 @@ END;
 
         # Check the sum of the distance matrix, should be = ?
         assert vcov_mtx2.data.sum() == var_cov_sum
+
+    # .....................................
+    def test_get_variance_covariance_matrix_no_branch_lengths(self):
+        """Test get_variance_covariance_matrix with no branch lengths
+        """
+        newick_string = '((Taxon_1,Taxon_4),(Taxon_2, Taxon_3));'
+        my_tree = tree.TreeWrapper.get(data=newick_string, schema='newick')
+
+        # Check that an LmTreeException is thrown
+        with pytest.raises(tree.LmTreeException):
+            my_tree.get_variance_covariance_matrix()
+
+    # .....................................
+    def test_has_branch_lengths(self):
+        """Test the has_branch_lengths function
+        """
+        bl_newick = '((Taxon_1:0.1,Taxon_4:0.1):0.2,Taxon_3:0.3);'
+        no_bl_newick = '((Taxon_1, Taxon_4),(Taxon_2, Taxon_3));'
+
+        bl_tree = tree.TreeWrapper.get(data=bl_newick, schema='newick')
+        no_bl_tree = tree.TreeWrapper.get(data=no_bl_newick, schema='newick')
+
+        # Check if they have branch lengths
+        assert bl_tree.has_branch_lengths()
+        assert not no_bl_tree.has_branch_lengths()
+
+    # .....................................
+    def test_has_polytomies(self):
+        """Test the has_polytomies function
+        """
+        poly_newick = '((A,B,C),D);'
+        no_poly_newick = '((A,B),(C,D));'
+
+        poly_tree = tree.TreeWrapper.get(data=poly_newick, schema='newick')
+        no_poly_tree = tree.TreeWrapper.get(data=no_poly_newick,
+                                            schema='newick')
+
+        # Check if they have branch lengths
+        assert poly_tree.has_polytomies()
+        assert not no_poly_tree.has_polytomies()
+
+    # .....................................
+    def test_is_binary(self):
+        """Test the is_binary function
+        """
+        no_bin_newick = '((A,B,C),D);'
+        bin_newick = '((A,B),(C,D));'
+
+        bin_tree = tree.TreeWrapper.get(data=bin_newick, schema='newick')
+        no_bin_tree = tree.TreeWrapper.get(data=no_bin_newick, schema='newick')
+
+        # Check if they have branch lengths
+        assert bin_tree.is_binary()
+        assert not no_bin_tree.is_binary()
+
+    # .....................................
+    def test_is_ultrametric(self):
+        """Test the is_ultrametric function
+        """
+        no_bl_newick = '((A,B),(C,D));'
+        no_ultra_newick = '((A:0.1,B:0.2):0.1,(C:0.1,D:0.3):0.4);'
+        ultra_newick = '((A:0.1,B:0.1):0.2,(C:0.2,D:0.2):0.1);'
+
+        no_bl_tree = tree.TreeWrapper.get(data=no_bl_newick, schema='newick')
+        no_ultra_tree = tree.TreeWrapper.get(data=no_ultra_newick,
+                                             schema='newick')
+        ultra_tree = tree.TreeWrapper.get(data=ultra_newick, schema='newick')
+
+        # Check if they have branch lengths
+        assert not no_bl_tree.is_ultrametric()
+        assert not no_ultra_tree.is_ultrametric()
+        assert ultra_tree.is_ultrametric()
