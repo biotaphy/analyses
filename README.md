@@ -54,4 +54,3 @@ optional arguments:
                         If provided, write the rates and plots here
 ```
 
-

@@ -29,7 +29,6 @@
 @todo: Should pruning a tree collapse clades automatically?
 @todo: Add method to remove annotations
 @todo: Move label method out of internal functions
-@todo: Make tree a subclass of dendropy tree
 """
 import dendropy
 import numpy as np
@@ -75,14 +74,22 @@ class TreeWrapper(dendropy.Tree):
         return cls.get(data=tree.as_string('nexus'), schema='nexus')
 
     # ..............................
-    def add_node_labels(self, prefix=None):
-        """
-        @summary: Add labels to the internal nodes of a tree
-        @param prefix: If provided, this will be prepended to the node label
-        @note: This labels nodes the way that R does
+    def add_node_labels(self, prefix=None, overwrite=False):
+        """Add labels to the nodes in the tree
+
+        Add labels to the unlabeled nodes in the tree.
+
+        Args:
+            prefix (:obj:`str`, optional): If provided, prefix the node labels
+                with this string.
+            overwrite (boolean): Indicates whether existing node labels should
+                be overwritten or if they should be maintained.
+
+        Note:
+            This labels nodes the way that R does
         """
         self._label_tree_nodes(self.seed_node, len(self.get_labels()),
-                               prefix=prefix)
+                               prefix=prefix, overwrite=overwrite)
 
     # ..............................
     def annotate_tree(self, attribute_name, annotation_pairs,
@@ -440,7 +447,7 @@ class TreeWrapper(dendropy.Tree):
             return self._annotation_method(label_attribute)
 
     # ..............................
-    def _label_tree_nodes(self, node, i, prefix=None):
+    def _label_tree_nodes(self, node, i, prefix=None, overwrite=False):
         """
         @summary: Private function to do the work when labeling nodes
         @note: Recursive
@@ -449,14 +456,16 @@ class TreeWrapper(dendropy.Tree):
 
         # If we have children, label and recurse
         if len(cn) > 0:
-            if prefix is not None:
-                node.label = '{}{}'.format(prefix, i)
-            else:
-                node.label = i
-            i += 1
+            if node.label is None or overwrite:
+                if prefix is not None:
+                    node.label = '{}{}'.format(prefix, i)
+                else:
+                    node.label = str(i)
+                i += 1
             # Loop through children and label nodes
             for child in cn:
-                i = self._label_tree_nodes(child, i)
+                i = self._label_tree_nodes(child, i, prefix=prefix,
+                                           overwrite=overwrite)
         # Return the current i value
         return i
 
