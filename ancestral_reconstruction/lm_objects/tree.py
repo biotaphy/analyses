@@ -176,7 +176,7 @@ class TreeWrapper(dendropy.Tree):
             path_lookups[taxon.label] = l
 
         num_taxa = len(self.taxon_namespace)
-        for i_1 in xrange(num_taxa - 1):
+        for i_1 in range(num_taxa - 1):
             taxon1 = self.taxon_namespace[i_1]
 
             label = label_method(taxon1)
@@ -193,7 +193,7 @@ class TreeWrapper(dendropy.Tree):
                     o_dist += p_dist
                     t_labels.append(label)
 
-                for i_2 in xrange(i_1, num_taxa):
+                for i_2 in range(i_1, num_taxa):
                     taxon2 = self.taxon_namespace[i_2]
 
                     try:
