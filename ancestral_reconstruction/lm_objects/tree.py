@@ -118,15 +118,12 @@ class TreeWrapper(dendropy.Tree):
                         # Set new value
                         taxon.annotations.add_new(attribute_name,
                                                   annotation_pairs[label])
-                    else:
-                        taxon.annotations.add_new(attribute_name,
-                                                  annotation_pairs[label])
+                else:
+                    taxon.annotations.add_new(attribute_name,
+                                              annotation_pairs[label])
             except KeyError:
                 # Pass if a label is not found in the dictionary,
                 #     otherwise fail
-                pass
-            except AttributeError:
-                # Pass if taxon does not have attribute (may not have squid)
                 pass
 
     # ..............................
@@ -137,11 +134,8 @@ class TreeWrapper(dendropy.Tree):
         """
         annotations = []
         for taxon in self.taxon_namespace:
-            try:
-                att = taxon.annotations.get_value(annotation_attribute)
-                annotations.append((taxon.label, att))
-            except:
-                pass
+            att = taxon.annotations.get_value(annotation_attribute)
+            annotations.append((taxon.label, att))
         return annotations
 
     # ..............................
@@ -226,8 +220,8 @@ class TreeWrapper(dendropy.Tree):
             except:
                 pass
 
-        distance_atrix = Matrix(dist_mtx, headers={'0': ordered_labels,
-                                                   '1': ordered_labels})
+        distance_matrix = Matrix(dist_mtx, headers={'0': ordered_labels,
+                                                    '1': ordered_labels})
         return distance_matrix
 
     # ..............................
@@ -272,8 +266,8 @@ class TreeWrapper(dendropy.Tree):
             except:
                 pass
 
-        distanceMatrix = Matrix(dist_mtx, headers={'0': ordered_labels,
-                                                   '1': ordered_labels})
+        distance_matrix = Matrix(dist_mtx, headers={'0': ordered_labels,
+                                                    '1': ordered_labels})
         return distance_matrix
 
     # ..............................
