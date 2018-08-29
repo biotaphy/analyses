@@ -27,6 +27,7 @@ class Sequence(object):
     def set_qualstr(self, qual):
         """
         @note: An offset of 33 is assumed
+        @todo: Should this reset both or neither?
         """
         self.qualstr = qual
         if len(self.qualarr) == 0:
@@ -37,6 +38,7 @@ class Sequence(object):
     def set_qualarr(self, qual):
         """
         @note: An offset of 33 is assumed
+        @todo: Should this reset both or neither?
         """
         self.qualarr = qual
         if len(self.qualstr) == 0:
