@@ -211,7 +211,7 @@ BEGIN TAXA;
     DIMENSIONS NTAX=3;
     TAXLABELS
         Taxon_1
-[&myatt=value1,&att2=existingvalue]
+[&myatt=value1,att2=existingvalue]
         Taxon_2
 [&myatt=value2]
         Taxon_3
@@ -271,7 +271,7 @@ BEGIN TAXA;
     DIMENSIONS NTAX=3;
     TAXLABELS
         Taxon_1
-[&myatt=value1,&att2=existingvalue]
+[&myatt=value1,att2=existingvalue]
         Taxon_2
 [&myatt=value2]
         Taxon_3
@@ -482,7 +482,7 @@ BEGIN TAXA;
     DIMENSIONS NTAX=3;
     TAXLABELS
         Taxon_1
-[&myatt=value1,&att2=existingvalue]
+[&myatt=value1,att2=existingvalue]
         Taxon_2
 [&myatt=value2]
         Taxon_3
@@ -516,7 +516,7 @@ BEGIN TAXA;
     DIMENSIONS NTAX=3;
     TAXLABELS
         Taxon_1
-[&myatt=value1,&att2=existingvalue]
+[&myatt=value1,att2=existingvalue]
         Taxon_2
 [&myatt=value2]
         Taxon_3
@@ -1168,3 +1168,59 @@ END;
         assert not no_bl_tree.is_ultrametric()
         assert not no_ultra_tree.is_ultrametric()
         assert ultra_tree.is_ultrametric()
+
+    # .....................................
+    def test_prune_tips_without_attribute(self):
+        """Tests the prune_tips_without_attribute method
+        """
+        # Set up tree
+        nexus_string = """\
+#NEXUS
+
+BEGIN TAXA;
+    DIMENSIONS NTAX=5;
+    TAXLABELS
+        Taxon_1
+[&myatt=value1,otheratt=something]
+        Taxon_2
+[&myatt=value2,otheratt=another]
+        Taxon_3
+[&myatt=value3,otheratt=onemore]
+        Taxon_4
+[&myatt=value4]
+        Taxon_5
+[&myatt=value5]
+  ;
+END;
+
+BEGIN TREES;
+    TREE 1 = (Taxon_5:0.4,((Taxon_1:0.2,Taxon_2:0.2):0.1,\
+(Taxon_3:0.2,Taxon_4:0.2):0.1):0.1);
+END;
+"""
+        taxon_labels = ['Taxon 1', 'Taxon 2', 'Taxon 3', 'Taxon 4', 'Taxon 5']
+        att2_labels = ['Taxon 1', 'Taxon 2', 'Taxon 3']
+
+        my_tree = tree.TreeWrapper.get(data=nexus_string, schema='nexus')
+
+        # Prune myatt first, should not remove any results
+        my_tree.prune_tips_without_attribute(search_attribute='myatt')
+
+        # Verify tips are all present
+        count = 0
+        for taxon in my_tree.taxon_namespace:
+            assert taxon.label in taxon_labels
+            count += 1
+        # Check that they are all still present
+        assert count == len(taxon_labels)
+
+        # Prune tips missing otheratt
+        my_tree.prune_tips_without_attribute(search_attribute='otheratt')
+
+        # Verify tips have been pruned
+        count = 0
+        for taxon in my_tree.taxon_namespace:
+            assert taxon.label in att2_labels
+            count += 1
+        # Check that they are all still present
+        assert count == len(att2_labels)
