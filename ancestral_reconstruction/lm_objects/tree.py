@@ -181,44 +181,38 @@ class TreeWrapper(dendropy.Tree):
 
             label = label_method(taxon1)
             # Check for matrix index
-            try:
-                idx1 = label_lookup[label]
+            idx1 = label_lookup[label]
 
-                # Build path to root for taxon 1
-                # path_labels = []
-                o_dist = 0.0
-                t_path = path_lookups[taxon1.label]
-                t_labels = []
-                for label, p_dist in t_path:
-                    o_dist += p_dist
-                    t_labels.append(label)
+            # Build path to root for taxon 1
+            # path_labels = []
+            o_dist = 0.0
+            t_path = path_lookups[taxon1.label]
+            t_labels = []
+            for label, p_dist in t_path:
+                o_dist += p_dist
+                t_labels.append(label)
 
-                for i_2 in range(i_1, num_taxa):
-                    taxon2 = self.taxon_namespace[i_2]
+            for i_2 in range(i_1, num_taxa):
+                taxon2 = self.taxon_namespace[i_2]
 
-                    try:
-                        idx2 = label_lookup[label_method(taxon2)]
+                idx2 = label_lookup[label_method(taxon2)]
 
-                        # Initialize distance for these two taxa
-                        dist = o_dist
+                # Initialize distance for these two taxa
+                dist = o_dist
 
-                        # Loop through path back to root
-                        t2_path = path_lookups[taxon2.label]
+                # Loop through path back to root
+                t2_path = path_lookups[taxon2.label]
 
-                        for label, p_dist in t2_path:
-                            if label in t_labels:
-                                dist -= p_dist
-                            else:
-                                dist += p_dist
+                for label, p_dist in t2_path:
+                    if label in t_labels:
+                        dist -= p_dist
+                    else:
+                        dist += p_dist
 
-                        # mrca = pdm.mrca(taxon1, taxon2)
-                        # dist = pdm.patristic_distance(taxon1, taxon2)
-                        dist_mtx[idx1, idx2] = dist
-                        dist_mtx[idx2, idx1] = dist
-                    except:
-                        pass
-            except:
-                pass
+                # mrca = pdm.mrca(taxon1, taxon2)
+                # dist = pdm.patristic_distance(taxon1, taxon2)
+                dist_mtx[idx1, idx2] = dist
+                dist_mtx[idx2, idx1] = dist
 
         distance_matrix = Matrix(dist_mtx, headers={'0': ordered_labels,
                                                     '1': ordered_labels})
@@ -252,19 +246,13 @@ class TreeWrapper(dendropy.Tree):
         for taxon1 in self.taxon_namespace:
             label = label_method(taxon1)
             # Check for matrix index
-            try:
-                idx1 = label_lookup[label]
+            idx1 = label_lookup[label]
 
-                for taxon2 in self.taxon_namespace:
-                    try:
-                        idx2 = label_lookup[label_method(taxon2)]
-                        # mrca = pdm.mrca(taxon1, taxon2)
-                        dist = pdm.patristic_distance(taxon1, taxon2)
-                        dist_mtx[idx1, idx2] = dist
-                    except:
-                        pass
-            except:
-                pass
+            for taxon2 in self.taxon_namespace:
+                idx2 = label_lookup[label_method(taxon2)]
+                # mrca = pdm.mrca(taxon1, taxon2)
+                dist = pdm.patristic_distance(taxon1, taxon2)
+                dist_mtx[idx1, idx2] = dist
 
         distance_matrix = Matrix(dist_mtx, headers={'0': ordered_labels,
                                                     '1': ordered_labels})
@@ -309,7 +297,7 @@ class TreeWrapper(dendropy.Tree):
         label_lookup = dict([(
                 ordered_labels[i], i) for i in range(len(ordered_labels))])
 
-        n = len(orderedLabels)
+        n = len(ordered_labels)
         vcv = np.zeros((n, n), dtype=float)
 
         edges = []
@@ -332,11 +320,11 @@ class TreeWrapper(dendropy.Tree):
                     left_child, right_child = edge.head_node.child_nodes()
                     left_tips = [
                         label_lookup[
-                            label_method(tipNode.taxon)
+                            label_method(tip_node.taxon)
                                     ] for tip_node in left_child.leaf_nodes()]
                     right_tips = [
                         label_lookup[
-                            label_method(tipNode.taxon)
+                            label_method(tip_node.taxon)
                                     ] for tip_node in right_child.leaf_nodes()]
                     # if len(leftTips) > 1 and len(rightTips) > 1:
                     for l in left_tips:
@@ -344,7 +332,7 @@ class TreeWrapper(dendropy.Tree):
                             vcv[l, r] = vcv[r, l] = el
 
             for node in self.leaf_nodes():
-                idx = label_ookup[label_method(node.taxon)]
+                idx = label_lookup[label_method(node.taxon)]
                 vcv[idx, idx] = node.distance_from_root()
 
         vcv_matrix = Matrix(vcv, headers={'0': ordered_labels,
