@@ -2,8 +2,9 @@ language: python
 python:
   - "2.7"
   - "3.4"
-  - "3.5"
   - "3.6"
+  - "3.7"
+  - "3.8"
 install: "pip install -r requirements.txt"
 script:
   - py.test tests/ --pep8 ancestral_reconstruction -v --cov ancestral_reconstruction --cov-report term-missing
