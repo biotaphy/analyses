@@ -62,8 +62,3 @@ class Sequence(object):
         retstr += "\n+\n"
         retstr += self.qualstr
         return retstr
-
-# .............................................................................
-if __name__ == "__main__":
-    s = Sequence(name="a", seq="acgt")
-    print(s.name)
