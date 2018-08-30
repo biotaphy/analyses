@@ -80,49 +80,41 @@ class Matrix(object):
 
     # ...........................
     @classmethod
-    def load(cls, fn):
+    def load(cls, flo):
         """
         @summary: Attempt to load a Matrix object from a file
-        @param fn: File location of a stored Matrix, Numpy array, or ?
+        @param flo: A file-like object for the stored Matrix, Numpy array, or ?
         """
-        # Try loading Matrix
+        # Try loading the Matrix object
         try:
-            try:
-                # New method
-                return cls.load_new(fn)
-            except:
-                # Old method
-                with open(fn) as inF:
-                    obj = json.load(inF)
-                return cls.load_from_json_or_dictionary(obj)
+            return cls.load_new(flo)
         except:
-            # Try loading numpy array
+            # Try loading a numpy array
             try:
-                data = np.load(fn)
+                data = np.load(flo)
                 return cls(data)
             except Exception as e:
-                raise Exception("Cannot load file: {0}, {1}".format(fn,
-                                                                    str(e)))
+                raise Exception(
+                    'Cannot load matrix data from file-like object provided')
 
     # ...........................
     @classmethod
-    def load_new(cls, filename):
+    def load_new(cls, flo):
         """
         @summary: Attempt to load a Matrix object from a file
-        @param filename: File location of a stored matrix
+        @param flo: A file-like object with matrix data
         """
         header_lines = []
         data_lines = []
         do_headers = True
-        with open(filename) as inF:
-            for line in inF:
-                if do_headers:
-                    if line.startswith(DATA_KEY):
-                        do_headers = False
-                    else:
-                        header_lines.append(line)
+        for line in flo:
+            if do_headers:
+                if line.startswith(DATA_KEY):
+                    do_headers = False
                 else:
-                    data_lines.append(line)
+                    header_lines.append(line)
+            else:
+                data_lines.append(line)
         s = StringIO()
         for line in data_lines:
             s.write(line)
@@ -146,14 +138,7 @@ class Matrix(object):
         @summary: Loads a Matrix from a CSV file
         @param flo: A string (filename) or file-like object containing a CSV
         """
-        pass
-
-    # ...........................
-    @classmethod
-    def load_from_json_or_dictionary(cls, obj):
-        headers = obj[HEADERS_KEY]
-        data = np.array(obj[DATA_KEY])
-        return cls(data, headers=headers)
+        raise Exception('Not implemented')
 
     # ...........................
     @classmethod
@@ -165,7 +150,7 @@ class Matrix(object):
         @param axis: The axis to concatenate these Matrix objects on
         @note: Assumes that headers for other axes are the same
         """
-        mtxObjs = []
+        mtx_objs = []
         axis_headers = []
         for mtx in mtx_list:
             if not isinstance(mtx, Matrix):
@@ -187,7 +172,7 @@ class Matrix(object):
         # Create a new data matrix
         new_data = np.concatenate(mtx_objs, axis=axis)
         # Use the first Matrix's headers as the base
-        new_headers = mtxList[0].get_headers()
+        new_headers = mtx_list[0].get_headers()
         # Replace the axis of headers with the concatenated version
         new_headers[str(axis)] = axis_headers
         return cls(new_data, headers=new_headers)
@@ -201,7 +186,7 @@ class Matrix(object):
         @note: Only keeps the headers for the append axis, assumes the other
                    axes are the same
         """
-        self.data = np.append(self.data, mtx, axis=axis)
+        self.data = np.append(self.data, mtx.data, axis=axis)
         self.headers[str(axis)].append(mtx.get_headers(axis=axis))
 
     # ...........................
@@ -511,7 +496,7 @@ class ArrayStream(list):
     # ...........................
     def gen(self):
         """
-        @summary: Generator function.  Loop over array and create ArrayStrems
+        @summary: Generator function.  Loop over array and create ArrayStreams
                    for sub arrays
         """
         n = 0
