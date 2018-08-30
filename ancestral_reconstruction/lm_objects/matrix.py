@@ -31,15 +31,10 @@
 @todo: Load should handle compressed and not compressed
 """
 from copy import deepcopy
+import io
 import json
 import numpy as np
 
-try:
-    # Python 2
-    from StringIO import StringIO
-except:
-    # Python 3
-    from io import StringIO
 
 HEADERS_KEY = 'headers'
 DATA_KEY = 'data'
@@ -94,8 +89,9 @@ class Matrix(object):
                 data = np.load(flo)
                 return cls(data)
             except Exception as e:
-                raise Exception(
-                    'Cannot load matrix data from file-like object provided')
+                raise Exception('{} : {}'.format(
+                    'Cannot load matrix data from file-like object provided',
+                    str(e)))
 
     # ...........................
     @classmethod
@@ -107,24 +103,25 @@ class Matrix(object):
         header_lines = []
         data_lines = []
         do_headers = True
+        data_stream = io.BytesIO()
         for line in flo:
-            if do_headers:
-                if line.startswith(DATA_KEY):
-                    do_headers = False
-                else:
-                    header_lines.append(line)
-            else:
-                data_lines.append(line)
-        s = StringIO()
-        for line in data_lines:
-            s.write(line)
-        s.seek(0)
+            try:
+                str_line = line.decode('utf-8')
+                if do_headers:
+                    if str_line.startswith(DATA_KEY):
+                        do_headers = False
+                    else:
+                        header_lines.append(str_line)
+            except:
+                data_stream.write(line)
+                # data_lines.append(line)
 
         my_obj = json.loads(''.join(header_lines))
 
         headers = my_obj[HEADERS_KEY]
         # Load returns a tuple if compressed
-        tmp = np.load(s)
+        data_stream.seek(0)
+        tmp = np.load(data_stream)
         if isinstance(tmp, np.ndarray):
             data = tmp
         else:
@@ -281,12 +278,19 @@ class Matrix(object):
                     the file-like object
         @param flo: The file-like object to write to
         """
-        myObj = {}
-        myObj[HEADERS_KEY] = self.headers
-        myObj[VERSION_KEY] = VERSION
-        flo.write('{}\n'.format(json.dumps(myObj, indent=3, default=float)))
-        flo.write('{}\n'.format(DATA_KEY))
-        np.savez_compressed(flo, self.data)
+        my_obj = {}
+        my_obj[HEADERS_KEY] = self.headers
+        my_obj[VERSION_KEY] = VERSION
+        try:
+            flo.write('{}\n'.format(json.dumps(my_obj, indent=3,
+                                               default=float)))
+            flo.write('{}\n'.format(DATA_KEY))
+            np.savez_compressed(flo, self.data)
+        except:
+            my_obj_str = '{}\n{}\n'.format(
+                json.dumps(my_obj, indent=3, default=float), DATA_KEY)
+            flo.write(bytes(my_obj_str, 'utf8'))
+            np.savez_compressed(flo, self.data)
 
     # ...........................
     def set_column_headers(self, headers):
