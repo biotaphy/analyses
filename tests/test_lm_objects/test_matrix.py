@@ -5,6 +5,7 @@ The functions in this module are pytest style tests for the matrix.py module
 import io
 import numpy as np
 import pytest
+import random
 import tempfile
 
 from ancestral_reconstruction.lm_objects import matrix
@@ -248,15 +249,95 @@ class Test_Matrix(object):
 
     # .....................................
     def test_slice(self):
-        pass
+        """Test the slice method
+        """
+        # Randomly generate size of matrix
+        n_dim = random.randint(2, 4)
+        dims = []
+        for i in range(n_dim):
+            d_size = random.randint(1, 20)
+            d_lower = random.randint(0, d_size - 1)
+            d_upper = random.randint(d_lower + 1, d_size)
+            dims.append((d_size, d_lower, d_upper))
+
+        # Generate the matrix and get original headers
+        mtx = get_random_matrix(*tuple([j[0] for j in dims]))
+        orig_headers = mtx.get_headers()
+
+        # Get slice parameters and slice matrix
+        slice_params = tuple([range(j[1], j[2]) for j in dims])
+        sliced_mtx = mtx.slice(*slice_params)
+
+        # Test data matrix
+        test_data = mtx.data
+
+        # For each dimension, check the size, and headers
+        for i in range(n_dim):
+            dim_size, dim_lower, dim_upper = dims[i]
+            assert sliced_mtx.data.shape[i] == dim_upper - dim_lower
+
+            # Check headers
+            orig_dim_headers = mtx.get_headers(axis=i)
+            dim_headers = sliced_mtx.get_headers(axis=i)
+            for j in range(len(dim_headers)):
+                assert dim_headers[j] == orig_dim_headers[j + dim_lower]
+
+            # Slice data for testing
+            test_data = test_data.take(range(dim_lower, dim_upper), axis=i)
+
+        # Check data
+        assert np.all(np.isclose(test_data, sliced_mtx.data))
 
     # .....................................
     def test_slice_by_header(self):
-        pass
+        """Test slice_by_header
+        """
+        mtx = get_random_matrix(3, 3, 3)
+        # Get the header to use for slicing, we'll use layer 2
+        slice_header = list(mtx.get_headers(axis=2))[1]
+
+        # Slice the matrix to only that layer
+        sliced_mtx = mtx.slice_by_header(slice_header, axis=2)
+
+        # Check that the shape is correct, should be (3, 3, 1)
+        assert sliced_mtx.data.shape == (3, 3, 1)
+
+        # Check that data is the second layer
+        assert np.all(np.isclose(sliced_mtx.data[:, :, 0], mtx.data[:, :, 1]))
+
+        # Check that the headers are what we expect
+        assert mtx.get_row_headers() == sliced_mtx.get_row_headers()
+        assert mtx.get_column_headers() == sliced_mtx.get_column_headers()
+        assert [mtx.get_headers(axis=2)[1]] == sliced_mtx.get_headers(axis=2)
+        assert len(sliced_mtx.get_headers(axis=2)) == 1
 
     # .....................................
-    def test_write_csv(self):
-        pass
+    def test_write_csv_no_slice(self):
+        """Test write_csv
+        """
+        mtx = get_random_matrix(10, 10)
+
+        with io.StringIO() as out_str:
+            mtx.write_csv(out_str)
+            out_str.seek(0)
+
+            # Test that csv can be read
+            for line in out_str:
+                assert len(line.split(',')) > 1
+
+    # .....................................
+    def test_write_csv_slice(self):
+        """Test write_csv
+        """
+        mtx = get_random_matrix(10, 10, 2)
+
+        with io.StringIO() as out_str:
+            mtx.write_csv(out_str, range(0, 10), range(0, 1), [0])
+            out_str.seek(0)
+
+            # Test that csv can be read
+            for line in out_str:
+                assert len(line.split(',')) > 1
 
 
 # .............................................................................
