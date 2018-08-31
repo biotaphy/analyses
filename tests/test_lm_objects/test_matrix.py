@@ -326,6 +326,40 @@ class Test_Matrix(object):
                 assert len(line.split(',')) > 1
 
     # .....................................
+    def test_write_csv_no_slice_list_row_headers(self):
+        """Test write_csv
+        """
+        mtx = get_random_matrix(10, 10)
+        o_rh = mtx.get_row_headers()
+        new_rh = []
+        for h in o_rh:
+            new_rh.append([h, 'a', 'b'])
+        mtx.set_row_headers(new_rh)
+
+        with io.StringIO() as out_str:
+            mtx.write_csv(out_str)
+            out_str.seek(0)
+
+            # Test that csv can be read
+            for line in out_str:
+                assert len(line.split(',')) > 1
+
+    # .....................................
+    def test_write_csv_no_slice_no_row_headers(self):
+        """Test write_csv
+        """
+        o_mtx = get_random_matrix(10, 10)
+        mtx = matrix.Matrix(o_mtx.data)
+
+        with io.StringIO() as out_str:
+            mtx.write_csv(out_str)
+            out_str.seek(0)
+
+            # Test that csv can be read
+            for line in out_str:
+                assert len(line.split(',')) > 1
+
+    # .....................................
     def test_write_csv_slice(self):
         """Test write_csv
         """
