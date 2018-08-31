@@ -381,6 +381,7 @@ class Matrix(object):
         #    query axis to 1
         new_shape = list(self.data.shape)
         new_shape[axis] = 1
+        new_data = new_data.reshape(new_shape)
 
         # Copy the headers and set the header for the axis to just be the
         #    search header
@@ -402,7 +403,7 @@ class Matrix(object):
         @note: Currently only works for 2-D tables
         """
         if list(slice_args):
-            mtx = self.slice(slice_args)
+            mtx = self.slice(*slice_args)
         else:
             mtx = self
 
@@ -438,7 +439,7 @@ class Matrix(object):
                 row_headers = mtx.headers['0']
             except:
                 # No row headers
-                row_headers = [[] for _ in xrange(mtx.data.shape[0])]
+                row_headers = [[] for _ in range(mtx.data.shape[0])]
 
             if isinstance(row_headers[0], list):
                 listify = already_lists
@@ -453,7 +454,7 @@ class Matrix(object):
                 header_row.extend(mtx.headers['1'])
                 yield header_row
             # For each row in the data set
-            for i in xrange(mtx.data.shape[0]):
+            for i in range(mtx.data.shape[0]):
                 # Add the row headers if exists
                 row = []
                 row.extend(listify(row_headers[i]))
@@ -464,7 +465,7 @@ class Matrix(object):
         # .....................
         # Main write_csv function
         for row in csv_generator():
-            flo.write("{0}\n".format(','.join([str(v) for v in row])))
+            flo.write(u"{0}\n".format(','.join([str(v) for v in row])))
 
 
 # .............................................................................
