@@ -126,7 +126,7 @@ class Matrix(object):
         tmp = np.load(data_stream)
 
         # Get data from temp object, we will return data item for first key
-        data = tmp[tmp.keys()[0]]
+        data = tmp[list(tmp.keys())[0]]
         return cls(data, headers=headers)
 
     # ...........................
