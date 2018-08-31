@@ -86,10 +86,12 @@ class Matrix(object):
         except:
             # Try loading a numpy array
             try:
+                # Seek back to start of file
+                flo.seek(0)
                 data = np.load(flo)
                 return cls(data)
             except Exception as e:
-                raise Exception('{} : {}'.format(
+                raise IOError('{} : {}'.format(
                     'Cannot load matrix data from file-like object provided',
                     str(e)))
 
@@ -122,10 +124,9 @@ class Matrix(object):
         # Load returns a tuple if compressed
         data_stream.seek(0)
         tmp = np.load(data_stream)
-        if isinstance(tmp, np.ndarray):
-            data = tmp
-        else:
-            data = tmp.items()[0][1]
+
+        # Get data from temp object, we will return data item for first key
+        data = tmp[tmp.keys()[0]]
         return cls(data, headers=headers)
 
     # ...........................

@@ -5,6 +5,7 @@ The functions in this module are pytest style tests for the matrix.py module
 import io
 import numpy as np
 import pytest
+import tempfile
 
 from ancestral_reconstruction.lm_objects import matrix
 
@@ -32,16 +33,30 @@ class Test_Matrix(object):
         orig_mtx = get_random_matrix(5, 5)
 
         # Create a file like object and save original matrix
-        mtx_stringio = io.BytesIO()
-        orig_mtx.save(mtx_stringio)
-        mtx_stringio.seek(0)
+        mtx_bytesio = io.BytesIO()
+        orig_mtx.save(mtx_bytesio)
+        mtx_bytesio.seek(0)
 
         # Attempt to load matrix
-        loaded_mtx = matrix.Matrix.load(mtx_stringio)
+        loaded_mtx = matrix.Matrix.load(mtx_bytesio)
+        mtx_bytesio.close()
 
         # Verify data and headers are the same
-        assert np.isclose(loaded_mtx.data.sum(), orig_mtx.data.sum())
+        assert np.all(np.isclose(loaded_mtx.data, orig_mtx.data))
         assert loaded_mtx.get_headers() == orig_mtx.get_headers()
+
+        # Write to temp file
+        out_f = tempfile.TemporaryFile()
+        np.save(out_f, orig_mtx.data)
+        out_f.seek(0)
+        np_mtx = matrix.Matrix.load(out_f)
+
+        # Verify that the data is the same
+        assert np.all(np.isclose(np_mtx.data, orig_mtx.data))
+
+        # Verify load fails with empty file
+        with pytest.raises(IOError):
+            mtx = matrix.Matrix.load(io.BytesIO())
 
     # .....................................
     def test_load_new(self):
