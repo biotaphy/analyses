@@ -46,10 +46,10 @@ class Test_Matrix(object):
         assert loaded_mtx.get_headers() == orig_mtx.get_headers()
 
         # Write to temp file
-        out_f = tempfile.TemporaryFile()
-        np.save(out_f, orig_mtx.data)
-        out_f.seek(0)
-        np_mtx = matrix.Matrix.load(out_f)
+        with tempfile.TemporaryFile() as out_f:
+            np.save(out_f, orig_mtx.data)
+            out_f.seek(0)
+            np_mtx = matrix.Matrix.load(out_f)
 
         # Verify that the data is the same
         assert np.all(np.isclose(np_mtx.data, orig_mtx.data))
@@ -60,7 +60,22 @@ class Test_Matrix(object):
 
     # .....................................
     def test_load_new(self):
-        pass
+        """Test the load_new method
+        """
+        orig_mtx = get_random_matrix(5, 5)
+
+        # Create a file like object and save original matrix
+        mtx_bytesio = io.BytesIO()
+        orig_mtx.save(mtx_bytesio)
+        mtx_bytesio.seek(0)
+
+        # Attempt to load matrix
+        loaded_mtx = matrix.Matrix.load_new(mtx_bytesio)
+        mtx_bytesio.close()
+
+        # Verify data and headers are the same
+        assert np.all(np.isclose(loaded_mtx.data, orig_mtx.data))
+        assert loaded_mtx.get_headers() == orig_mtx.get_headers()
 
     # .....................................
     def test_load_from_csv(self):
@@ -148,19 +163,88 @@ class Test_Matrix(object):
 
     # .....................................
     def test_save(self):
-        pass
+        """Test the save method
+
+        Save should save a Matrix object to a file that can be loaded later
+        """
+        orig_mtx = get_random_matrix(5, 5)
+
+        # Create a file like object and save original matrix
+        with tempfile.TemporaryFile() as save_f:
+            # Save the original matrix
+            orig_mtx.save(save_f)
+
+            # Load the saved Matrix
+            save_f.seek(0)
+            loaded_mtx = matrix.Matrix.load(save_f)
+
+        # Verify data and headers are the same
+        assert np.all(np.isclose(loaded_mtx.data, orig_mtx.data))
+        assert loaded_mtx.get_headers() == orig_mtx.get_headers()
 
     # .....................................
     def test_set_column_headers(self):
-        pass
+        """Test set_column_headers
+        """
+        n_rows, n_cols = (9, 6)
+        mtx = get_random_matrix(n_rows, n_cols)
+        new_col_headers = ['Col head - {}'.format(i**2) for i in range(n_cols)]
+
+        # Test that current column headers do not match new
+        old_col_headers = mtx.get_column_headers()
+        assert not all(
+            [new_col_headers[i] == old_col_headers[i] for i in range(n_cols)])
+
+        # Set the column headers and check that they now match
+        mtx.set_column_headers(new_col_headers)
+        mtx_new_headers = mtx.get_column_headers()
+        assert all(
+            [new_col_headers[i] == mtx_new_headers[i] for i in range(n_cols)])
 
     # .....................................
     def test_set_headers(self):
-        pass
+        """Test set_headers
+        """
+        n_rows, n_cols = (8, 10)
+        mtx = get_random_matrix(n_rows, n_cols)
+        new_col_headers = ['Col head - {}'.format(i**2) for i in range(n_cols)]
+        new_row_headers = ['Row head - {}'.format(i**2) for i in range(n_rows)]
+
+        # Test that current headers do not match new
+        old_col_headers = mtx.get_column_headers()
+        old_row_headers = mtx.get_row_headers()
+        assert not all(
+            [new_col_headers[i] == old_col_headers[i] for i in range(n_cols)])
+        assert not all(
+            [new_row_headers[i] == old_row_headers[i] for i in range(n_rows)])
+
+        # Set the row headers and check that they now match
+        mtx.set_headers({'0': new_row_headers, '1': new_col_headers})
+        test_col_headers = mtx.get_column_headers()
+        test_row_headers = mtx.get_row_headers()
+        assert all(
+            [new_col_headers[i] == test_col_headers[i] for i in range(n_cols)])
+        assert all(
+            [new_row_headers[i] == test_row_headers[i] for i in range(n_rows)])
 
     # .....................................
     def test_set_row_headers(self):
-        pass
+        """Test set_row_headers
+        """
+        n_rows, n_cols = (9, 6)
+        mtx = get_random_matrix(n_rows, n_cols)
+        new_row_headers = ['Row head - {}'.format(i**2) for i in range(n_rows)]
+
+        # Test that current row headers do not match new
+        old_row_headers = mtx.get_row_headers()
+        assert not all(
+            [new_row_headers[i] == old_row_headers[i] for i in range(n_rows)])
+
+        # Set the row headers and check that they now match
+        mtx.set_row_headers(new_row_headers)
+        mtx_new_headers = mtx.get_row_headers()
+        assert all(
+            [new_row_headers[i] == mtx_new_headers[i] for i in range(n_rows)])
 
     # .....................................
     def test_slice(self):
