@@ -73,13 +73,19 @@ def read_csv_alignment_flo(csv_flo):
     sequence_list = []
 
     try:
-        has_header = csv.Sniffer().has_header(csv_flo.read(5000))
+        has_header = csv.Sniffer().has_header(csv_flo.readline())
         csv_flo.seek(0)
     except Exception as e:
         raise AlignmentIOError('Could not sniff header: {}'.format(str(e)))
 
+    num_parts = None
     for line in csv_flo:
         parts = line.strip().split(',')
+        if num_parts is None:
+            num_parts = len(parts)
+        else:
+            if len(parts) != num_parts:
+                raise AlignmentIOError('Number of columns is inconsistent')
         if has_header and headers is None:
             headers = parts[1:]
         else:
