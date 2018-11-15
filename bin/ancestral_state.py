@@ -40,6 +40,9 @@ if __name__ == '__main__':
     parser.add_argument('out_tree_schema', type=str, 
                         help='The format of the tree', 
                         choices=['newick', 'nexml', 'nexus'])
+    parser.add_argument(
+        'out_characters_filename', type=str,
+        help='A file location to write the character data as CSV')
 
     args = parser.parse_args()
 
@@ -52,11 +55,11 @@ if __name__ == '__main__':
                                                       args.data_filename))
     # Read data
     if args.data_format == 'csv':
-        sequences, headers = data_readers.read_csv_alignment_flo(
-            args.data_filename)
+        with open(args.data_filename) as in_file:
+            sequences, headers = data_readers.read_csv_alignment_flo(in_file)
     elif args.data_format == 'json':
-        sequences, headers = data_readers.read_json_alginment_flo(
-            args.data_filename)
+        with open(args.data_filename) as in_file:
+            sequences, headers = data_readers.read_json_alginment_flo(in_file)
     elif args.data_format == 'phylip':
         with open(args.data_filename) as in_file:
             sequences = data_reders.read_phylip_alignment_flo(in_file)
@@ -73,8 +76,13 @@ if __name__ == '__main__':
                              schema=args.in_tree_schema)
 
     # Run analysis
-    calculate_continuous_ancestral_states(tree, sequences)
+    char_mtx = data_readers.get_character_matrix_from_sequences_list(sequences)
+    (out_tree, anc_state) = calculate_continuous_ancestral_states(
+        tree, char_mtx)
 
     # Write outputs
     with open(args.out_tree_filename, 'w') as out_file:
-        out_file.write(tree.as_string(schema=args.out_tree_schema))
+        out_file.write(out_tree.as_string(schema=args.out_tree_schema))
+
+    with open(args.out_characters_filename, 'w') as out_file:
+        anc_state.write_csv(out_file)
