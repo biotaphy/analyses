@@ -3,6 +3,6 @@ scipy>=1.0.0
 numpy>=1.11.0
 python-coveralls
 pytest
-pytest-cov
+pytest-cov>=4.4
 pytest-pep8
 matplotlib
