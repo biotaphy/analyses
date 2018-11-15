@@ -60,10 +60,44 @@ def calculate_continuous_ancestral_states(tree, char_mtx, sum_to_one=False,
                 columns - character variables
                 depth - first is the calculated value, second layer is
                             standard error if desired
+    @todo: Add function for consistent label handling
     """
     # Wrap tree if dendropy tree
     if not isinstance(tree, TreeWrapper):
         tree = TreeWrapper.from_base_tree(tree)
+
+    # Assign labels to nodes that don't have them
+    tree.add_node_labels()
+
+    # Synchronize tree and character data
+    # Prune tree
+    prune_taxa = []
+    keep_taxon_labels = []
+    init_row_headers = char_mtx.get_row_headers()
+    for taxon in tree.taxon_namespace:
+        label = taxon.label.replace(' ', '_')
+        if label not in init_row_headers:
+            prune_taxa.append(taxon)
+            print(
+                'Could not find {} in character matrix, pruning'.format(label))
+        else:
+            keep_taxon_labels.append(label)
+    tree.prune_taxa(prune_taxa)
+    tree.purge_taxon_namespace()
+    if len(keep_taxon_labels) == 0:
+        raise Exception(
+            'None of the tree tips were found in the character data')
+
+    # Prune character data
+    keep_rows = []
+    i = 0
+    for label in init_row_headers:
+        if label in keep_taxon_labels:
+            keep_rows.append(i)
+        else:
+            print('Could not find {} in tree tips, pruning'.format(label))
+        i += 1
+    char_mtx = char_mtx.slice(keep_rows)
 
     # Standardize character matrix if requested
     tip_count, num_vars = char_mtx.data.shape
@@ -81,12 +115,10 @@ def calculate_continuous_ancestral_states(tree, char_mtx, sum_to_one=False,
     # Initialize headers
     row_headers = []
 
-    # Assign labels to nodes that don't have them
-    tree.add_node_labels()
-
     tip_col_headers = char_mtx.get_column_headers()
     tip_row_headers = char_mtx.get_row_headers()
-    tip_lookup = dict([(tip_row_headers[i], i) for i in range(tip_count)])
+    tip_lookup = dict([
+        (tip_row_headers[i].replace('_', ' '), i) for i in range(tip_count)])
 
     # Get the number of internal nodes in the tree
     internal_node_count = num_nodes - tip_count
@@ -136,8 +168,7 @@ def calculate_continuous_ancestral_states(tree, char_mtx, sum_to_one=False,
                     node_num_j = node_index_lookup[_get_node_label(j)]
 
                     if len(j.child_nodes()) == 0:
-                        full_vcp[node_num_i] += (data[node_num_j,
-                                                      x, 0] * tbl)
+                        full_vcp[node_num_i] += (data[node_num_j, x, 0] * tbl)
                     else:
                         node_num_j -= tip_count
                         full_mcp[node_num_i][node_num_j] -= tbl
