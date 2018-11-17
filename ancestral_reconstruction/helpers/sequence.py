@@ -1,5 +1,4 @@
-"""
-@summary: Module containing sequence class
+"""Module containing sequence class
 """
 import os
 import sys
@@ -7,9 +6,10 @@ import sys
 
 # .............................................................................
 class Sequence(object):
-    """
-    @summary: This is a barebones class for sequences.  These can be aligned or
-                not and can be any type of alphabet.
+    """Barebones class for sequences
+
+    This is a barebones class for sequences.  These can be aligned or not and
+    can be any type of alphabet.
     """
     # .....................................
     def __init__(self, name="", seq=""):
@@ -26,8 +26,11 @@ class Sequence(object):
     # .....................................
     def set_qualstr(self, qual):
         """
-        @note: An offset of 33 is assumed
-        @todo: Should this reset both or neither?
+        Note:
+            * An offset of 33 is assumed
+
+        Todo:
+            * Should this reset both or neither?
         """
         self.qualstr = qual
         if len(self.qualarr) == 0:
@@ -37,8 +40,11 @@ class Sequence(object):
     # .....................................
     def set_qualarr(self, qual):
         """
-        @note: An offset of 33 is assumed
-        @todo: Should this reset both or neither?
+        Note:
+            * An offset of 33 is assumed
+
+        Todo:
+            * Should this reset both or neither?
         """
         self.qualarr = qual
         if len(self.qualstr) == 0:

@@ -1,34 +1,9 @@
-"""
-@summary: Module containing LmTree class
-@author: CJ Grady
-@version: 2.0
-@status: alpha
+"""Module for the Lifemapper TreeWrapper class
 
-@license: gpl2
-@copyright: Copyright (C) 2018, University of Kansas Center for Research
-
-          Lifemapper Project, lifemapper [at] ku [dot] edu,
-          Biodiversity Institute,
-          1345 Jayhawk Boulevard, Lawrence, Kansas, 66045, USA
-
-          This program is free software; you can redistribute it and/or modify
-          it under the terms of the GNU General Public License as published by
-          the Free Software Foundation; either version 2 of the License, or (at
-          your option) any later version.
-
-          This program is distributed in the hope that it will be useful, but
-          WITHOUT ANY WARRANTY; without even the implied warranty of
-          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-          General Public License for more details.
-
-          You should have received a copy of the GNU General Public License
-          along with this program; if not, write to the Free Software
-          Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-          02110-1301, USA.
-@todo: Should we provide a method to collapse clades that only have one child?
-@todo: Should pruning a tree collapse clades automatically?
-@todo: Add method to remove annotations
-@todo: Move label method out of internal functions
+Todo:
+    * Should we provide a method to collapse clades that only have one child?
+    * Add method to remove annotations
+    * Move label method out of internal functions
 """
 import dendropy
 import numpy as np
@@ -44,8 +19,7 @@ DEFAULT_TREE_SCHEMA = 'nexus'
 
 # .............................
 class PhyloTreeKeys(object):
-    """
-    @summary: Keys for phylogenetic trees
+    """Keys for phylogenetic trees
     """
     MTX_IDX = 'mx'  # The matrix index for this node
     SQUID = 'squid'  # This is the LM SQUID (species identifier) for the tip
@@ -53,23 +27,22 @@ class PhyloTreeKeys(object):
 
 # .............................................................................
 class LmTreeException(Exception):
-    """
-    @summary: Wrapper around the base Exception class for tree related errors
+    """Wrapper around the base Exception class for tree related errors
     """
     pass
 
 
 # .............................................................................
 class TreeWrapper(dendropy.Tree):
-    """
-    @summary: Dendropy Tree wrapper that adds a little functionality and
-                improves performance of some functions
+    """Dendropy Tree wrapper
+
+    Dendropy tree wrapper that adds a little functionality and improves
+    performance of some functions
     """
     # ..............................
     @classmethod
     def from_base_tree(cls, tree):
-        """
-        @summary: Creates a TreeWrapper object from a base dendropy.Tree
+        """Creates a TreeWrapper object from a base dendropy.Tree
         """
         return cls.get(data=tree.as_string('nexus'), schema='nexus')
 
@@ -94,13 +67,14 @@ class TreeWrapper(dendropy.Tree):
     # ..............................
     def annotate_tree(self, attribute_name, annotation_pairs,
                       label_attribute='label', update=False):
-        """
-        @summary: Annotates the nodes of the tree
-        @param attribute_name: The name of the annotation attribute to add
-        @param annotation_pairs: A dictionary of label keys with annotation
-                                    values
-        @param label_attribute: If this is provided, use this annotation
-                                    attribute as the key instead of the label
+        """Annotates the nodes of the tree
+
+        Args:
+            attribute_name : The name of the annotation attribute to add
+            annotation_pairs : A dictionary of label keys with annotation
+                values
+            label_attribute : If this is provided, use this annotation
+                attribute as the key instead of the label
         """
         label_method = self._get_label_method(label_attribute)
 
@@ -128,9 +102,10 @@ class TreeWrapper(dendropy.Tree):
 
     # ..............................
     def get_annotations(self, annotation_attribute):
-        """
-        @summary: Gets a list of (label, annotation) pairs
-        @param annotation_attribute: The annotation attribute to retrieve
+        """Gets a list of (label, annotation) pairs
+
+        Args:
+            annotation_attribute : The annotation attribute to retrieve
         """
         annotations = []
         for taxon in self.taxon_namespace:
@@ -141,12 +116,15 @@ class TreeWrapper(dendropy.Tree):
     # ..............................
     def get_distance_matrix(self, label_attribute='label',
                             ordered_labels=None):
-        """
-        @summary: Get a Matrix object of phylogenetic distances between tips
-                    using a lower memory footprint
-        @param label_attribute: The attribute of the tips to use as labels for
-                                    the matrix
-        @param ordered_labels: If provided, use this order of labels
+        """Gets a Matrix object of phylogenetic distances
+
+        Get a Matrix object of phylogenetic distances between tips using a
+        lower memory footprint
+
+        Args:
+            label_attribute : The attribute of the tips to use as labels for
+                the matrix
+            ordered_labels : If provided, use this order of labels
         """
         label_method = self._get_label_method(label_attribute)
 
@@ -221,11 +199,12 @@ class TreeWrapper(dendropy.Tree):
     # ..............................
     def get_distance_matrix_dendropy(self, label_attribute='label',
                                      ordered_labels=None):
-        """
-        @summary: Get a Matrix object of phylogenetic distances between tips
-        @param label_attribute: The attribute of the tips to use as labels for
-                                    the matrix
-        @param ordered_labels: If provided, use this order of labels
+        """Gets a Matrix object of phylogenetic distances between tips
+
+        Args:
+            label_attribute : The attribute of the tips to use as labels for
+                the matrix
+            ordered_labels : If provided, use this order of labels
         """
         label_method = self._get_label_method(label_attribute)
 
@@ -260,9 +239,10 @@ class TreeWrapper(dendropy.Tree):
 
     # ..............................
     def get_labels(self):
-        """
-        @summary: Get tip labels for a clade
-        @note: Bottom-up order
+        """Gets tip labels for a clade
+
+        Note:
+            * Bottom-up order
         """
         labels = []
         for taxon in self.taxon_namespace:
@@ -274,11 +254,12 @@ class TreeWrapper(dendropy.Tree):
     # ..............................
     def get_variance_covariance_matrix(self, label_attribute='label',
                                        ordered_labels=None):
-        """
-        @summary: Get a Matrix object of variance / covariance for tips in tree
-        @param label_attribute: The attribute of the tips to use as labels for
-                                    the matrix
-        @param ordered_labels: If provided, use this order of labels
+        """Gets a Matrix object of variance / covariance for tips in tree
+
+        Args:
+            label_attribute : The attribute of the tips to use as labels for
+                the matrix
+            ordered_labels : If provided, use this order of labels
         """
         if not self.has_branch_lengths():
             raise LmTreeException('Cannot create VCV without branch lengths')
@@ -336,9 +317,7 @@ class TreeWrapper(dendropy.Tree):
 
     # ..............................
     def has_branch_lengths(self):
-        """
-        @summary: Returns boolean indicating if the tree has branch lengths for
-                      every clade
+        """Returns a boolean indicating if the entire tree has branch lengths
         """
         try:
             self.minmax_leaf_distance_from_root()
@@ -348,8 +327,7 @@ class TreeWrapper(dendropy.Tree):
 
     # ..............................
     def has_polytomies(self):
-        """
-        @summary: Returns boolean indicating if the tree has polytomies
+        """Returns boolean indicating if the tree has polytomies
         """
         for n in self.nodes():
             if len(n.child_nodes()) > 2:
@@ -358,9 +336,10 @@ class TreeWrapper(dendropy.Tree):
 
     # ..............................
     def is_binary(self):
-        """
-        @summary: Returns a boolean indicating if the tree is binary
-        @note: Checks that every clade has either zero or two children
+        """Checks if the tree is binary
+
+        Note:
+            * Checks that every clade has either zero or two children
         """
         for n in self.nodes():
             if not len(n.child_nodes()) in [0, 2]:
@@ -369,13 +348,15 @@ class TreeWrapper(dendropy.Tree):
 
     # ..............................
     def is_ultrametric(self, rel_tol=1e-03):
-        """
-        @summary: Check if the tree is ultrametric
-        @param rel_tol: The relative tolerance to determine if the min and max
-                        are equal.  We will say they are equal if they are
-                        99.9%.
-        @note: To be ultrametric, the branch length from root to tip must be
-                   equal for all tips
+        """Checks if the tree is ultrametric
+
+        Args:
+            rel_tol : The relative tolerance to determine if the min and max
+                are equal.  We will say they are equal if they are 99.9%.
+
+        Note:
+            * To be ultrametric, the branch length from root to tip must be
+                equal for all tips
         """
         try:
             min_bl, max_bl = self.minmax_leaf_distance_from_root()
@@ -387,9 +368,7 @@ class TreeWrapper(dendropy.Tree):
     # ..............................
     def prune_tips_without_attribute(self,
                                      search_attribute=PhyloTreeKeys.MTX_IDX):
-        """
-        @summary: Prunes the tree of any tips that don't have the specified
-                      attribute
+        """Prunes the tree of any tips that don't have the specified attribute
         """
         prune_taxa = []
         for taxon in self.taxon_namespace:
@@ -401,8 +380,7 @@ class TreeWrapper(dendropy.Tree):
 
     # ..............................
     def _annotation_method(self, label_attribute):
-        """
-        @summary: Use the label attribute as the node label
+        """Use the label attribute as the node label
         """
         def label_method(taxon):
             return taxon.annotations.get_value(label_attribute)
@@ -410,8 +388,7 @@ class TreeWrapper(dendropy.Tree):
 
     # ..............................
     def _get_label_method(self, label_attribute):
-        """
-        @summary: Get the function to be used for retrieving labels
+        """Gets the function to be used for retrieving labels
         """
         if label_attribute.lower() == 'label':
             return self._taxon_label_method
@@ -420,9 +397,10 @@ class TreeWrapper(dendropy.Tree):
 
     # ..............................
     def _label_tree_nodes(self, node, i, prefix=None, overwrite=False):
-        """
-        @summary: Private function to do the work when labeling nodes
-        @note: Recursive
+        """Private function to do the work when labeling nodes
+
+        Note:
+            * Recursive
         """
         cn = node.child_nodes()
 
@@ -443,7 +421,6 @@ class TreeWrapper(dendropy.Tree):
 
     # ..............................
     def _taxon_label_method(self, taxon):
-        """
-        @summary: Use the taxon label for the label
+        """Use the taxon label for the label
         """
         return taxon.label

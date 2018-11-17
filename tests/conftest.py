@@ -1,8 +1,9 @@
-"""
-@summary: Test configuration fixtures
+"""Test configuration fixtures
 """
 import glob
 import os
+
+
 import pytest
 
 # .............................................................................
@@ -19,18 +20,22 @@ SAMPLE_DATA_PATH = os.path.join(THIS_DIR, 'data_dir')
 
 # .............................................................................
 class SampleDataFiles(object):
-    """
-    @summary: This class is used to retrieve sample data for the tests
-    @note: For test files, the format should be something like:
-                "(in)valid_{name}.{extension}"
+    """This class is used to retrieve sample data for the tests.
+
+    Note:
+        * For test files, the format should be something like:
+            "(in)valid_{name}.{extension}"
     """
     # .....................................
     def get_alignments(self, fmt, is_valid):
-        """
-        @summary: Get an alignment file from the sample data
-        @param fmt: The format of the file you want (csv, json, phylip, table)
-        @param is_valid: Return valid data files if true, invalid files if not
-        @note: Will return a list
+        """Gets an alignment file from the sample data.
+
+        Args:
+            fmt :  The format of the file you want (csv, json, phylip, table)
+            is_valid : Return valid data files if true, invalid files if not
+
+        Returns:
+            A list of alignments matching the arguments
         """
         ALIGNMENTS_PATH = os.path.join(SAMPLE_DATA_PATH, ALIGNMENTS_DIR)
         return glob.iglob(
@@ -39,31 +44,40 @@ class SampleDataFiles(object):
 
     # .....................................
     def get_ancestral_distribution_packages(self, is_valid):
-        """
-        @summary: Get a list of the available packages for testing
-        @note: All packages are assumed to be correct as of now
-        @note: Will return list of (tree, alignment, results) tuples
+        """Gets a list of the available packages for testing
+
+        Args:
+            is_valid : Return valid data files if true, invalid files if not
+
+        Returns:
+            A list of (tree, alignment, results) tuples
         """
         packages_path = os.path.join(SAMPLE_DATA_PATH, ANC_DIST_PACKAGES_DIR)
         return self._get_packages(packages_path, is_valid)
 
     # .....................................
     def get_ancestral_state_packages(self, is_valid):
-        """
-        @summary: Get a list of the available packages for testing
-        @note: All packages are assumed to be correct as of now
-        @note: Will return list of (tree, alignment, results) tuples
+        """Gets a list of the available packages for testing
+
+        Args:
+            is_valid : Return valid data files if true, invalid files if not
+
+        Returns:
+            A list of (tree, alignment, results) tuples
         """
         packages_path = os.path.join(SAMPLE_DATA_PATH, ANC_STATE_PACKAGES_DIR)
         return self._get_packages(packages_path, is_valid)
 
     # .....................................
     def get_trees(self, fmt, is_valid):
-        """
-        @summary: Get an alignment file from the sample data
-        @param fmt: The format of the file you want (newick, nexus)
-        @param is_valid: Return valid data files if true, invalid files if not
-        @note: Will return a list
+        """Gets an alignment file from the sample data.
+
+        Args:
+            fmt : The format of the file you want (newick, nexus)
+            is_valid : Return valid data files if true, invalid files if not
+
+        Returns:
+            A list of tree filenames
         """
         TREE_PATH = os.path.join(SAMPLE_DATA_PATH, TREES_DIR)
         return glob.iglob(
@@ -97,14 +111,19 @@ class SampleDataFiles(object):
 
     # .....................................
     def _get_packages(self, packages_path, is_valid):
-        """
-        @summary: Get a list of the available packages for testing
-        @note: All packages are assumed to be correct as of now
-        @note: Will return list of (tree, alignment, results) tuples
+        """Gets a list of the available packages for testing
+
+        Args:
+            packages_path : A directory to look for packages within
+            is_valid : Return valid data files if true, invalid files if not
+
+
+        Returns:
+            A list of (tree, alignment, results) tuples
         """
         packages = []
-        package_dirs = glob.glob(self._get_glob_string(packages_path,
-                                                       is_valid, ''))
+        package_dirs = glob.glob(
+            self._get_glob_string(packages_path, is_valid, ''))
         for pkg_dir in package_dirs:
             tree_fn = None
             align_fn = None
@@ -126,4 +145,9 @@ class SampleDataFiles(object):
 # .............................................................................
 @pytest.fixture(scope="session")
 def data_files():
+    """Gets test fixture used to retrieve sample data files.
+
+    Returns:
+        A `SampleDataFiles` object
+    """
     return SampleDataFiles()

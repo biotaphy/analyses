@@ -1,38 +1,16 @@
-"""
-@summary Module that contains a Matrix class that has header information
-@author CJ Grady
-@status: alpha
-@version: 2.0
-@license: gpl2
-@copyright: Copyright (C) 2018, University of Kansas Center for Research
+"""Module that contains a Matrix class that has header information
 
-          Lifemapper Project, lifemapper [at] ku [dot] edu,
-          Biodiversity Institute,
-          1345 Jayhawk Boulevard, Lawrence, Kansas, 66045, USA
-
-          This program is free software; you can redistribute it and/or modify
-          it under the terms of the GNU General Public License as published by
-          the Free Software Foundation; either version 2 of the License, or (at
-          your option) any later version.
-
-          This program is distributed in the hope that it will be useful, but
-          WITHOUT ANY WARRANTY; without even the implied warranty of
-          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-          General Public License for more details.
-
-          You should have received a copy of the GNU General Public License
-          along with this program; if not, write to the Free Software
-          Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-          02110-1301, USA.
-@todo: Use https://docs.scipy.org/doc/numpy/user/basics.subclassing.html when
-          changing this to subclass numpy.ndarray
-@todo: Handle multiple rows / columns / etc of headers like:
-            (PAM x, y, site ids)
-@todo: Load should handle compressed and not compressed
+Todo:
+    * Use https://docs.scipy.org/doc/numpy/user/basics.subclassing.html when
+        changing this to subclass numpy.ndarray
+    * Handle multiple rows / columns / etc of headers like:
+        (PAM x, y, site ids)
+    * Load should handle compressed and not compressed
 """
 from copy import deepcopy
 import io
 import json
+
 import numpy as np
 
 
@@ -44,29 +22,30 @@ VERSION = '2.0.0'
 
 # .............................................................................
 class Matrix(object):
-    """
-    @summary: Lifemapper wrapper for Numpy ndarrays that adds headers
+    """Lifemapper wrapper for Numpy ndarrays that adds headers
     """
     # ...........................
     def __init__(self, mtx, headers=None):
-        """
-        @summary: Constructor
-        @param mtx: A matrix (like) object to use as the base data for the
-                    Matrix.  This can be None if the data has not been
-                    initialized
-        @param headers: Optional headers for this matrix.  This may be either a
-                          list of lists, where the index of a list in the lists
-                          will be treated as the axis
-                          (ex. [['Row 1', 'Row 2', 'Row 3'],
-                                ['Column 1', 'Column 2']])
-                          Or this could be a dictionary where the key is used
-                          for the axis.  (Ex:
-                          {
-                             '1' : ['Column 1', 'Column 2'],
-                             '0' : ['Row 1', 'Row 2', 'Row 3']
-                          }
-        @note: If the headers for an axis are a string and not a list, it will
-                    be treated as a file name
+        """Constructor
+
+        Args:
+            mtx : A matrix (like) object to use as the base data for the
+                Matrix.  This can be None if the data has not been initialized
+            headers : Optional headers for this matrix.  This may be either a
+                list of lists, where the index of a list in the lists will be
+                treated as the axis::
+                    (ex. [['Row 1', 'Row 2', 'Row 3'],
+                          ['Column 1', 'Column 2']])
+                Or this could be a dictionary where the key is used for the
+                axis.  (Ex:
+                    {
+                        '1' : ['Column 1', 'Column 2'],
+                        '0' : ['Row 1', 'Row 2', 'Row 3']
+                    }
+
+        Note:
+            * If the headers for an axis are a string and not a list, it will
+                be treated as a file name
         """
         self.data = mtx
         self.headers = {}
@@ -76,9 +55,10 @@ class Matrix(object):
     # ...........................
     @classmethod
     def load(cls, flo):
-        """
-        @summary: Attempt to load a Matrix object from a file
-        @param flo: A file-like object for the stored Matrix, Numpy array, or ?
+        """Attempts to load a Matrix object from a file
+
+        Args:
+            flo : A file-like object for the stored Matrix, Numpy array, or ?
         """
         # Try loading the Matrix object
         try:
@@ -98,9 +78,10 @@ class Matrix(object):
     # ...........................
     @classmethod
     def load_new(cls, flo):
-        """
-        @summary: Attempt to load a Matrix object from a file
-        @param flo: A file-like object with matrix data
+        """Attempts to load a Matrix object from a file
+
+        Args:
+            flo : A file-like object with matrix data
         """
         header_lines = []
         data_lines = []
@@ -132,21 +113,24 @@ class Matrix(object):
     # ...........................
     @classmethod
     def load_from_csv(cls, flo):
-        """
-        @summary: Loads a Matrix from a CSV file
-        @param flo: A string (filename) or file-like object containing a CSV
+        """Loads a Matrix from a CSV file
+
+        Args:
+            flo : A string (filename) or file-like object containing a CSV
         """
         raise Exception('Not implemented')
 
     # ...........................
     @classmethod
     def concatenate(cls, mtx_list, axis=0):
-        """
-        @summary: Concatenates multiple Matrix objects together to form a new
-                        Matrix object
-        @param mtx_list: A List of Matrix objects to concatenate together
-        @param axis: The axis to concatenate these Matrix objects on
-        @note: Assumes that headers for other axes are the same
+        """Concatenates multiple Matrix objects together to form a new Matrix
+
+        Args:
+            mtx_list : A List of Matrix objects to concatenate together
+            axis : The axis to concatenate these Matrix objects on
+
+        Note:
+            * Assumes that headers for other axes are the same
         """
         mtx_objs = []
         axis_headers = []
@@ -177,20 +161,22 @@ class Matrix(object):
 
     # ...........................
     def append(self, mtx, axis=0):
-        """
-        @summary: Appends the provided Matrix object to this one
-        @param mtx: The Matrix object to append to this one
-        @param axis: The axis to append this matrix on
-        @note: Only keeps the headers for the append axis, assumes the other
-                   axes are the same
+        """Appends the provided Matrix object to this one
+
+        Args:
+            mtx : The Matrix object to append to this one
+            axis : The axis to append this matrix on
+
+        Note:
+            * Only keeps the headers for the append axis, assumes the other
+                axes are the same
         """
         self.data = np.append(self.data, mtx.data, axis=axis)
         self.headers[str(axis)].append(mtx.get_headers(axis=axis))
 
     # ...........................
     def flatten_2D(self):
-        """
-        @summary: Flattens a higher dimension Matrix object into a 2D matrix
+        """Flattens a higher dimension Matrix object into a 2D matrix
         """
         flat_mtx = self
         while flat_mtx.data.ndim > 2:
@@ -242,19 +228,19 @@ class Matrix(object):
 
     # ...........................
     def get_column_headers(self):
-        """
-        @summary: Shortcut to get column headers
-        @todo: Throw a different exception if no column header?
+        """Shortcut to get column headers
+
+        Todo:
+            * Throw a different exception if no column header?
         """
         return self.get_headers(axis=1)
 
     # ...........................
     def get_headers(self, axis=None):
-        """
-        @summary: Get the headers associated with this Matrix, optionally
-                     limited to a specific axis
-        @param axis: If provided, return headers for this axis, else, return
-                        all
+        """Gets the headers associated with this Matrix
+
+        Args:
+            axis : If provided, return headers for this axis, else, return all
         """
         if axis is None:
             return self.headers
@@ -266,18 +252,22 @@ class Matrix(object):
 
     # ...........................
     def get_row_headers(self):
-        """
-        @summary: Shortcut to get row headers
-        @todo: Throw a different exception if no row headers?
+        """Shortcut to get row headers
+
+        Todo:
+            * Throw a different exception if no row headers?
         """
         return self.get_headers(axis=0)
 
     # ...........................
     def save(self, flo):
-        """
-        @summary: Saves the Matrix object in a JSON / Numpy hybrid format to
-                    the file-like object
-        @param flo: The file-like object to write to
+        """Saves the Matrix to a file-like object
+
+        Saves the Matrix object in a JSON / Numpy hybrid format to the
+            file-like object
+
+        Args:
+            flo : The file-like object to write to
         """
         my_obj = {}
         my_obj[HEADERS_KEY] = self.headers
@@ -295,23 +285,29 @@ class Matrix(object):
 
     # ...........................
     def set_column_headers(self, headers):
-        """
-        @summary: Shortcut to set column headers
+        """Shortcut to set column headers
+
+        Args:
+            headers : A list of new column headers
         """
         self.set_headers(headers, axis=1)
 
     # ...........................
     def set_headers(self, headers, axis=None):
-        """
-        @summary: Set the headers for this Matrix, optionally for a specific
-                    axis
-        @param headers: Matrix headers.  Can be a list of lists, a dictionary
-                          of lists, or if axis is provided, a single list
-        @param axis: If provided, set the headers for a specific axis, else,
-                      process as if it is for the entire Matrix
-        @todo: Validate input for single axis operation?
-        @note: Resets headers dictionary when setting values for all headers
-        @note: Duck types to use list of lists or dictionary to set values for
+        """Sets the headers for this Matrix
+
+        Args:
+            headers : Matrix headers.  Can be a list of lists, a dictionary
+                of lists, or if axis is provided, a single list
+            axis : If provided, set the headers for a specific axis, else,
+                process as if it is for the entire Matrix
+
+        Todo:
+            * Validate input for single axis operation?
+
+        Note:
+            * Resets headers dictionary when setting values for all headers
+            * Duck types to use list of lists or dictionary to set values for
                 different axes
         """
         if axis is not None:
@@ -337,17 +333,22 @@ class Matrix(object):
 
     # ...........................
     def set_row_headers(self, headers):
-        """
-        @summary: Shortcut to set row headers
+        """Shortcut to set row headers
+
+        Args:
+            headers : A list of new row headers
         """
         self.set_headers(headers, axis=0)
 
     # ...........................
     def slice(self, *args):
-        """
-        @summary: Subsets the matrix and returns a new instance
-        @param *args: These are iterables for the indices to retrieve
-        @note: The first parameter will be for axis 0, second for axis 1, etc
+        """Subsets the matrix and returns a new instance
+
+        Args:
+            *args: These are iterables for the indices to retrieve
+
+        Note:
+            * The first parameter will be for axis 0, second for axis 1, etc
         """
         new_data = np.copy(self.data)
         new_headers = deepcopy(self.headers)
@@ -364,12 +365,17 @@ class Matrix(object):
 
     # ...........................
     def slice_by_header(self, header, axis):
-        """
-        @summary: Gets a slice of the Matrix matching the header provided
-        @param header: The name of a header to use for slicing
-        @param axis: The axis to find this header
-        @raise ValueError: If the header is not found for the specified axis
-        @todo: Add capability to slice over multiple axes and multiple headers
+        """Gets a slice of the Matrix matching the header provided
+
+        Args:
+            header : The name of a header to use for slicing
+            axis : The axis to find this header
+
+        Raises:
+            ValueError: If the header is not found for the specified axis
+
+        Todo:
+            * Add capability to slice over multiple axes and multiple headers.
                 Maybe combine with other slice method and provide method to
                 search for header indices
         """
@@ -393,14 +399,19 @@ class Matrix(object):
 
     # ...........................
     def write_csv(self, flo, *slice_args):
-        """
-        @summary: Write the Matrix object to a CSV file-like object
-        @param flo: The file-like object to write to
-        @param slice_args: If provided, perform a slice operation and use the
-                         resulting matrix for writing
-        @todo: Handle header overlap (where the header for one axis is for
-                  another axis header
-        @note: Currently only works for 2-D tables
+        """Writes the Matrix object to a CSV file-like object
+
+        Args:
+            flo : The file-like object to write to
+            slice_args : If provided, perform a slice operation and use the
+                resulting matrix for writing
+
+        Todo:
+            Handle header overlap (where the header for one axis is for another
+                axis header
+
+        Note:
+            Currently only works for 2-D tables
         """
         if list(slice_args):
             mtx = self.slice(*slice_args)
@@ -415,25 +426,19 @@ class Matrix(object):
 
         # .....................
         def already_lists(x):
-            """
-            @summary: Use this function for processing headers when they are
-                        already lists
+            """Use this function for processing headers when they are lists
             """
             return x
 
         # .....................
         def make_lists(x):
-            """
-            @summary: Use this function for processing headers when they are
-                        not lists to start
+            """Use this function for processing headers when they are not lists
             """
             return [x]
 
         # .....................
         def csv_generator():
-            """
-            @summary: This function is a generator that yields rows of values
-                       to be output as CSV
+            """Generator that yields rows of values to be output as CSV
             """
             try:
                 row_headers = mtx.headers['0']
@@ -470,40 +475,38 @@ class Matrix(object):
 
 # .............................................................................
 class ArrayStream(list):
-    """
-    @summary: Generator class for a numpy array for JSON serialization
-    @note: This is done to save memory rather than creating a list of the
-             entire array / matrix.  It is used by the JSON encoder to write
-             the data to file
+    """Generator class for a numpy array for JSON serialization
+
+    Note:
+        * This is done to save memory rather than creating a list of the entire
+            array / matrix.  It is used by the JSON encoder to write the data
+            to file
     """
     # ...........................
     def __init__(self, x):
-        """
-        @summary: Constructor
-        @param x: The numpy array to stream
+        """Constructor
+
+        Args:
+            x : The numpy array to stream
         """
         self.x = x
         self.my_len = self.x.shape[0]
 
     # ...........................
     def __iter__(self):
-        """
-        @summary: Iterator for array
+        """Iterator for array
         """
         return self.gen()
 
     # ...........................
     def __len__(self):
-        """
-        @summary: Length function
+        """Length function
         """
         return self.my_len
 
     # ...........................
     def gen(self):
-        """
-        @summary: Generator function.  Loop over array and create ArrayStreams
-                   for sub arrays
+        """Loops over array and create ArrayStreams for sub arrays
         """
         n = 0
 

@@ -2,9 +2,10 @@
 
 The functions in this module are pytest style tests for the tree.py module
 """
+import random
+
 import dendropy
 import pytest
-import random
 
 from ancestral_reconstruction.lm_objects import tree
 

@@ -1,17 +1,14 @@
-"""
-@summary: This module contains functions for reading data files in various
-             formats.  This is for reading some common alignment files.  Each
-             function returns a list of sequences
-@note: If you want to read an alignment in fasta format, just use the fasta
-          reader in the seq_reader.py
-@todo: FASTA reader?
-@todo: Use file-like objects
+"""Module containing tools for reading alignment files in various formats.
+
+Todo:
+    * FASTA reader?
 """
 import csv
 import json
-import numpy as np
 import os
 import sys
+
+import numpy as np
 
 from ancestral_reconstruction.helpers.sequence import Sequence
 from ancestral_reconstruction.lm_objects.matrix import Matrix
@@ -19,17 +16,20 @@ from ancestral_reconstruction.lm_objects.matrix import Matrix
 
 # .............................................................................
 class AlignmentIOError(Exception):
+    """Wrapper class for alignment errors
+    """
     pass
 
 
 # .............................................................................
 def create_sequence_list_from_dict(values_dict):
-    """
-    @summary: Creates a list of sequences from a dictionary
-    @note: The dictionary should have structure:
-              {
-               "{taxon_name}" : [{values}]
-              }
+    """Creates a list of sequences from a dictionary
+
+    Note:
+        * The dictionary should have structure::
+            {
+                "{taxon_name}" : [{values}]
+            }
     """
     headers = None
     sequence_list = []
@@ -44,8 +44,11 @@ def create_sequence_list_from_dict(values_dict):
 
 # .............................................................................
 def get_character_matrix_from_sequences_list(sequences, var_headers=None):
-    """
-    @summary: Convert a list of sequences into a character matrix
+    """Converts a list of sequences into a character matrix
+
+    Args:
+        sequences : A list of Sequence objects to be converted
+        var_headers : If provided, uses these as variable headers
     """
     if var_headers is not None:
         col_headers = var_headers
@@ -64,10 +67,10 @@ def get_character_matrix_from_sequences_list(sequences, var_headers=None):
 
 # .............................................................................
 def read_csv_alignment_flo(csv_flo):
-    """
-    @summary: Read a CSV file-like object and return a list of sequences and
-                 headers
-    @param csv_flo: A file-like object with CSV alignment data
+    """Reads a CSV file-like object and return a list of sequences and headers
+
+    Args:
+        csv_flo : A file-like object with CSV alignment data
     """
     headers = None
     sequence_list = []
@@ -99,20 +102,22 @@ def read_csv_alignment_flo(csv_flo):
 
 # .............................................................................
 def read_json_alignment_flo(json_flo):
-    """
-    @summary: Read a JSON file-like object and return a list of sequences and
-                 headers
-    @param json_flo: A file-like object with JSON alignment data
-    @note: File should have structure:
-               {
+    """Read a JSON file-like object and return a list of sequences and headers
+
+    Args:
+        json_flo : A file-like object with JSON alignment data
+
+    Note:
+        * File should have structure::
+            {
                 "headers" : [{header_names}],
                 "values" : [
-                            {
-                             "name" : "{taxon_name}",
-                             "values" : [{values}]
-                            }
-                           ]
-               }
+                    {
+                        "name" : "{taxon_name}",
+                        "values" : [{values}]
+                    }
+                ]
+            }
     """
     json_vals = json.load(json_flo)
 
@@ -136,16 +141,18 @@ def read_json_alignment_flo(json_flo):
 
 # .............................................................................
 def read_phylip_alignment_flo(phylip_flo):
-    """
-    @summary: This will read a phylip alignment file-like object and return the
-                 list of sequences contained
-    @param phylip_flo: The phylip file-like object
-    @note: We assume that the phylip files are extended and not strict (in
-              terms of how many characters for taxon names)
-    @note: The phylip file is in the format:
-              numoftaxa numofsites
-              seqlabel sequence
-              seqlabel sequence
+    """Reads a phylip alignment file-like object and return the sequences
+
+    Args:
+        phylip_flo : The phylip file-like object
+
+    Note:
+        * We assume that the phylip files are extended and not strict (in terms
+            of how many characters for taxon names)
+        * The phylip file is in the format::
+            numoftaxa numofsites
+            seqlabel sequence
+            seqlabel sequence
     """
     seqlist = []
     # first line is the number of taxa and num of sites
@@ -167,16 +174,19 @@ def read_phylip_alignment_flo(phylip_flo):
 
 # .............................................................................
 def read_phylip_cont_file(infile):
-    """
-    @summary: This will read a phylip alignment file with continuous characters
-                 and return the list of seqs
-    @note: We assume that the phylip files are extended and not strict (in
-              terms of what type and how much white space and how many
-              characters for taxon names)
-    @note: The phylip file is in the format:
-              numoftaxa numofsites
-              seqlabel contvalue contvalue
-              seqlabel contvalue contvalue
+    """Reads a phylip alignment file with continuous characters
+
+    Args:
+        infile : The phylip alignment file to read
+
+    Note:
+        * We assume that the phylip files are extended and not strict (in terms
+            of what type and how much white space and how many characters for
+            taxon names)
+        * The phylip file is in the format::
+            numoftaxa numofsites
+            seqlabel contvalue contvalue
+            seqlabel contvalue contvalue
     """
     seqlist = []
     # first line is the number of taxa and num of sites
@@ -197,9 +207,10 @@ def read_phylip_cont_file(infile):
 
 # .............................................................................
 def read_table_alignment_flo(table_flo):
-    """
-    @summary: Read a table from a file-like object
-    @param table_flo: A file-like object containing table data
+    """Reads a table from a file-like object
+
+    Args:
+        table_flo : A file-like object containing table data
     """
     seqlist = []
     for i in table_flo:

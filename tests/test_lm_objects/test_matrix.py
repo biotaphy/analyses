@@ -3,10 +3,11 @@
 The functions in this module are pytest style tests for the matrix.py module
 """
 import io
-import numpy as np
-import pytest
 import random
 import tempfile
+
+import numpy as np
+import pytest
 
 from ancestral_reconstruction.lm_objects import matrix
 

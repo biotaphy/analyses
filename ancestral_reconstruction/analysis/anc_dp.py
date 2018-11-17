@@ -1,11 +1,10 @@
+"""Module containing code for calculating ancestral states
 """
-@summary: Module containing code for calculating ancestral states
-"""
-import dendropy as dp
 import math
+import sys
+
 import numpy as np
 import scipy.linalg as la
-import sys
 
 from ancestral_reconstruction.lm_objects.matrix import Matrix
 from ancestral_reconstruction.lm_objects.tree import TreeWrapper
@@ -13,9 +12,10 @@ from ancestral_reconstruction.lm_objects.tree import TreeWrapper
 
 # .............................................................................
 def _get_node_label(node):
-    """
-    @summary: Return the node label or the taxon label if node is a tip
-    @param node: A tree node to get the label for
+    """Returns the node label or taxon label if node is a tip
+
+    Args:
+        node : A tree node to get the label for
     """
     if node.label is not None:
         return node.label
@@ -25,13 +25,16 @@ def _get_node_label(node):
 
 # .............................................................................
 def calculate_ancestral_distributions(tree, char_mtx):
-    """
-    @summary: Calculate ancestral distributions
-    @param tree: A dendropy tree or TreeWrapper object
-    @param char_mtx: A Matrix object with character information.  Each row
-                        should represent a tip in the tree and each column
-                        should be a bin to calculate ancestral distribution
-    @return: A matrix of character data with the following dimensions:
+    """Calculates ancestral distributions
+
+    Args:
+        tree : A dendropy tree or TreeWrapper object
+        char_mtx : A Matrix object with character information.  Each row should
+            represent a tip in the tree and each column should be a bin to
+            calculate ancestral distribution
+
+    Returns:
+        A matrix of character data with the following dimensions:
                 rows - nodes / tips in the tree
                 columns - character variables
                 depth - first is the calculated value, second layer is
@@ -48,19 +51,25 @@ def calculate_continuous_ancestral_states(tree, char_mtx, sum_to_one=False,
     """
     @summary: Calculates the continuous ancestral states for the nodes in a
                 tree
-    @param tree: A dendropy tree or TreeWrapper object
-    @param char_mtx: A Matrix object with character information.  Each row
-                        should represent a tip in the tree and each column
-                        should be a variable to calculate ancestral state for
-    @param calc_std_err: If True, calculate standard error for each variable
-    @param sum_to_one: If True, standardize the character matrix so that the
-                        values in a row sum to one
-    @return: A matrix of character data with the following dimensions:
+
+    Args:
+        tree : A dendropy tree or TreeWrapper object
+        char_mtx : A Matrix object with character information.  Each row should
+            represent a tip in the tree and each column should be a variable to
+            calculate ancestral state for
+        calc_std_err : If True, calculate standard error for each variable
+        sum_to_one : If True, standardize the character matrix so that the
+            values in a row sum to one
+
+    Returns:
+        A matrix of character data with the following dimensions:
                 rows - nodes / tips in the tree
                 columns - character variables
                 depth - first is the calculated value, second layer is
                             standard error if desired
-    @todo: Add function for consistent label handling
+
+    Todo:
+        * Add function for consistent label handling
     """
     # Wrap tree if dendropy tree
     if not isinstance(tree, TreeWrapper):

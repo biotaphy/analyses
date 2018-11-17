@@ -1,11 +1,12 @@
+"""This module is used for testing ancestral state reconstruction
+
+Notes:
+    * Uses pytest style testing
 """
-@summary: This module contains classes and functions for testing ancestral
-            state reconstruction
-@note: Uses pytest style testing
-"""
+import os
+
 import dendropy
 import numpy as np
-import os
 import pytest
 
 from ancestral_reconstruction.analysis import anc_dp
@@ -15,15 +16,17 @@ from ancestral_reconstruction.lm_objects.tree import TreeWrapper
 
 # .............................................................................
 class Test_calculate_continuous_ancestral_states(object):
-    """
-    @summary: Tests ancestral state reconstruction
+    """Tests ancestral state reconstruction
     """
     # .....................................
     def test_package_invalid(self, data_files):
-        """
-        @summary: Tests the calculate_continusous_ancestral_states method with
-                    invalid data
-        @note: This test will need to evolve as the output format changes.  It
+        """Test calculate_continusous_ancestral_states method with invalid data
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
+
+        Note:
+            * This test will need to evolve as the output format changes.  It
                 will probably be better to return a data structure with various
                 values for each node rather than assigning the value to the
                 node label
@@ -76,9 +79,13 @@ class Test_calculate_continuous_ancestral_states(object):
 
     # .....................................
     def test_package_valid(self, data_files):
-        """
-        @summary: Tests the calculate_continusous_ancestral_states method
-        @note: This test will need to evolve as the output format changes.  It
+        """Tests the calculate_continusous_ancestral_states method
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
+
+        Note:
+            * This test will need to evolve as the output format changes.  It
                 will probably be better to return a data structure with various
                 values for each node rather than assigning the value to the
                 node label
@@ -163,15 +170,17 @@ class Test_calculate_continuous_ancestral_states(object):
 
 # .............................................................................
 class Test_ancestal_distribution(object):
-    """
-    @summary: Tests ancestral distribution reconstruction
+    """Tests ancestral distribution reconstruction
     """
     # .....................................
     def test_package_invalid(self, data_files):
-        """
-        @summary: Tests the calculate_ancestral_distributions method with
-                    invalid data
-        @note: This test will need to evolve as the output format changes.  It
+        """Test calculate_ancestral_distributions method with invalid data
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
+
+        Note:
+            * This test will need to evolve as the output format changes.  It
                 will probably be better to return a data structure with various
                 values for each node rather than assigning the value to the
                 node label
@@ -224,8 +233,10 @@ class Test_ancestal_distribution(object):
 
     # .....................................
     def test_package_valid(self, data_files):
-        """
-        @summary: Tests the calculate_ancestral_distributions method
+        """Tests the calculate_ancestral_distributions method
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         # Get the data files
         packages = data_files.get_ancestral_distribution_packages(True)

@@ -1,9 +1,8 @@
+"""This module contains classes and functions for testing data readers
+
+Notes:
+    * Uses pytest style testing
 """
-@summary: This module contains classes and functions for testing the provided
-             data readers
-@note: Uses pytest style testing
-"""
-import pytest
 try:
     from StringIO import StringIO
     string_formats = (basestring)
@@ -12,20 +11,19 @@ except:
     from io import StringIO
     string_formats = (str)
 
+import pytest
+
 import ancestral_reconstruction.helpers.data_readers as dr
 from ancestral_reconstruction.helpers.sequence import Sequence
 
 
 # .............................................................................
 class Test_create_sequence_list_from_dict(object):
-    """
-    @summary: Tests the create_sequence_list_from_dict method
+    """Test class for the create_sequence_list_from_dict method
     """
     # .....................................
     def test_invalid_dict(self):
-        """
-        @summary: Test that function fails with a dictionary that has the
-                     wrong structure
+        """Tests that function fails with a dict that has the wrong structure
         """
         test_dict = {
             "name1": [1, 2, 3],
@@ -36,9 +34,7 @@ class Test_create_sequence_list_from_dict(object):
 
     # .....................................
     def test_valid_dict(self):
-        """
-        @summary: Test that the function operates correctly with a dictionary
-                     with the expected format
+        """Tests that the function operates correctly with valid input data
         """
         test_dict = {
             "A": [0.9, 0.2, 0.2, 0.3, 0.4, 0.4],
@@ -58,14 +54,14 @@ class Test_create_sequence_list_from_dict(object):
 
 # .............................................................................
 class Test_read_csv_alignment_flo(object):
-    """
-    @summary: Tests the dr.read_csv_alignment_flo method
+    """Tests the dr.read_csv_alignment_flo method
     """
     # .....................................
     def test_file_invalid(self, data_files):
-        """
-        @summary: Tests that the invalid alignment files fail properly
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that the invalid alignment files fail properly
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         invalid_csv_alignments = data_files.get_alignments('csv', False)
         for fn in invalid_csv_alignments:
@@ -75,9 +71,10 @@ class Test_read_csv_alignment_flo(object):
 
     # .....................................
     def test_file_valid(self, data_files):
-        """
-        @summary: Tests that the valid alignment files do not fail
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that the valid alignment files do not fail
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         valid_csv_alignments = data_files.get_alignments('csv', True)
         for fn in valid_csv_alignments:
@@ -96,10 +93,13 @@ class Test_read_csv_alignment_flo(object):
 
     # .....................................
     def test_stringio_invalid(self, data_files):
-        """
-        @summary: Tests that the invalid alignment files fail properly when
-                   loaded into StringIO objects
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that invalid alignment files cause the proper failure
+
+        Tests that the invalid alignment files fail properly when loaded into
+        StringIO objects
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         invalid_csv_alignments = data_files.get_alignments('csv', False)
         for fn in invalid_csv_alignments:
@@ -112,10 +112,13 @@ class Test_read_csv_alignment_flo(object):
 
     # .....................................
     def test_stringio_valid(self, data_files):
-        """
-        @summary: Tests that the valid alignment files do not fail when loaded
-                     into StringIO objects
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that alignments are read properly with valid input data
+
+        Tests that the valid alignment files do not fail when loaded into
+        StringIO objects
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         valid_csv_alignments = data_files.get_alignments('csv', True)
         for fn in valid_csv_alignments:
@@ -124,8 +127,8 @@ class Test_read_csv_alignment_flo(object):
                 csv_stringio.write(in_csv.read())
                 csv_stringio.seek(0)
                 try:
-                    sequence_list, headers = dr.read_csv_alignment_flo(
-                                                                csv_stringio)
+                    (sequence_list, headers) = dr.read_csv_alignment_flo(
+                        csv_stringio)
                     assert len(headers) > 0
                     assert len(sequence_list) > 0
                     for i in sequence_list:
@@ -139,14 +142,14 @@ class Test_read_csv_alignment_flo(object):
 
 # .............................................................................
 class Test_read_json_alignment_flo(object):
-    """
-    @summary: Tests the dr.read_json_alignment_flo method
+    """Test class for the dr.read_json_alignment_flo method
     """
     # .....................................
     def test_file_invalid(self, data_files):
-        """
-        @summary: Tests that the invalid alignment files fail properly
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that the invalid alignment files fail properly
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         invalid_json_alignments = data_files.get_alignments('json', False)
         for fn in invalid_json_alignments:
@@ -156,16 +159,17 @@ class Test_read_json_alignment_flo(object):
 
     # .....................................
     def test_file_valid(self, data_files):
-        """
-        @summary: Tests that the valid alignment files do not fail
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that the valid alignment files do not fail
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         valid_json_alignments = data_files.get_alignments('json', True)
         for fn in valid_json_alignments:
             with open(fn) as in_json:
                 try:
-                    sequence_list, headers = dr.read_json_alignment_flo(
-                                                                    in_json)
+                    (sequence_list, headers
+                     ) = dr.read_json_alignment_flo(in_json)
                     if headers is not None:
                         assert len(headers) > 0
                     assert len(sequence_list) > 0
@@ -179,10 +183,13 @@ class Test_read_json_alignment_flo(object):
 
     # .....................................
     def test_stringio_invalid(self, data_files):
-        """
-        @summary: Tests that the invalid alignment files fail properly when
-                   loaded into StringIO objects
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that invalid alignment files fail properly
+
+        Tests that the invalid alignment files fail properly when loaded into
+        StringIO objects
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         invalid_json_alignments = data_files.get_alignments('json', False)
         for fn in invalid_json_alignments:
@@ -195,10 +202,13 @@ class Test_read_json_alignment_flo(object):
 
     # .....................................
     def test_stringio_valid(self, data_files):
-        """
-        @summary: Tests that the valid alignment files do not fail when loaded
-                     into StringIO objects
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that valid JSON alignment files do not fail
+
+        Tests that the valid alignment files do not fail when loaded into
+        StringIO objects
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         valid_json_alignments = data_files.get_alignments('json', True)
         for fn in valid_json_alignments:
@@ -207,8 +217,8 @@ class Test_read_json_alignment_flo(object):
                 json_stringio.write(in_json.read())
                 json_stringio.seek(0)
                 try:
-                    sequence_list, headers = dr.read_json_alignment_flo(
-                                                                json_stringio)
+                    (sequence_list, headers
+                     ) = dr.read_json_alignment_flo(json_stringio)
                     if headers is not None:
                         assert len(headers) > 0
                     assert len(sequence_list) > 0
@@ -223,14 +233,14 @@ class Test_read_json_alignment_flo(object):
 
 # .............................................................................
 class Test_read_phylip_alignment_flo(object):
-    """
-    @summary: Tests the dr.read_phylip_alignment_flo method
+    """Test class for the dr.read_phylip_alignment_flo method
     """
     # .....................................
     def test_file_invalid(self, data_files):
-        """
-        @summary: Tests that the invalid alignment files fail properly
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that the invalid alignment files fail properly
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         invalid_phylip_alignments = data_files.get_alignments('phylip', False)
         for fn in invalid_phylip_alignments:
@@ -240,9 +250,10 @@ class Test_read_phylip_alignment_flo(object):
 
     # .....................................
     def test_file_valid(self, data_files):
-        """
-        @summary: Tests that the valid alignment files do not fail
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that the valid alignment files do not fail
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         valid_phylip_alignments = data_files.get_alignments('phylip', True)
         for fn in valid_phylip_alignments:
@@ -260,10 +271,13 @@ class Test_read_phylip_alignment_flo(object):
 
     # .....................................
     def test_stringio_invalid(self, data_files):
-        """
-        @summary: Tests that the invalid alignment files fail properly when
-                   loaded into StringIO objects
-        @param data_files: A pytest fixture defined in conftest.py
+        """Test that invalid phylip alignment files cause a failure
+
+        Tests that the invalid alignment files fail properly when loaded into
+        StringIO objects
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         invalid_phylip_alignments = data_files.get_alignments('phylip', False)
         for fn in invalid_phylip_alignments:
@@ -276,10 +290,13 @@ class Test_read_phylip_alignment_flo(object):
 
     # .....................................
     def test_stringio_valid(self, data_files):
-        """
-        @summary: Tests that the valid alignment files do not fail when loaded
-                     into StringIO objects
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that valid phylip alignment files are loaded properly
+
+        Tests that the valid alignment files do not fail when loaded into
+        StringIO objects
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         valid_phylip_alignments = data_files.get_alignments('phylip', True)
         for fn in valid_phylip_alignments:
@@ -289,7 +306,7 @@ class Test_read_phylip_alignment_flo(object):
                 phylip_stringio.seek(0)
                 try:
                     sequence_list = dr.read_phylip_alignment_flo(
-                                                            phylip_stringio)
+                        phylip_stringio)
                     assert len(sequence_list) > 0
                     for i in sequence_list:
                         assert isinstance(i, Sequence)
@@ -302,8 +319,7 @@ class Test_read_phylip_alignment_flo(object):
 
 # .............................................................................
 class Test_read_phylip_continuous_alignment_flo(object):
-    """
-    @summary: Tests the read_phylip_continuous_alignment_flo method
+    """Test class for the read_phylip_continuous_alignment_flo method
     """
     # .....................................
     def test_file_invalid(self, data_files):
@@ -324,14 +340,14 @@ class Test_read_phylip_continuous_alignment_flo(object):
 
 # .............................................................................
 class Test_read_table_continuous_alignment_flo(object):
-    """
-    @summary: Tests the read_table_continuous_alignment_flo method
+    """Test class for the read_table_continuous_alignment_flo method
     """
     # .....................................
     def test_file_invalid(self, data_files):
-        """
-        @summary: Tests that the invalid alignment files fail properly
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that the invalid alignment files fail properly
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         invalid_table_alignments = data_files.get_alignments('table', False)
         for fn in invalid_table_alignments:
@@ -341,9 +357,10 @@ class Test_read_table_continuous_alignment_flo(object):
 
     # .....................................
     def test_file_valid(self, data_files):
-        """
-        @summary: Tests that the valid alignment files do not fail
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that the valid alignment files do not fail
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         valid_table_alignments = data_files.get_alignments('table', True)
         for fn in valid_table_alignments:
@@ -361,10 +378,13 @@ class Test_read_table_continuous_alignment_flo(object):
 
     # .....................................
     def test_stringio_invalid(self, data_files):
-        """
-        @summary: Tests that the invalid alignment files fail properly when
-                   loaded into StringIO objects
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that invalid table alignment files cause a failure
+
+        Tests that the invalid alignment files fail properly when loaded into
+        StringIO objects
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         invalid_table_alignments = data_files.get_alignments('table', False)
         for fn in invalid_table_alignments:
@@ -377,10 +397,13 @@ class Test_read_table_continuous_alignment_flo(object):
 
     # .....................................
     def test_stringio_valid(self, data_files):
-        """
-        @summary: Tests that the valid alignment files do not fail when loaded
-                     into StringIO objects
-        @param data_files: A pytest fixture defined in conftest.py
+        """Tests that valid table alignment files are loaded correctly.
+
+        Tests that the valid alignment files do not fail when loaded into
+        StringIO objects
+
+        Args:
+            data_files : A pytest fixture defined in conftest.py
         """
         valid_table_alignments = data_files.get_alignments('table', True)
         for fn in valid_table_alignments:

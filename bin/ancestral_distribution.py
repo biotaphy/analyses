@@ -1,14 +1,16 @@
 #!/usr/bin/env python
-"""
-@summary:
-@todo: Rename without .py extension
-@todo: Constants
-@todo: Clean up help
+"""Tool for performing ancestral distribution computations
+
+Todo:
+    * Rename without .py extension
+    * Constants
+    * Clean up help
 """
 import argparse
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 
 from ancestral_reconstruction.helpers import data_readers
 from ancestral_reconstruction.analysis import anc_dp
