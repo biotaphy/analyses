@@ -198,8 +198,8 @@ class Test_TreeWrapper(object):
             assert node_label in existing_labels
 
     # .....................................
-    def test_annotate_tree_with_attribute_no_update(self):
-        """Test annotate_tree with attribute as label, no updates
+    def test_annotate_tree_tips_with_attribute_no_update(self):
+        """Test annotate_tree_tips with attribute as label, no updates
 
         Test that annotating the tree using an attribute label and not updating
         the existing attribute works properly.
@@ -242,7 +242,7 @@ END;
         orig_annotations = dict(my_tree.get_annotations('att2'))
 
         # Annotate tree
-        my_tree.annotate_tree('att2', att_pairs, label_attribute='myatt')
+        my_tree.annotate_tree_tips('att2', att_pairs, label_attribute='myatt')
 
         # Check that annotations are correct
         annotations = my_tree.get_annotations('att2')
@@ -258,8 +258,8 @@ END;
                 assert check_pairs[label] == att
 
     # .....................................
-    def test_annotate_tree_with_attribute_yes_update(self):
-        """Test annotate_tree with attribute as label, update existing
+    def test_annotate_tree_tips_with_attribute_yes_update(self):
+        """Test annotate_tree_tips with attribute as label, update existing
 
         Test that annotating the tree using an attribute label and updating
         the existing attribute works properly.
@@ -302,8 +302,8 @@ END;
         orig_annotations = dict(my_tree.get_annotations('att2'))
 
         # Annotate tree
-        my_tree.annotate_tree('att2', att_pairs, label_attribute='myatt',
-                              update=True)
+        my_tree.annotate_tree_tips(
+            'att2', att_pairs, label_attribute='myatt', update=True)
 
         # Check that annotations are correct
         annotations = my_tree.get_annotations('att2')
@@ -315,10 +315,10 @@ END;
             assert check_pairs[label] == att
 
     # .....................................
-    def test_annotate_tree_with_bad_attribute(self):
-        """Test annotate_tree when trying to use a bad label attribute
+    def test_annotate_tree_tips_with_bad_attribute(self):
+        """Test annotate_tree_tips when trying to use a bad label attribute
 
-        Test that annotate_tree operates correctly when trying to add
+        Test that annotate_tree_tips operates correctly when trying to add
         annotations based on a label attribute that does not exist
         """
         # Set up tree
@@ -350,7 +350,8 @@ END;
         orig_annotations = dict(my_tree.get_annotations('myatt'))
 
         # Annotate tree
-        my_tree.annotate_tree('myatt', att_pairs, label_attribute='badatt')
+        my_tree.annotate_tree_tips(
+            'myatt', att_pairs, label_attribute='badatt')
 
         # Check that annotations are correct
         annotations = my_tree.get_annotations('myatt')
@@ -366,8 +367,8 @@ END;
                 assert att_pairs[label] != att
 
     # .....................................
-    def test_annotate_tree_with_label_no_update(self):
-        """Test annotate_tree without updating existing values
+    def test_annotate_tree_tips_with_label_no_update(self):
+        """Test annotate_tree_tips without updating existing values
         """
         # Set up tree
         nexus_string = """\
@@ -399,7 +400,7 @@ END;
         orig_annotations = dict(my_tree.get_annotations('myatt'))
 
         # Annotate tree
-        my_tree.annotate_tree('myatt', att_pairs)
+        my_tree.annotate_tree_tips('myatt', att_pairs)
 
         # Check that annotations are correct
         annotations = my_tree.get_annotations('myatt')
@@ -415,8 +416,8 @@ END;
                 assert att_pairs[label] == att
 
     # .....................................
-    def test_annotate_tree_with_label_yes_update(self):
-        """Test annotate_tree when updating existing values
+    def test_annotate_tree_tips_with_label_yes_update(self):
+        """Test annotate_tree_tips when updating existing values
         """
         # Set up tree
         nexus_string = """\
@@ -449,7 +450,7 @@ END;
         orig_annotations = dict(my_tree.get_annotations('myatt'))
 
         # Annotate tree
-        my_tree.annotate_tree('myatt', att_pairs, update=True)
+        my_tree.annotate_tree_tips('myatt', att_pairs, update=True)
 
         # Check that annotations are correct
         annotations = my_tree.get_annotations('myatt')
