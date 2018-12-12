@@ -29,7 +29,7 @@ def create_distribution_plots(lm_tree, node_matrix, output_directory):
     low = 0
     high = num_cats
 
-    x_grid = np.inspace(low, high, num_cats)
+    x_grid = np.linspace(low, high, num_cats)
     for i in range(len(node_names)):
         # TODO(CJ) : Variable figure size
         plt.figure(figsize=(6, 4))
@@ -38,11 +38,11 @@ def create_distribution_plots(lm_tree, node_matrix, output_directory):
         if np.any(node_matrix.data[i, :, 1] > 0.0):
             # TODO(CJ) : Options for high and low value lines
             high_vals = node_matrix.data[i, :, 0] + node_matrix.data[i, :, 1]
-            low_vals = node_matrix.data[i, :, 0] - results.data[i, :, 1]
+            low_vals = node_matrix.data[i, :, 0] - node_matrix.data[i, :, 1]
             plt.plot(x_grid, high_vals, '--', alpha=0.55,)
             plt.plot(x_grid, low_vals, '--', alpha=0.55,)
         # TODO(CJ) : Does this print to screen?  Remove it?
-        plt.grid(true)
+        plt.grid(True)
         # TODO: Calculate rates
         # plt.plot(x_grid, rates)
         # plt.ylabel('estimated rate')

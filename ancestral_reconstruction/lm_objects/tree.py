@@ -97,7 +97,7 @@ class TreeWrapper(dendropy.Tree):
                     for (ann_name, ann_value) in node_annotation.items():
                         self._annotate_node(
                             node, ann_name, ann_value, update=update)
-                except:
+                except Exception:
                     # Annotation is a single value
                     self._annotate_node(
                         node, annotation_attribute, node_annotation,
@@ -441,7 +441,10 @@ class TreeWrapper(dendropy.Tree):
         """
         if annotation_attribute is None or \
                 annotation_attribute.lower() == 'label':
-            node.label = annotation_value
+            try:
+                node.taxon.label = annotation_value
+            except:
+                node.label = annotation_value
         else:
             if node.annotations.get_value(annotation_attribute) is not None:
                 if update:

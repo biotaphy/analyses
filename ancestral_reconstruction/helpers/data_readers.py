@@ -53,7 +53,9 @@ def get_character_matrix_from_sequences_list(sequences, var_headers=None):
     if var_headers is not None:
         col_headers = var_headers
     else:
-        col_headers = range(len(sequences[0].cont_values))
+        col_headers = [
+            'Column {}'.format(i) for i in range(
+                len(sequences[0].cont_values))]
     data = np.zeros((len(sequences), len(col_headers)), dtype=float)
     row_headers = []
     i = 0
