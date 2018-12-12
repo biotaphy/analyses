@@ -44,6 +44,13 @@ optional arguments:
                         this file location
 ```
 
+Notes:
+  * Use the `-l` option with either a column name or column index to use the reconstructed values for 
+    that column as the labels of your output tree.
+  * The `-p` option will tell the tool to write out plots for the distributions
+  * The `-c` option will write out the reconstruction matrix as a CSV file for processing elsewhere
+
+
 ## Formats
 
 ### CSV Alignment file
