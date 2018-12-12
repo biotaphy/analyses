@@ -56,7 +56,7 @@ if __name__ == '__main__':
         help='If provided, write distribution plots to this directory')
     parser.add_argument(
         '-c', '--out_csv_filename', type=str,
-        help='If provided, write the output character matrix CSV ',
+        help='If provided, write the output character matrix CSV '
              'to this file location')
     
     args = parser.parse_args()
@@ -103,7 +103,7 @@ if __name__ == '__main__':
                 label_column = int(args.annotate_labels)
             except:
                 raise Exception(
-                    'Could not find column to use for labels.  ',
+                    'Could not find column to use for labels.  '
                     'Check the name to make sure it matches or use column'
                     ' index.')
 
