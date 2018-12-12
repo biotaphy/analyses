@@ -11,33 +11,13 @@ $ python setup.py install
 
 ## Usage
 
-### ancestral_state.py
-```
-usage: ancestral_state.py [-h] [-ch COLUMN_HEADERS]
-                          in_tree_filename {newick,nexml,nexus} data_filename
-                          {csv,json,phylip} out_tree_filename
-                          {newick,nexml,nexus}
-
-positional arguments:
-  in_tree_filename          Path to the tree file
-  {newick,nexml,nexus}      The format of the tree
-  data_filename             Path to file with character state data
-  {csv,json,phylip}         The format of the character data
-  out_tree_filename         Path for new output tree
-  {newick,nexml,nexus}      The format of the tree
-  out_characters_filename   A file location to write the character data as CSV
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -ch COLUMN_HEADERS, --column_headers COLUMN_HEADERS
-                        Path to file containing column headers, one per line
-```
-
 ### ancestral_distribution.py
 ```
-usage: ancestral_distribution.py [-h] [-o OUTPUT_DIRECTORY]
+usage: ancestral_distribution.py [-h] [-l ANNOTATE_LABELS] [-p PLOT_DIRECTORY]
+                                 [-c OUT_CSV_FILENAME]
                                  in_tree_filename {newick,nexml,nexus}
                                  data_filename {csv,json,phylip,table}
+                                 out_tree_filename {newick,nexml,nexus}
 
 Generates ancestral distribution estimations based on the environmental
 distributions at the tips of the tree
@@ -48,11 +28,20 @@ positional arguments:
   data_filename         Path to file with character state data
   {csv,json,phylip,table}
                         The format of the character data
+  out_tree_filename     Path to write the resulting annotated tree
+  {newick,nexml,nexus}  The format to use when writing the tree
 
 optional arguments:
   -h, --help            show this help message and exit
-  -o OUTPUT_DIRECTORY, --output_directory OUTPUT_DIRECTORY
-                        If provided, write the rates and plots here
+  -l ANNOTATE_LABELS, --annotate_labels ANNOTATE_LABELS
+                        If provided, annotate the tree labels with this data
+                        column
+  -p PLOT_DIRECTORY, --plot_directory PLOT_DIRECTORY
+                        If provided, write distribution plots to this
+                        directory
+  -c OUT_CSV_FILENAME, --out_csv_filename OUT_CSV_FILENAME
+                        If provided, write the output character matrix CSV to
+                        this file location
 ```
 
 ## Formats
