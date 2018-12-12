@@ -65,9 +65,51 @@ class TreeWrapper(dendropy.Tree):
                                prefix=prefix, overwrite=overwrite)
 
     # ..............................
-    def annotate_tree(self, attribute_name, annotation_pairs,
-                      label_attribute='label', update=False):
-        """Annotates the nodes of the tree
+    def annotate_tree(self, annotation_dict, annotation_attribute=None,
+                      label_attribute=None, update=False):
+        """Annotates tree tips and nodes
+
+        Args:
+            annotation_dict (:obj:`dict`): A dictionary where the keys
+                correspond with the node labels and the value is either, a
+                single value, or a dictionary of annotation name keys and
+                annotation value values.
+            annotation_attribute (:obj:`str` or None, optional): Only used if
+                annotation_dict contains single values, this will be the name
+                of the annotation added for each node.  Using None or setting
+                value to 'label' will change the label of the node.
+            label_attribute (:obj:`str`, optional): Use the value of this
+                annotation as the label for the node.  Setting the value to
+                'label' or leaving as None will use the label of the node.
+            update (:obj:`bool`, optional): If True, update any existing
+                annotations with the annotations provided.
+        """
+        label_method = self._get_label_method(label_attribute)
+
+        for node in self.nodes():
+            # Get the label of the node
+            label = label_method(node)
+            if label in annotation_dict.keys():
+                node_annotation = annotation_dict[label]
+
+                # Assume annotations are in a dictionary
+                try:
+                    for (ann_name, ann_value) in node_annotation.items():
+                        self._annotate_node(
+                            node, ann_name, ann_value, update=update)
+                except:
+                    # Annotation is a single value
+                    self._annotate_node(
+                        node, annotation_attribute, node_annotation,
+                        update=update)
+
+    # ..............................
+    def annotate_tree_tips(self, attribute_name, annotation_pairs,
+                           label_attribute='label', update=False):
+        """Annotates the tips of the tree
+
+        Deprecated:
+            * Update to use annotate_tree
 
         Args:
             attribute_name : The name of the annotation attribute to add
@@ -96,8 +138,7 @@ class TreeWrapper(dendropy.Tree):
                     taxon.annotations.add_new(attribute_name,
                                               annotation_pairs[label])
             except KeyError:
-                # Pass if a label is not found in the dictionary,
-                #     otherwise fail
+                # Pass if label is not found in the dictionary, otherwise fail
                 pass
 
     # ..............................
@@ -387,11 +428,39 @@ class TreeWrapper(dendropy.Tree):
         return label_method
 
     # ..............................
+    def _annotate_node(self, node, annotation_attribute, annotation_value,
+                       update=False):
+        """Annotates a node with the given value
+
+        Args:
+            node: A node to add an annotation to
+            annotation_attribute: The annotation attribute to add.  If None or
+                'label', update the node label
+            annotation_value: The value of the annotation
+            update (:obj:`bool`, optional): If True, update existing attribute
+        """
+        if annotation_attribute is None or \
+                annotation_attribute.lower() == 'label':
+            node.label = annotation_value
+        else:
+            if node.annotations.get_value(annotation_attribute) is not None:
+                if update:
+                    # Remove existing annotations
+                    for ann in node.annotations.findall(
+                            name=annotation_attribute):
+                        node.annotations.remove(ann)
+                    node.annotations.add_new(
+                        annotation_attribute, annotation_value)
+            else:
+                node.annotations.add_new(
+                    annotation_attribute, annotation_value)
+
+    # ..............................
     def _get_label_method(self, label_attribute):
         """Gets the function to be used for retrieving labels
         """
-        if label_attribute.lower() == 'label':
-            return self._taxon_label_method
+        if label_attribute is None or label_attribute.lower() == 'label':
+            return self._label_method
         else:
             return self._annotation_method(label_attribute)
 
@@ -420,7 +489,17 @@ class TreeWrapper(dendropy.Tree):
         return i
 
     # ..............................
-    def _taxon_label_method(self, taxon):
-        """Use the taxon label for the label
+    def _label_method(self, node):
+        """Use the label of the node or taxon for the label
         """
+        # If the node (or taxon) has a label, return it
+        if node.label is not None:
+            return node.label
+        else:
+            # Try to return the label of the taxon object if it has one
+            try:
+                return node.taxon.label
+            except:
+                # Fall back to returning None
+                return None
         return taxon.label
