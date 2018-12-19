@@ -9,7 +9,7 @@ with open('LICENSE') as f:
 
 setup(
     name='ancestral_reconstruction',
-    version='0.1.0',
+    version='0.2.0',
     description='Biotaphy package for generating ancestral reconstructions',
     long_description=readme,
     author='Biotaphy Team',
