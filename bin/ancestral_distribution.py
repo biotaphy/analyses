@@ -75,11 +75,13 @@ if __name__ == '__main__':
 
     # Read data
     if args.data_format == 'csv':
-        sequences, headers = data_readers.read_csv_alignment_flo(
-            args.data_filename)
+        with open(args.data_filename) as in_file:
+            sequences, headers = data_readers.read_csv_alignment_flo(
+                in_file)
     elif args.data_format == 'json':
-        sequences, headers = data_readers.read_json_alginment_flo(
-            args.data_filename)
+        with open(args.data_filename) as in_file:
+            sequences, headers = data_readers.read_json_alginment_flo(
+                inf_file)
     elif args.data_format == 'phylip':
         with open(args.data_filename) as in_file:
             sequences = data_reders.read_phylip_alignment_flo(in_file)
