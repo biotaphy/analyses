@@ -1,4 +1,4 @@
-"""This module tests the ancestral_reconstruction/lm_objects/matrix.py module
+"""This module tests the analyses/lm_objects/matrix.py module
 
 The functions in this module are pytest style tests for the matrix.py module
 """
@@ -9,7 +9,7 @@ import tempfile
 import numpy as np
 import pytest
 
-from ancestral_reconstruction.lm_objects import matrix
+from analyses.lm_objects import matrix
 
 
 # .............................................................................

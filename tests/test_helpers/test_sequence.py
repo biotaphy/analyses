@@ -2,7 +2,7 @@
 """
 import pytest
 
-from ancestral_reconstruction.helpers import sequence
+from analyses.helpers import sequence
 
 
 # .............................................................................

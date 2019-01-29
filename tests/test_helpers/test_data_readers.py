@@ -13,8 +13,8 @@ except:
 
 import pytest
 
-import ancestral_reconstruction.helpers.data_readers as dr
-from ancestral_reconstruction.helpers.sequence import Sequence
+import analyses.helpers.data_readers as dr
+from analyses.helpers.sequence import Sequence
 
 
 # .............................................................................

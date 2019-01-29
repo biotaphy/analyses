@@ -10,8 +10,8 @@ import sys
 
 import numpy as np
 
-from ancestral_reconstruction.helpers.sequence import Sequence
-from ancestral_reconstruction.lm_objects.matrix import Matrix
+from analyses.helpers.sequence import Sequence
+from analyses.lm_objects.matrix import Matrix
 
 
 # .............................................................................

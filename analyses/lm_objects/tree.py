@@ -8,7 +8,7 @@ Todo:
 import dendropy
 import numpy as np
 
-from ancestral_reconstruction.lm_objects.matrix import Matrix
+from analyses.lm_objects.matrix import Matrix
 
 
 # .............................................................................

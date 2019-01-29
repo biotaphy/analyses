@@ -1,4 +1,4 @@
-"""This module tests the ancestral_reconstruction/lm_objects/tree.py module
+"""This module tests the analyses/lm_objects/tree.py module
 
 The functions in this module are pytest style tests for the tree.py module
 """
@@ -7,7 +7,7 @@ import random
 import dendropy
 import pytest
 
-from ancestral_reconstruction.lm_objects import tree
+from analyses.lm_objects import tree
 
 
 # .............................................................................

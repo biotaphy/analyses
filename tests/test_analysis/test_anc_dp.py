@@ -9,9 +9,9 @@ import dendropy
 import numpy as np
 import pytest
 
-from ancestral_reconstruction.analysis import anc_dp
-import ancestral_reconstruction.helpers.data_readers as data_readers
-from ancestral_reconstruction.lm_objects.tree import TreeWrapper
+from analyses.ancestral_state import anc_dp
+import analyses.helpers.data_readers as data_readers
+from analyses.lm_objects.tree import TreeWrapper
 
 
 # .............................................................................
