@@ -6,7 +6,7 @@ python:
   - "3.6"
 install: "pip install -r requirements.txt"
 script:
-  - py.test tests/ --pep8 ancestral_reconstruction -v --cov ancestral_reconstruction --cov-report term-missing
+  - py.test tests/ --pep8 analyses -v --cov analyses --cov-report term-missing
 after_success:
   - coveralls
 
