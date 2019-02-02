@@ -1,4 +1,4 @@
-# ancestral_state
+# BiotaPhy analyses
 
 [![Build Status](https://travis-ci.org/biotaphy/analyses.svg?branch=master)](https://travis-ci.org/biotaphy/analyses) [![Coverage Status](https://coveralls.io/repos/github/biotaphy/analyses/badge.svg?branch=master)](https://coveralls.io/github/biotaphy/analyses?branch=master)
 
