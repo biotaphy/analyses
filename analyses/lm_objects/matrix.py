@@ -112,16 +112,6 @@ class Matrix(object):
 
     # ...........................
     @classmethod
-    def load_from_csv(cls, flo):
-        """Loads a Matrix from a CSV file
-
-        Args:
-            flo : A string (filename) or file-like object containing a CSV
-        """
-        raise Exception('Not implemented')
-
-    # ...........................
-    @classmethod
     def concatenate(cls, mtx_list, axis=0):
         """Concatenates multiple Matrix objects together to form a new Matrix
 
@@ -134,6 +124,7 @@ class Matrix(object):
         """
         mtx_objs = []
         axis_headers = []
+        first_mtx = None
         for mtx in mtx_list:
             if not isinstance(mtx, Matrix):
                 mtx = Matrix(mtx)
@@ -150,11 +141,13 @@ class Matrix(object):
                     h = ['']
                 axis_headers.extend(h)
                 mtx_objs.append(mtx.data)
+            if first_mtx is None:
+                first_mtx = mtx
 
         # Create a new data matrix
         new_data = np.concatenate(mtx_objs, axis=axis)
         # Use the first Matrix's headers as the base
-        new_headers = mtx_list[0].get_headers()
+        new_headers = first_mtx.get_headers()
         # Replace the axis of headers with the concatenated version
         new_headers[str(axis)] = axis_headers
         return cls(new_data, headers=new_headers)

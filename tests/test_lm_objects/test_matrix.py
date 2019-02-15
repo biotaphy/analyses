@@ -101,6 +101,17 @@ class Test_Matrix(object):
         assert mtx5.data.shape == (mtx4.data.shape[0] + mtx3.data.shape[0],
                                    mtx4.data.shape[1])
 
+        # Concatenate numpy arrays
+        mtx6 = matrix.Matrix.concatenate(
+            [np.random.random((4, 2)), np.random.random((4, 6))], axis=1)
+        assert mtx6.data.shape == (4, 8)
+
+        # Concatenate a stack and a single
+        mtx7 = get_random_matrix(4, 4, 3)
+        mtx8 = get_random_matrix(4, 4)
+        mtx9 = matrix.Matrix.concatenate([mtx7, mtx8], axis=2)
+        assert mtx9.data.shape == (4, 4, 4)
+
     # .....................................
     def test_append(self):
         """Test append
