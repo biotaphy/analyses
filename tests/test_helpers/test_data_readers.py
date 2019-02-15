@@ -15,6 +15,7 @@ import pytest
 
 import analyses.helpers.data_readers as dr
 from analyses.helpers.sequence import Sequence
+from analyses.lm_objects.matrix import Matrix
 
 
 # .............................................................................
@@ -50,6 +51,38 @@ class Test_create_sequence_list_from_dict(object):
             assert isinstance(i, Sequence)
             assert isinstance(i.name, string_formats)
             assert len(i.cont_values) > 0
+
+
+# .............................................................................
+class Test_get_character_matrix_from_sequences_list(object):
+    """Test class for get_character_matrix_from_sequences_list method
+    """
+    # .....................................
+    def test_valid_no_headers(self):
+        """Test the function with valid Sequences and no variable headers
+        """
+        seq1 = Sequence(name='seq1')
+        seq1.set_cont_values([1.0, 2.0, 3.0])
+        seq2 = Sequence(name='seq2')
+        seq2.set_cont_values([3.0, 3.2, 4.1])
+        test_sequence_list = [seq1, seq2]
+        mtx = dr.get_character_matrix_from_sequences_list(test_sequence_list)
+        assert isinstance(mtx, Matrix)
+
+    # .....................................
+    def test_valid_with_headers(self):
+        """Test the function with valid Sequences and include headers
+        """
+        seq1 = Sequence(name='seq1')
+        seq1.set_cont_values([1.0, 2.0, 3.0])
+        seq2 = Sequence(name='seq2')
+        seq2.set_cont_values([3.0, 3.2, 4.1])
+        test_sequence_list = [seq1, seq2]
+        col_headers = ['Val 1', 'Val 2', 'Val 3']
+        mtx = dr.get_character_matrix_from_sequences_list(
+            test_sequence_list, var_headers=col_headers)
+        assert isinstance(mtx, Matrix)
+        assert mtx.get_column_headers() == col_headers
 
 
 # .............................................................................
