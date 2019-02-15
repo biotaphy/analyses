@@ -77,11 +77,8 @@ def read_csv_alignment_flo(csv_flo):
     headers = None
     sequence_list = []
 
-    try:
-        has_header = csv.Sniffer().has_header(csv_flo.readline())
-        csv_flo.seek(0)
-    except Exception as e:
-        raise AlignmentIOError('Could not sniff header: {}'.format(str(e)))
+    has_header = csv.Sniffer().has_header(csv_flo.readline())
+    csv_flo.seek(0)
 
     num_parts = None
     for line in csv_flo:
@@ -171,39 +168,6 @@ def read_phylip_alignment_flo(phylip_flo):
                 seqlist.append(tseq)
         except Exception as e:
             raise AlignmentIOError(str(e))
-    return seqlist
-
-
-# .............................................................................
-def read_phylip_cont_file(infile):
-    """Reads a phylip alignment file with continuous characters
-
-    Args:
-        infile : The phylip alignment file to read
-
-    Note:
-        * We assume that the phylip files are extended and not strict (in terms
-            of what type and how much white space and how many characters for
-            taxon names)
-        * The phylip file is in the format::
-            numoftaxa numofsites
-            seqlabel contvalue contvalue
-            seqlabel contvalue contvalue
-    """
-    seqlist = []
-    # first line is the number of taxa and num of sites
-    # we don't really even need to read this line,
-    # so let's just skip it
-    i = infile.readline()
-    for i in infile:
-        if len(i) > 2:
-            spls = i.strip().split("\t")
-            name = spls[0].strip()
-            seq = spls[1].strip().split(" ")
-            seq = [float(j) for j in seq]
-            tseq = Sequence(name=name)
-            tseq.set_cont_values(seq)
-            seqlist.append(tseq)
     return seqlist
 
 
