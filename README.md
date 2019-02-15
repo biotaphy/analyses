@@ -6,7 +6,7 @@ Generate ancestral state and distribution reconstructions.
 
 The ancestral distribution code uses a novel approach developed by S.A. Smith and B. O'Meara. Given a set of histograms for species, representing occupancy of environmental space in terms of common bins (i.e., a PNO or predicted niche occupancy profile), this approach reconstructs ancestral histograms of occupancy of climate space. 
 
-This approach is different from those used previously, based on either sampling statistically from present day environmental space or summary statistics (mean, median, maximum, 95th percentile, etc.). Instead of sampling environmental space, probabilities of climate occupancy per bin are explicitly reconstructed. A key advantage of this approach is the ability to reconstruct multimodal ancestral distributions, whereas sampling-based approaches tend to result in normally distributed ancestral reconstructions regardless of extant species distributions.
+This approach is different from those used previously, based on either sampling statistically from present day environmental space or summary statistics (mean, median, maximum, 95th percentile, etc.). Instead of sampling environmental space, probabilities of climate occupancy per bin are explicitly reconstructed. Likewise, summary statistic approaches either result in a point estimate or a minimum and maximum constraint on ancestral reconstructions, both of which are coarse-grained and perhaps not biologically realistic. A key advantage of this approach is the ability to reconstruct multimodal ancestral distributions, whereas sampling-based approaches tend to result in normally distributed ancestral reconstructions regardless of extant species distributions.
 
 ## Install
 ```
