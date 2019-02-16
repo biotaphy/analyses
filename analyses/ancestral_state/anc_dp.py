@@ -91,11 +91,13 @@ def calculate_continuous_ancestral_states(tree, char_mtx, sum_to_one=False,
                 'Could not find {} in character matrix, pruning'.format(label))
         else:
             keep_taxon_labels.append(label)
-    tree.prune_taxa(prune_taxa)
-    tree.purge_taxon_namespace()
+
     if len(keep_taxon_labels) == 0:
         raise Exception(
             'None of the tree tips were found in the character data')
+
+    tree.prune_taxa(prune_taxa)
+    tree.purge_taxon_namespace()
 
     # Prune character data
     keep_rows = []
@@ -143,12 +145,7 @@ def calculate_continuous_ancestral_states(tree, char_mtx, sum_to_one=False,
             # Tip
             node_index_lookup[label] = tip_i
             row_headers.append(label)
-            if label not in tip_lookup.keys():
-                # Cannot find data for tip, raise exception
-                raise Exception(
-                    'Could not find {} in character matrix'.format(label))
-            else:
-                data[tip_i, :, 0] = char_mtx.data[tip_lookup[label]]
+            data[tip_i, :, 0] = char_mtx.data[tip_lookup[label]]
             tip_i += 1
         else:
             node_index_lookup[label] = node_i

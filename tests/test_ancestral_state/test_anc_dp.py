@@ -261,29 +261,29 @@ class Test_ancestal_distribution(object):
             if align_ext == '.csv':
                 with open(alignment_filename) as align_file:
                     sequences, headers = data_readers.read_csv_alignment_flo(
-                                                                    align_file)
+                        align_file)
             elif align_ext == '.json':
                 with open(alignment_filename) as align_file:
                     sequences, headers = data_readers.read_json_alignment_flo(
-                                                                    align_file)
+                        align_file)
             elif align_ext == '.phylip':
                 with open(alignment_filename) as align_file:
                     sequences = data_readers.read_phylip_alignment_flo(
-                                                                    align_file)
+                        align_file)
             elif align_ext == '.tbl':
                 with open(alignment_filename) as align_file:
                     sequences = data_readers.read_table_alignment_flo(
-                                                                    align_file)
+                        align_file)
             else:
                 raise Exception(
                     'Cannot handle alignments with extension: {}'.format(
                         align_ext))
 
             char_mtx = data_readers.get_character_matrix_from_sequences_list(
-                        sequences)
+                sequences)
             # Run analysis
-            _, anc_mtx = anc_dp.calculate_ancestral_distributions(tree,
-                                                                  char_mtx)
+            _, anc_mtx = anc_dp.calculate_ancestral_distributions(
+                tree, char_mtx)
 
             # Testing method
             # Assume that the results file is a csv with row headers for node
@@ -324,13 +324,13 @@ class Test_ancestal_distribution(object):
                     print(ml_results[i])
                     print(std_err_results[i])
                     if np.all(np.isclose(ml_row, ml_results[i])) and \
-                            np.all(np.isclose(std_err_row,
-                                              std_err_results[i])):
+                            np.all(np.isclose(
+                                std_err_row, std_err_results[i])):
                         found = True
                         ml_results.pop(i)
                         std_err_results.pop(i)
                         break
                 if not found:
                     raise Exception(
-                        'Could not find {}, {} in results'.format(ml_row,
-                                                                  std_err_row))
+                        'Could not find {}, {} in results'.format(
+                            ml_row, std_err_row))
