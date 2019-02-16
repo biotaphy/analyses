@@ -146,6 +146,46 @@ class Test_Matrix(object):
         assert flat_mtx.data.shape[0] == x * z
 
     # .....................................
+    def test_flatten_2D_higher_dim(self):
+        """Test flatten_2D method
+        """
+        a, b, c, d = 4, 5, 6, 7
+        mtx = get_random_matrix(a, b, c, d)
+        flat_mtx = mtx.flatten_2D()
+
+        # Test that there are two dimensions of headers and data
+        assert len(flat_mtx.data.shape) == 2
+        assert len(flat_mtx.get_headers().keys()) == 2
+
+        # Test that the length of the row headers is now 3 (accounting for
+        #    the flattened dimensions
+        for h in flat_mtx.get_row_headers():
+            assert len(h) == 3
+
+        # Check that the data shape in the row dimension is c * a * d
+        assert flat_mtx.data.shape[0] == a * c * d
+
+    # .....................................
+    def test_flatten_2D_missing_header(self):
+        """Test flatten_2D method when headers are missing
+        """
+        x, y, z = 5, 5, 3
+        mtx = matrix.Matrix(np.random.random((x, y, z)))
+        flat_mtx = mtx.flatten_2D()
+
+        # Test that there are two dimensions of headers and data
+        assert len(flat_mtx.data.shape) == 2
+        assert len(flat_mtx.get_headers().keys()) == 2
+
+        # Test that the length of the row headers is now 2 (accounting for
+        #    the flattened dimension
+        for h in flat_mtx.get_row_headers():
+            assert len(h) == 2
+
+        # Check that the data shape in the row dimension is z * old shape
+        assert flat_mtx.data.shape[0] == x * z
+
+    # .....................................
     def test_get_column_headers(self):
         """Test get_column_headers
         """

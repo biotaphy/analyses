@@ -181,12 +181,13 @@ class Matrix(object):
             new_mtx = Matrix(np.zeros(new_shape))
 
             old_rh = flat_mtx.get_row_headers()
+            if old_rh is None:
+                old_rh = []
             new_rh = []
 
             # Get old headers
-            try:
-                old_headers = flat_mtx.get_headers(axis=2)
-            except KeyError:
+            old_headers = flat_mtx.get_headers(axis=2)
+            if old_headers is None:
                 old_headers = [''] * old_shape[2]
 
             # Set data and headers
@@ -265,12 +266,12 @@ class Matrix(object):
         my_obj = {}
         my_obj[HEADERS_KEY] = self.headers
         my_obj[VERSION_KEY] = VERSION
-        try:
+        try:  # pragma: no cover
             flo.write('{}\n'.format(json.dumps(my_obj, indent=3,
                                                default=float)))
             flo.write('{}\n'.format(DATA_KEY))
             np.savez_compressed(flo, self.data)
-        except:
+        except:  # pragma: no cover
             my_obj_str = '{}\n{}\n'.format(
                 json.dumps(my_obj, indent=3, default=float), DATA_KEY)
             flo.write(bytes(my_obj_str, 'utf8'))
@@ -307,21 +308,8 @@ class Matrix(object):
             self.headers[str(axis)] = headers
         else:
             self.headers = {}
-            try:
-                headers_keys = headers.keys()
-            except:  # Not a dictionary
-                # Check if first item is a list
-                if isinstance(headers[str(0)], list):
-                    # Assume list of lists
-                    headers_keys = range(len(headers))
-                else:
-                    # Convert to a list
-                    headers = [headers]
-                    headers_keys = [0]
 
-            # We should have a list of keys, which could be either dictionary
-            #    keys or list indices
-            for k in headers_keys:
+            for k in headers.keys():
                 self.headers[str(k)] = headers[str(k)]
 
     # ...........................
