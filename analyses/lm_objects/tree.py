@@ -505,4 +505,3 @@ class TreeWrapper(dendropy.Tree):
             except:
                 # Fall back to returning None
                 return None
-        return taxon.label

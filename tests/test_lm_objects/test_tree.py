@@ -198,6 +198,16 @@ class Test_TreeWrapper(object):
             assert node_label in existing_labels
 
     # .....................................
+    def test_annotate_tree_nodes(self):
+        """Test annotating internal nodes of a tree
+        """
+        my_tree = tree.TreeWrapper.get(data='(A,((B,C),D));', schema='newick')
+        i = 0
+        for node in my_tree.nodes():
+            my_tree._annotate_node(node, None, 'val_{}'.format(i), update=True)
+            i += 1
+
+    # .....................................
     def test_annotate_tree_tips_with_attribute_no_update(self):
         """Test annotate_tree_tips with attribute as label, no updates
 
@@ -313,6 +323,48 @@ END;
             assert label in check_pairs.keys()
             # Check that the annotation is in the new annotation
             assert check_pairs[label] == att
+
+    # .....................................
+    def test_annotate_tree_annotate_twice_with_update(self):
+        """Test annotating a tree twice using the same attribute
+        """
+        my_tree = tree.TreeWrapper.get(data='(A,(B,C));', schema='newick')
+        att_pairs_1 = {
+            'A': 'val1',
+            'B': 'val2',
+            'C': 'val3'
+        }
+        att_pairs_2 = {
+            'val1': 'newval1',
+            'val2': 'newval2',
+            'val3': 'newval3'
+        }
+        check_pairs = {
+            'A': 'newval1',
+            'B': 'newval2',
+            'C': 'newval3'
+        }
+
+        my_tree.annotate_tree(att_pairs_1, annotation_attribute='myatt')
+
+        # Check that original annotations are correct
+        for node in my_tree.nodes():
+            if node.label is not None:
+                assert node.label in att_pairs_1.keys()
+                assert node.annotations.get_value(
+                    'myatt') == att_pairs_1[node.label]
+
+        # Update the annotations
+        my_tree.annotate_tree(
+            att_pairs_2, annotation_attribute='myatt', label_attribute='myatt',
+            update=True)
+
+        # Check that the annotations were updated correctly
+        for node in my_tree.nodes():
+            if node.label is not None:
+                assert node.label in check_pairs.keys()
+                assert node.annotations.get_value(
+                    'myatt') == check_pairs[node.label]
 
     # .....................................
     def test_annotate_tree_tips_with_bad_attribute(self):
