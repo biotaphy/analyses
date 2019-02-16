@@ -7,10 +7,10 @@ Todo:
 import os
 
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
-matplotlib.use('Agg')
 
 # .............................................................................
 def create_distribution_plots(lm_tree, node_matrix, output_directory):
