@@ -9,11 +9,11 @@ Todo:
 import argparse
 import os
 
-from ancestral_reconstruction.analysis import anc_dp
-import ancestral_reconstruction.tools.annotators as annotators
-import ancestral_reconstruction.tools.plots as tree_plots
-from ancestral_reconstruction.helpers import data_readers
-from ancestral_reconstruction.lm_objects.tree import TreeWrapper
+from analyses.ancestral_state import anc_dp
+import analyses.tools.annotators as annotators
+import analyses.tools.plots as tree_plots
+from analyses.helpers import data_readers
+from analyses.lm_objects.tree import TreeWrapper
 
 DESCRIPTION = """\
 Generates ancestral distribution estimations based on the environmental 
