@@ -6,11 +6,11 @@ Todo:
 """
 import os
 
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
+
+plt.switch_backend('Agg')
 
 # .............................................................................
 def create_distribution_plots(lm_tree, node_matrix, output_directory):
