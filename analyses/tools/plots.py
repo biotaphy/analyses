@@ -12,6 +12,7 @@ import numpy as np
 
 plt.switch_backend('Agg')
 
+
 # .............................................................................
 def create_distribution_plots(lm_tree, node_matrix, output_directory):
     """Creates distribution plots for each of the nodes in the tree
