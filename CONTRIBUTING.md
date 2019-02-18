@@ -4,7 +4,7 @@
 
 * Check that it hasn't already be reported by searching our GitHub issues [Issues](https://github.com/biotaphy/analyses/issues).
 
-* If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/biotaphy/analyses/issues/new). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
+* If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/biotaphy/analyses/issues/new?assignees=cjgrady&template=bug_report.md). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
 
 
 #### You wrote a patch for a bug
@@ -18,7 +18,7 @@
 
 #### You want to add a new analysis
 
-* [Submit a new GitHub issue](https://github.com/biotaphy/analyses/issues/new) and suggest your analysis.  We want to make sure that it fits before you spend time coding it.
+* [Submit a new GitHub issue](https://github.com/biotaphy/analyses/issues/new?assignees=&template=feature_request.md) and suggest your analysis.  We want to make sure that it fits before you spend time coding it.
 
 * Write your code and tests following our coding and testing conventions.
 
