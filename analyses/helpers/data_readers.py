@@ -16,7 +16,7 @@ from analyses.lm_objects.matrix import Matrix
 
 # .............................................................................
 class AlignmentIOError(Exception):
-    """Wrapper class for alignment errors
+    """Wrapper class for alignment errors.
     """
     pass
 
@@ -25,11 +25,21 @@ class AlignmentIOError(Exception):
 def create_sequence_list_from_dict(values_dict):
     """Creates a list of sequences from a dictionary
 
+    Args:
+        values_dict (dict) : A dictionary of taxon name keys and a list of
+            values for each value.
+
     Note:
         * The dictionary should have structure::
             {
                 "{taxon_name}" : [{values}]
             }
+
+    Returns:
+        A list of Sequence objects and None for headers.
+
+    Raises:
+        AlignmentIOError: If a dictionary value is not a list.
     """
     headers = None
     sequence_list = []
@@ -44,11 +54,16 @@ def create_sequence_list_from_dict(values_dict):
 
 # .............................................................................
 def get_character_matrix_from_sequences_list(sequences, var_headers=None):
-    """Converts a list of sequences into a character matrix
+    """Converts a list of sequences into a character matrix.
 
     Args:
-        sequences : A list of Sequence objects to be converted
-        var_headers : If provided, uses these as variable headers
+        sequences (:obj:`list` of :obj:`Sequence`): A list of Sequence objects
+            to be converted.
+        var_headers (:obj:`list` of headers, optional): If provided, uses these
+            as variable headers for the columns in the matrix.
+
+    Returns:
+        Matrix: A matrix of sequence data.
     """
     if var_headers is not None:
         col_headers = var_headers
@@ -63,16 +78,22 @@ def get_character_matrix_from_sequences_list(sequences, var_headers=None):
         row_headers.append(seq.name)
         data[i] = np.array(seq.cont_values)
         i += 1
-    return Matrix(data, headers={'0': row_headers,
-                                 '1': col_headers})
+    return Matrix(data, headers={'0': row_headers, '1': col_headers})
 
 
 # .............................................................................
 def read_csv_alignment_flo(csv_flo):
-    """Reads a CSV file-like object and return a list of sequences and headers
+    """Reads a CSV file-like object and return a list of sequences and headers.
 
     Args:
-        csv_flo : A file-like object with CSV alignment data
+        csv_flo (file-like): A file-like object with CSV alignment data.
+
+    Returns:
+        A list of Sequence objects and headers.
+
+    Raises:
+        AlignmentIOError: If the number of columns is inconsistent across the
+            sequences.
     """
     headers = None
     sequence_list = []
@@ -101,10 +122,10 @@ def read_csv_alignment_flo(csv_flo):
 
 # .............................................................................
 def read_json_alignment_flo(json_flo):
-    """Read a JSON file-like object and return a list of sequences and headers
+    """Read a JSON file-like object and return a list of sequences and headers.
 
     Args:
-        json_flo : A file-like object with JSON alignment data
+        json_flo (file-like): A file-like object with JSON alignment data.
 
     Note:
         * File should have structure::
@@ -117,6 +138,11 @@ def read_json_alignment_flo(json_flo):
                     }
                 ]
             }
+    Returns:
+        A list of Sequence objects and headers.
+
+    Raises:
+        AlignmentIOError: If headers are provided but they are not a list.
     """
     json_vals = json.load(json_flo)
 
@@ -140,18 +166,24 @@ def read_json_alignment_flo(json_flo):
 
 # .............................................................................
 def read_phylip_alignment_flo(phylip_flo):
-    """Reads a phylip alignment file-like object and return the sequences
+    """Reads a phylip alignment file-like object and return the sequences.
 
     Args:
-        phylip_flo : The phylip file-like object
+        phylip_flo (file-like): The phylip file-like object.
 
     Note:
         * We assume that the phylip files are extended and not strict (in terms
-            of how many characters for taxon names)
+            of how many characters for taxon names).
         * The phylip file is in the format::
             numoftaxa numofsites
             seqlabel sequence
             seqlabel sequence
+
+    Returns:
+        A list of Sequence objects.
+
+    Raises:
+        AlignmentIOError: If there is a problem creating sequences.
     """
     seqlist = []
     # first line is the number of taxa and num of sites
@@ -173,10 +205,16 @@ def read_phylip_alignment_flo(phylip_flo):
 
 # .............................................................................
 def read_table_alignment_flo(table_flo):
-    """Reads a table from a file-like object
+    """Reads a table from a file-like object.
 
     Args:
-        table_flo : A file-like object containing table data
+        table_flo (file-like): A file-like object containing table data.
+
+    Returns:
+        A list of Sequence objects.
+
+    Raises:
+        AlignmentIOError: If there is a problem creating sequences.
     """
     seqlist = []
     for i in table_flo:

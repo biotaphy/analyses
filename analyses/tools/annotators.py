@@ -1,16 +1,17 @@
-"""Module containing tools for annotating trees with ancestral trait data
+"""Module containing tools for annotating trees with ancestral trait data.
 """
 
 
 # .............................................................................
 def add_all_annotations(lm_tree, node_matrix, update=False):
-    """Adds all annotations from the node matrix to the tree
+    """Adds all annotations from the node matrix to the tree.
 
     Args:
-        lm_tree (TreeWrapper) : A Lifemapper tree object.
-        node_matrix (Matrix) : A Lifemapper Matrix object with rows matching
-            the nodes in the provided tree.
-        update (bool) : Should any existing annotations be updated
+        lm_tree (TreeWrapper): A Lifemapper tree object.
+        node_matrix (Matrix): A Lifemapper Matrix object with rows matching the
+            nodes in the provided tree.
+        update (:obj:`bool`, optional): Should any existing annotations be
+            updated.  Defaults to False.
     """
     annotations = {}
     for i, node_name in enumerate(node_matrix.get_row_headers()):
@@ -23,13 +24,14 @@ def add_all_annotations(lm_tree, node_matrix, update=False):
 
 # .............................................................................
 def annotate_tree_with_label(lm_tree, node_matrix, label_column=0):
-    """Annotates the tree by changing the label of each node
+    """Annotates the tree by changing the label of each node.
 
     Args:
-        lm_tree (TreeWrapper) : A Lifemapper tree object.
-        node_matrix (Matrix) : A Lifemapper Matrix object with rows matching
+        lm_tree (TreeWrapper): A Lifemapper tree object.
+        node_matrix (Matrix): A Lifemapper Matrix object with rows matching
             the nodes in the provided tree.
-        label_column (int) : The column in the matrix to use for node labels.
+        label_column (:obj:`int`, optional): The column in the matrix to use
+            for node labels.  Defaults to 0.
     """
     annotations = {}
     for i, node_name in enumerate(node_matrix.get_row_headers()):

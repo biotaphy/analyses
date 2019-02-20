@@ -1,7 +1,7 @@
-"""This module contains classes and functions for testing annotators
+"""This module contains classes and functions for testing annotators.
 
-Notes:
-    * Uses pytest style testing
+Note:
+    * Uses pytest style testing.
 """
 import numpy as np
 import pytest
@@ -13,11 +13,11 @@ import analyses.tools.annotators as annotators
 
 # .............................................................................
 class Test_add_all_annotations(object):
-    """Test class for the add_all_annotations method
+    """Test class for the add_all_annotations method.
     """
     # .....................................
     def test_valid(self):
-        """Test the function with valid inputs
+        """Test the function with valid inputs.
         """
         # Create a tree
         tree = TreeWrapper.get(data='(A,(B,((C,D),(E,F))));', schema='newick')
@@ -31,11 +31,11 @@ class Test_add_all_annotations(object):
 
 # .............................................................................
 class Test_annotate_tree_with_label(object):
-    """Test class for the annotate_tree_with_label method
+    """Test class for the annotate_tree_with_label method.
     """
     # .....................................
     def test_valid(self):
-        """Test the function with valid inputs
+        """Test the function with valid inputs.
         """
         # Create a tree
         tree = TreeWrapper.get(data='(A,(B,((C,D),(E,F))));', schema='newick')

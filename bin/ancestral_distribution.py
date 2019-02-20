@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-"""Tool for performing ancestral distribution computations
+"""Tool for performing ancestral distribution computations.
 
 Todo:
-    * Rename without .py extension
-    * Constants
-    * Clean up help
+    * Rename without .py extension.
+    * Constants.
+    * Clean up help.
 """
 import argparse
 import os

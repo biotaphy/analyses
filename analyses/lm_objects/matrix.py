@@ -1,11 +1,11 @@
-"""Module that contains a Matrix class that has header information
+"""Module that contains a Matrix class that has header information.
 
 Todo:
     * Use https://docs.scipy.org/doc/numpy/user/basics.subclassing.html when
-        changing this to subclass numpy.ndarray
+        changing this to subclass numpy.ndarray.
     * Handle multiple rows / columns / etc of headers like:
-        (PAM x, y, site ids)
-    * Load should handle compressed and not compressed
+        (PAM x, y, site ids).
+    * Load should handle compressed and not compressed.
 """
 from copy import deepcopy
 import io
@@ -22,18 +22,26 @@ VERSION = '2.0.0'
 
 # .............................................................................
 class Matrix(object):
-    """Lifemapper wrapper for Numpy ndarrays that adds headers
+    """Lifemapper wrapper for Numpy ndarrays that adds headers.
+
+    Attributes:
+        data (numpy.ndarray): The base, undecorated data for a Matrix.  It may
+            be None if the data has not been initialized.
+        headers (dict): A dictionary of headers for each axis of the Matrix.
+            Note that the keys must be integer strings.
     """
     # ...........................
     def __init__(self, mtx, headers=None):
-        """Constructor
+        """Constructor.
 
         Args:
-            mtx : A matrix (like) object to use as the base data for the
-                Matrix.  This can be None if the data has not been initialized
-            headers : Optional headers for this matrix.  This may be either a
-                list of lists, where the index of a list in the lists will be
-                treated as the axis::
+            mtx (numpy.ndarray): A matrix (like) object to use as the base data
+                for the Matrix.  This can be None if the data has not been
+                initialized.
+            headers (:obj:`dict` or :obj:`list` of :obj:`list` of :obj:`str`):
+                Headers for this matrixOptional headers for this matrix.  This
+                may be either a list of lists, where the index of a list in the
+                lists will be treated as the axis::
                     (ex. [['Row 1', 'Row 2', 'Row 3'],
                           ['Column 1', 'Column 2']])
                 Or this could be a dictionary where the key is used for the
@@ -42,10 +50,6 @@ class Matrix(object):
                         '1' : ['Column 1', 'Column 2'],
                         '0' : ['Row 1', 'Row 2', 'Row 3']
                     }
-
-        Note:
-            * If the headers for an axis are a string and not a list, it will
-                be treated as a file name
         """
         self.data = mtx
         self.headers = {}
@@ -55,10 +59,20 @@ class Matrix(object):
     # ...........................
     @classmethod
     def load(cls, flo):
-        """Attempts to load a Matrix object from a file
+        """Attempts to load a Matrix object from a file.
 
         Args:
-            flo : A file-like object for the stored Matrix, Numpy array, or ?
+            flo (file-like): A file-like object for the stored Matrix or Numpy
+                array.
+
+        Todo:
+            * Add support for loading a CSV file.
+
+        Returns:
+            Matrix: A newly loaded Matrix object.
+
+        Raises:
+            IOError: If there is a problem loading the Matrix data.
         """
         # Try loading the Matrix object
         try:
@@ -78,10 +92,16 @@ class Matrix(object):
     # ...........................
     @classmethod
     def load_new(cls, flo):
-        """Attempts to load a Matrix object from a file
+        """Attempts to load a Matrix object from a file.
 
         Args:
-            flo : A file-like object with matrix data
+            flo (file-like): A file-like object with matrix data.
+
+        Todo:
+            * Merge this into main load method.
+
+        Returns:
+            Matrix: The newly loaded Matrix object.
         """
         header_lines = []
         data_lines = []
@@ -113,14 +133,21 @@ class Matrix(object):
     # ...........................
     @classmethod
     def concatenate(cls, mtx_list, axis=0):
-        """Concatenates multiple Matrix objects together to form a new Matrix
+        """Concatenates multiple Matrix objects together to form a new Matrix.
 
         Args:
-            mtx_list : A List of Matrix objects to concatenate together
-            axis : The axis to concatenate these Matrix objects on
+            mtx_list (:obj:`list` of :obj:`Matrix`): A List of Matrix objects
+                to concatenate together.
+            axis (int, optional): The axis to concatenate these Matrix objects
+                on.  This should be an integer for the matrix axis of
+                concatenation.  This will be converted to a string where needed
+                for headers.
 
         Note:
-            * Assumes that headers for other axes are the same
+            * Assumes that headers for other axes are the same.
+
+        Returns:
+            Matrix: The concatenated Matrix objects.
         """
         mtx_objs = []
         axis_headers = []
@@ -154,30 +181,38 @@ class Matrix(object):
 
     # ...........................
     def append(self, mtx, axis=0):
-        """Appends the provided Matrix object to this one
+        """Appends the provided Matrix object to this one.
 
         Args:
-            mtx : The Matrix object to append to this one
-            axis : The axis to append this matrix on
+            mtx (Matrix): The Matrix object to append to this one.
+            axis (:obj:`int`, optional): The axis to append this matrix on.
 
         Note:
             * Only keeps the headers for the append axis, assumes the other
-                axes are the same
+                axes are the same.
         """
         self.data = np.append(self.data, mtx.data, axis=axis)
         self.headers[str(axis)].append(mtx.get_headers(axis=axis))
 
     # ...........................
     def flatten_2D(self):
-        """Flattens a higher dimension Matrix object into a 2D matrix
+        """Flattens a higher dimension Matrix object into a 2D matrix.
+
+        Todo:
+            * Modify this method to take an argument for the number of
+                dimensions that the matrix should be flattened to.
+
+        Returns:
+            Matrix: A Matrix object flattened to only have two dimensions.
         """
         flat_mtx = self
         while flat_mtx.data.ndim > 2:
             # More than two dimensions so we must flatten
             old_shape = flat_mtx.data.shape
             old_num_rows = old_shape[0]
-            new_shape = tuple([old_shape[0]*old_shape[2],
-                               old_shape[1]] + list(old_shape[3:]))
+            new_shape = tuple(
+                [old_shape[0]*old_shape[2],
+                 old_shape[1]] + list(old_shape[3:]))
             new_mtx = Matrix(np.zeros(new_shape))
 
             old_rh = flat_mtx.get_row_headers()
@@ -213,8 +248,9 @@ class Matrix(object):
                 if int(axis) > 2:
                     # Reduce the key of the axis by one and set headers on
                     #   new matrix
-                    new_mtx.set_headers(flat_mtx.get_headers(axis=axis),
-                                        axis=str(int(axis) - 1))
+                    new_mtx.set_headers(
+                        flat_mtx.get_headers(axis=axis),
+                        axis=str(int(axis) - 1))
 
             flat_mtx = new_mtx
 
@@ -222,19 +258,27 @@ class Matrix(object):
 
     # ...........................
     def get_column_headers(self):
-        """Shortcut to get column headers
+        """Shortcut to get column headers.
 
         Todo:
             * Throw a different exception if no column header?
+
+        Returns:
+            A list of headers for each column.
         """
         return self.get_headers(axis=1)
 
     # ...........................
     def get_headers(self, axis=None):
-        """Gets the headers associated with this Matrix
+        """Gets the headers associated with this Matrix.
 
         Args:
-            axis : If provided, return headers for this axis, else, return all
+            axis (:obj:`int`, optional): If provided, return headers for this
+                axis, else, return all.
+
+        Returns:
+            If axis is None, a dictionary of all headers for the matrix.
+            If axis is int, A list of headers for the specified axis.
         """
         if axis is None:
             return self.headers
@@ -246,22 +290,25 @@ class Matrix(object):
 
     # ...........................
     def get_row_headers(self):
-        """Shortcut to get row headers
+        """Shortcut to get row headers.
 
         Todo:
             * Throw a different exception if no row headers?
+
+        Returns:
+            A list of headers for the rows in the matrix.
         """
         return self.get_headers(axis=0)
 
     # ...........................
     def save(self, flo):
-        """Saves the Matrix to a file-like object
+        """Saves the Matrix to a file-like object.
 
         Saves the Matrix object in a JSON / Numpy hybrid format to the
-            file-like object
+            file-like object.
 
         Args:
-            flo : The file-like object to write to
+            flo (file-like): The file-like object to write to.
         """
         my_obj = {}
         my_obj[HEADERS_KEY] = self.headers
@@ -279,30 +326,31 @@ class Matrix(object):
 
     # ...........................
     def set_column_headers(self, headers):
-        """Shortcut to set column headers
+        """Shortcut to set column headers.
 
         Args:
-            headers : A list of new column headers
+            headers (:obj:`list` of :obj:`str`): A list of new column headers.
         """
         self.set_headers(headers, axis=1)
 
     # ...........................
     def set_headers(self, headers, axis=None):
-        """Sets the headers for this Matrix
+        """Sets the headers for this Matrix.
 
         Args:
-            headers : Matrix headers.  Can be a list of lists, a dictionary
-                of lists, or if axis is provided, a single list
-            axis : If provided, set the headers for a specific axis, else,
-                process as if it is for the entire Matrix
+            headers (:obj:`dict` or :obj:`list` of :obj:`list` or :obj:`list`):
+                Matrix headers.  Can be a list of lists, a dictionary of lists,
+                or if axis is provided, a single list.
+            axis (:obj:`int`): If provided, set the headers for a specific
+                axis, else, process as if it is for the entire Matrix.
 
         Todo:
             * Validate input for single axis operation?
 
         Note:
-            * Resets headers dictionary when setting values for all headers
+            * Resets headers dictionary when setting values for all headers.
             * Duck types to use list of lists or dictionary to set values for
-                different axes
+                different axes.
         """
         if axis is not None:
             self.headers[str(axis)] = headers
@@ -314,22 +362,27 @@ class Matrix(object):
 
     # ...........................
     def set_row_headers(self, headers):
-        """Shortcut to set row headers
+        """Shortcut to set row headers.
 
         Args:
-            headers : A list of new row headers
+            headers (:obj:`list` of :obj:`str`): A list of new row headers.
         """
         self.set_headers(headers, axis=0)
 
     # ...........................
     def slice(self, *args):
-        """Subsets the matrix and returns a new instance
+        """Subsets the matrix and returns a new instance.
 
         Args:
-            *args: These are iterables for the indices to retrieve
+            *args: A variable length argument list of iterables for the indices
+                to retrieve for each axis.
 
         Note:
-            * The first parameter will be for axis 0, second for axis 1, etc
+            * The first parameter will be for axis 0, second for axis 1, etc.
+
+        Returns:
+            Matrix: A new Matrix that is a subset of the original specified by
+                the slicing parameters.
         """
         new_data = np.copy(self.data)
         new_headers = deepcopy(self.headers)
@@ -346,19 +399,22 @@ class Matrix(object):
 
     # ...........................
     def slice_by_header(self, header, axis):
-        """Gets a slice of the Matrix matching the header provided
+        """Gets a slice of the Matrix matching the header provided.
 
         Args:
-            header : The name of a header to use for slicing
-            axis : The axis to find this header
+            header (str): The name of a header to use for slicing
+            axis (int): The axis to find this header.
 
         Raises:
-            ValueError: If the header is not found for the specified axis
+            ValueError: If the header is not found for the specified axis.
 
         Todo:
             * Add capability to slice over multiple axes and multiple headers.
                 Maybe combine with other slice method and provide method to
-                search for header indices
+                search for header indices.
+
+        Returns:
+            Matrix: A subset of the original Matrix specified by the header.
         """
         idx = self.headers[str(axis)].index(header)
 
@@ -380,19 +436,19 @@ class Matrix(object):
 
     # ...........................
     def write_csv(self, flo, *slice_args):
-        """Writes the Matrix object to a CSV file-like object
+        """Writes the Matrix object to a CSV file-like object.
 
         Args:
-            flo : The file-like object to write to
-            slice_args : If provided, perform a slice operation and use the
-                resulting matrix for writing
+            flo (file-like): The file-like object to write to.
+            *slice_args: A variable length argument list of iterables to use
+                for a slice operation prior to generating CSV content.
 
         Todo:
             Handle header overlap (where the header for one axis is for another
-                axis header
+                axis header.
 
         Note:
-            Currently only works for 2-D tables
+            Currently only works for 2-D tables.
         """
         if list(slice_args):
             mtx = self.slice(*slice_args)
@@ -407,19 +463,19 @@ class Matrix(object):
 
         # .....................
         def already_lists(x):
-            """Use this function for processing headers when they are lists
+            """Use this function for processing headers when they are lists.
             """
             return x
 
         # .....................
         def make_lists(x):
-            """Use this function for processing headers when they are not lists
+            """Use this function for processing non-list headers.
             """
             return [x]
 
         # .....................
         def csv_generator():
-            """Generator that yields rows of values to be output as CSV
+            """Generator that yields rows of values to be output as CSV.
             """
             try:
                 row_headers = mtx.headers['0']
@@ -456,38 +512,45 @@ class Matrix(object):
 
 # .............................................................................
 class ArrayStream(list):
-    """Generator class for a numpy array for JSON serialization
+    """Generator class for a numpy array for JSON serialization.
+
+    Attributes:
+        x (numpy.ndarray): A numpy array to be streamed to JSON serialization.
+        my_len (int): The size of the first dimension of the array.
 
     Note:
         * This is done to save memory rather than creating a list of the entire
             array / matrix.  It is used by the JSON encoder to write the data
-            to file
+            to file.
     """
     # ...........................
     def __init__(self, x):
-        """Constructor
+        """Constructor.
 
         Args:
-            x : The numpy array to stream
+            x : The numpy array to stream.
         """
         self.x = x
         self.my_len = self.x.shape[0]
 
     # ...........................
     def __iter__(self):
-        """Iterator for array
+        """Iterator for array.
         """
         return self.gen()
 
     # ...........................
     def __len__(self):
-        """Length function
+        """Length function.
         """
         return self.my_len
 
     # ...........................
     def gen(self):
-        """Loops over array and create ArrayStreams for sub arrays
+        """Loops over array and create ArrayStreams for sub arrays.
+
+        Yields:
+            The next item in the stream.
         """
         n = 0
 

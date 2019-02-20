@@ -1,8 +1,8 @@
-"""Module containing tools for plotting tree nodes
+"""Module containing tools for plotting tree nodes.
 
 Todo:
-    * Determine best path for this module
-    * Determine a good way to pass plot options
+    * Determine best path for this module.
+    * Determine a good way to pass plot options.
 """
 import os
 
@@ -15,13 +15,13 @@ plt.switch_backend('Agg')
 
 # .............................................................................
 def create_distribution_plots(lm_tree, node_matrix, output_directory):
-    """Creates distribution plots for each of the nodes in the tree
+    """Creates distribution plots for each of the nodes in the tree.
 
     Args:
-        lm_tree (TreeWrapper) : A Lifemapper tree object.
-        node_matrix (Matrix) : A Lifemapper Matrix object with rows matching
-            the nodes in the provided tree.
-        output_directory (str) : A directory where the output plots should be
+        lm_tree (TreeWrapper): A Lifemapper tree object.
+        node_matrix (Matrix): A Lifemapper Matrix object with rows matching the
+            nodes in the provided tree.
+        output_directory (str): A directory where the output plots should be
             written.
     """
     # If the output directory does not exist, create it

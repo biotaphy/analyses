@@ -1,7 +1,11 @@
-"""This module is used for testing ancestral state reconstruction
+"""This module is used for testing ancestral state reconstruction.
 
 Notes:
-    * Uses pytest style testing
+    * Uses pytest style testing.
+
+Todo:
+    * Need a general load tree and alignment method so error handling is not in
+        testing.
 """
 import os
 
@@ -16,20 +20,25 @@ from analyses.lm_objects.tree import TreeWrapper
 
 # .............................................................................
 class Test_calculate_continuous_ancestral_states(object):
-    """Tests ancestral state reconstruction
+    """Tests ancestral state reconstruction.
     """
     # .....................................
     def test_package_invalid(self, data_files):
-        """Test calculate_continusous_ancestral_states method with invalid data
+        """Test calculate_continusous_ancestral_states with invalid data.
 
         Args:
-            data_files : A pytest fixture defined in conftest.py
+            data_files (pytest.fixture): A pytest fixture defined in
+                conftest.py for retrieving test data.
 
         Note:
             * This test will need to evolve as the output format changes.  It
                 will probably be better to return a data structure with various
                 values for each node rather than assigning the value to the
-                node label
+                node label.
+
+        Raises:
+            IOError: When the alignment or tree cannot be loaded for the
+                specified file extension.
         """
         # Get the data files
         packages = data_files.get_ancestral_state_packages(False)
@@ -44,7 +53,7 @@ class Test_calculate_continuous_ancestral_states(object):
             elif tree_ext == '.tre':
                 tree_schema = 'newick'
             else:
-                raise Exception(
+                raise IOError(
                     'Cannot handle tree with extension: {}'.format(tree_ext))
             tree = dendropy.Tree.get(path=tree_filename, schema=tree_schema)
 
@@ -53,21 +62,21 @@ class Test_calculate_continuous_ancestral_states(object):
             if align_ext == '.csv':
                 with open(alignment_filename) as align_file:
                     sequences, headers = data_readers.read_csv_alignment_flo(
-                                                                    align_file)
+                        align_file)
             elif align_ext == '.json':
                 with open(alignment_filename) as align_file:
                     sequences, headers = data_readers.read_json_alignment_flo(
-                                                                    align_file)
+                        align_file)
             elif align_ext == '.phylip':
                 with open(alignment_filename) as align_file:
                     sequences = data_readers.read_phylip_alignment_flo(
-                                                                    align_file)
+                        align_file)
             elif align_ext == '.tbl':
                 with open(alignment_filename) as align_file:
                     sequences = data_readers.read_table_alignment_flo(
-                                                                    align_file)
+                        align_file)
             else:
-                raise Exception(
+                raise IOError(
                     'Cannot handle alignments with extension: {}'.format(
                         align_ext))
 
@@ -79,16 +88,23 @@ class Test_calculate_continuous_ancestral_states(object):
 
     # .....................................
     def test_package_valid(self, data_files):
-        """Tests the calculate_continusous_ancestral_states method
+        """Tests the calculate_continusous_ancestral_states method.
 
         Args:
-            data_files : A pytest fixture defined in conftest.py
+            data_files (pytest.fixture): A pytest fixture defined in
+                conftest.py for retrieving test data.
 
         Note:
             * This test will need to evolve as the output format changes.  It
                 will probably be better to return a data structure with various
                 values for each node rather than assigning the value to the
-                node label
+                node label.
+
+        Raises:
+            IOError: When the tree or alignment cannot be loaded for the
+                specified file extension.
+            Exception: When a specified successful result value cannot be
+                found.
         """
         # Get the data files
         packages = data_files.get_ancestral_state_packages(True)
@@ -103,7 +119,7 @@ class Test_calculate_continuous_ancestral_states(object):
             elif tree_ext == '.tre':
                 tree_schema = 'newick'
             else:
-                raise Exception(
+                raise IOError(
                     'Cannot handle tree with extension: {}'.format(tree_ext))
             # tree = dendropy.Tree.get(path=tree_filename, schema=tree_schema)
             tree = TreeWrapper.get(path=tree_filename, schema=tree_schema)
@@ -113,26 +129,26 @@ class Test_calculate_continuous_ancestral_states(object):
             if align_ext == '.csv':
                 with open(alignment_filename) as align_file:
                     sequences, headers = data_readers.read_csv_alignment_flo(
-                                                                    align_file)
+                        align_file)
             elif align_ext == '.json':
                 with open(alignment_filename) as align_file:
                     sequences, headers = data_readers.read_json_alignment_flo(
-                                                                    align_file)
+                        align_file)
             elif align_ext == '.phylip':
                 with open(alignment_filename) as align_file:
                     sequences = data_readers.read_phylip_alignment_flo(
-                                                                    align_file)
+                        align_file)
             elif align_ext == '.tbl':
                 with open(alignment_filename) as align_file:
                     sequences = data_readers.read_table_alignment_flo(
-                                                                    align_file)
+                        align_file)
             else:
-                raise Exception(
+                raise IOError(
                     'Cannot handle alignments with extension: {}'.format(
                         align_ext))
 
             char_mtx = data_readers.get_character_matrix_from_sequences_list(
-                        sequences)
+                sequences)
             # Run analysis
             _, anc_mtx = anc_dp.calculate_continuous_ancestral_states(
                 tree, char_mtx, calc_std_err=True, sum_to_one=False)
@@ -170,20 +186,25 @@ class Test_calculate_continuous_ancestral_states(object):
 
 # .............................................................................
 class Test_ancestal_distribution(object):
-    """Tests ancestral distribution reconstruction
+    """Tests ancestral distribution reconstruction.
     """
     # .....................................
     def test_package_invalid(self, data_files):
-        """Test calculate_ancestral_distributions method with invalid data
+        """Test calculate_ancestral_distributions method with invalid data.
 
         Args:
-            data_files : A pytest fixture defined in conftest.py
+            data_files (pytest.fixture): A pytest fixture defined in
+                conftest.py for retrieving test data.
 
         Note:
             * This test will need to evolve as the output format changes.  It
                 will probably be better to return a data structure with various
                 values for each node rather than assigning the value to the
-                node label
+                node label.
+
+        Raises:
+            IOError: When the tree or alignment cannot be loaded for the
+                specified file extension.
         """
         # Get the data files
         packages = data_files.get_ancestral_distribution_packages(False)
@@ -198,7 +219,7 @@ class Test_ancestal_distribution(object):
             elif tree_ext == '.tre':
                 tree_schema = 'newick'
             else:
-                raise Exception(
+                raise IOError(
                     'Cannot handle tree with extension: {}'.format(tree_ext))
             tree = dendropy.Tree.get(path=tree_filename, schema=tree_schema)
 
@@ -207,21 +228,21 @@ class Test_ancestal_distribution(object):
             if align_ext == '.csv':
                 with open(alignment_filename) as align_file:
                     sequences, headers = data_readers.read_csv_alignment_flo(
-                                                                    align_file)
+                        align_file)
             elif align_ext == '.json':
                 with open(alignment_filename) as align_file:
                     sequences, headers = data_readers.read_json_alignment_flo(
-                                                                    align_file)
+                        align_file)
             elif align_ext == '.phylip':
                 with open(alignment_filename) as align_file:
                     sequences = data_readers.read_phylip_alignment_flo(
-                                                                    align_file)
+                        align_file)
             elif align_ext == '.tbl':
                 with open(alignment_filename) as align_file:
                     sequences = data_readers.read_table_alignment_flo(
-                                                                    align_file)
+                        align_file)
             else:
-                raise Exception(
+                raise IOError(
                     'Cannot handle alignments with extension: {}'.format(
                         align_ext))
 
@@ -233,10 +254,17 @@ class Test_ancestal_distribution(object):
 
     # .....................................
     def test_package_valid(self, data_files):
-        """Tests the calculate_ancestral_distributions method
+        """Tests the calculate_ancestral_distributions method.
 
         Args:
-            data_files : A pytest fixture defined in conftest.py
+            data_files (pytest.fixture): A pytest fixture defined in
+                conftest.py for retrieving test data.
+
+        Raises:
+            IOError: When the tree or alignment cannot be loaded for the
+                specified file extension.
+            Exception: When a specified successful result value cannot be
+                found.
         """
         # Get the data files
         packages = data_files.get_ancestral_distribution_packages(True)
@@ -251,7 +279,7 @@ class Test_ancestal_distribution(object):
             elif tree_ext == '.tre':
                 tree_schema = 'newick'
             else:
-                raise Exception(
+                raise IOError(
                     'Cannot handle tree with extension: {}'.format(tree_ext))
             # tree = dendropy.Tree.get(path=tree_filename, schema=tree_schema)
             tree = TreeWrapper.get(path=tree_filename, schema=tree_schema)
@@ -275,7 +303,7 @@ class Test_ancestal_distribution(object):
                     sequences = data_readers.read_table_alignment_flo(
                         align_file)
             else:
-                raise Exception(
+                raise IOError(
                     'Cannot handle alignments with extension: {}'.format(
                         align_ext))
 
@@ -301,8 +329,8 @@ class Test_ancestal_distribution(object):
                         # Add result (without label) to appropriate list
                         parts = line.strip().split(',')
                         layer = parts[1].lower()
-                        values = np.array([float(i) for i in parts[2:]],
-                                          dtype=float)
+                        values = np.array(
+                            [float(i) for i in parts[2:]], dtype=float)
                         if layer == 'maximum_likelihood':
                             ml_results.append(values)
                         else:

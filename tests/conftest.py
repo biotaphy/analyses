@@ -1,4 +1,4 @@
-"""Test configuration fixtures
+"""Test configuration fixtures.
 """
 import glob
 import os
@@ -24,18 +24,20 @@ class SampleDataFiles(object):
 
     Note:
         * For test files, the format should be something like:
-            "(in)valid_{name}.{extension}"
+            "(in)valid_{name}.{extension}".
     """
     # .....................................
     def get_alignments(self, fmt, is_valid):
         """Gets an alignment file from the sample data.
 
         Args:
-            fmt :  The format of the file you want (csv, json, phylip, table)
-            is_valid : Return valid data files if true, invalid files if not
+            fmt (str):  The format of the file you want (csv, json, phylip,
+                table).
+            is_valid (bool): Return valid data files if true, invalid files if
+                not.
 
         Returns:
-            A list of alignments matching the arguments
+            A list of alignments matching the arguments.
         """
         ALIGNMENTS_PATH = os.path.join(SAMPLE_DATA_PATH, ALIGNMENTS_DIR)
         return glob.iglob(
@@ -44,26 +46,28 @@ class SampleDataFiles(object):
 
     # .....................................
     def get_ancestral_distribution_packages(self, is_valid):
-        """Gets a list of the available packages for testing
+        """Gets a list of the available packages for testing.
 
         Args:
-            is_valid : Return valid data files if true, invalid files if not
+            is_valid (bool): Return valid data files if true, invalid files if
+                not.
 
         Returns:
-            A list of (tree, alignment, results) tuples
+            A list of (tree, alignment, results) tuples.
         """
         packages_path = os.path.join(SAMPLE_DATA_PATH, ANC_DIST_PACKAGES_DIR)
         return self._get_packages(packages_path, is_valid)
 
     # .....................................
     def get_ancestral_state_packages(self, is_valid):
-        """Gets a list of the available packages for testing
+        """Gets a list of the available packages for testing.
 
         Args:
-            is_valid : Return valid data files if true, invalid files if not
+            is_valid (bool): Return valid data files if true, invalid files if
+                not.
 
         Returns:
-            A list of (tree, alignment, results) tuples
+            A list of (tree, alignment, results) tuples.
         """
         packages_path = os.path.join(SAMPLE_DATA_PATH, ANC_STATE_PACKAGES_DIR)
         return self._get_packages(packages_path, is_valid)
@@ -73,11 +77,12 @@ class SampleDataFiles(object):
         """Gets an alignment file from the sample data.
 
         Args:
-            fmt : The format of the file you want (newick, nexus)
-            is_valid : Return valid data files if true, invalid files if not
+            fmt (str): The format of the file you want (newick, nexus).
+            is_valid (bool): Return valid data files if true, invalid files if
+                not.
 
         Returns:
-            A list of tree filenames
+            A list of tree filenames.
         """
         TREE_PATH = os.path.join(SAMPLE_DATA_PATH, TREES_DIR)
         return glob.iglob(
@@ -86,6 +91,17 @@ class SampleDataFiles(object):
 
     # .....................................
     def _get_format_extension(self, fmt):
+        """Get the file extension for a format.
+
+        Args:
+            fmt (str): The name of a format to get the file extension for.
+
+        Returns:
+            str: A file extension for the specified format.
+
+        Raises:
+            Exception: If the specified format was not found.
+        """
         if fmt.lower() == 'csv':
             return '.csv'
         elif fmt.lower() == 'json':
@@ -103,6 +119,18 @@ class SampleDataFiles(object):
 
     # .....................................
     def _get_glob_string(self, search_dir, is_valid, fmt_ext):
+        """Get a glob string for returning files.
+
+        Args:
+            search_dir (str): A directory to search for files.
+            is_valid (bool): If True, look for files with 'valid' in filename
+                otherwise look for 'invalid'.
+            fmt_ext (str): Look for files with this file extension.
+
+        Returns:
+            A string that can be sent to glob to retrieve files matching the
+                provided parameters.
+        """
         if is_valid:
             valid_str = 'valid'
         else:
@@ -111,15 +139,16 @@ class SampleDataFiles(object):
 
     # .....................................
     def _get_packages(self, packages_path, is_valid):
-        """Gets a list of the available packages for testing
+        """Gets a list of the available packages for testing.
 
         Args:
-            packages_path : A directory to look for packages within
-            is_valid : Return valid data files if true, invalid files if not
+            packages_path (str): A directory to look for packages within.
+            is_valid (bool): Return valid data files if true, invalid files if
+                not.
 
 
         Returns:
-            A list of (tree, alignment, results) tuples
+            A list of (tree, alignment, results) tuples.
         """
         packages = []
         package_dirs = glob.glob(
@@ -148,6 +177,6 @@ def data_files():
     """Gets test fixture used to retrieve sample data files.
 
     Returns:
-        A `SampleDataFiles` object
+        A `SampleDataFiles` object.
     """
     return SampleDataFiles()

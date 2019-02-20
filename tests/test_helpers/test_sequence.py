@@ -1,4 +1,7 @@
-"""This module tests the sequence module
+"""This module tests the sequence module.
+
+Note:
+    * This module uses pytest style tests for the sequence module.
 """
 import pytest
 
@@ -7,11 +10,11 @@ from analyses.helpers import sequence
 
 # .............................................................................
 class Test_Sequence(object):
-    """Test the Sequence class
+    """Test the Sequence class.
     """
     # .....................................
     def test_set_cont_values(self):
-        """Test the set_cont_values method
+        """Test the set_cont_values method.
         """
         seq = sequence.Sequence(name='test')
         new_vals = [1, 2, 3, 4, 5]
@@ -20,10 +23,10 @@ class Test_Sequence(object):
 
     # .....................................
     def test_set_qualstr(self):
-        """Test the set_qualstr method
+        """Test the set_qualstr method.
 
         Note:
-            Only modifies qualarr if it is an empty list
+            * Only modifies qualarr if it is an empty list.
         """
         qual = 'abcdefg'
         seq1 = sequence.Sequence()
@@ -44,10 +47,10 @@ class Test_Sequence(object):
 
     # .....................................
     def test_set_qualarr(self):
-        """Test the set_qualarr function
+        """Test the set_qualarr function.
 
         Note:
-            Only modifies qualstr if it was an empty string
+            * Only modifies qualstr if it was an empty string.
         """
         qual = [1, 2, 3, 4, 5]
         seq2_qualstr = 'abcdefg'
@@ -68,7 +71,7 @@ class Test_Sequence(object):
 
     # .....................................
     def test_get_fasta(self):
-        """Test the get_fasta method
+        """Test the get_fasta method.
         """
         name = 'test_name'
         seq_str = 'abcdefg'
@@ -77,7 +80,7 @@ class Test_Sequence(object):
 
     # .....................................
     def test_get_fastq(self):
-        """Test the get_fastq method
+        """Test the get_fastq method.
         """
         name = 'test_name'
         seq_str = 'abcdefg'
@@ -89,7 +92,7 @@ class Test_Sequence(object):
 
     # .....................................
     def test_constructor(self):
-        """Test Sequence construction
+        """Test Sequence construction.
         """
         _ = sequence.Sequence(name='test', seq='aaa')
         _ = sequence.Sequence(name='test')

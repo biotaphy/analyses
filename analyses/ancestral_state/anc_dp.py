@@ -1,4 +1,4 @@
-"""Module containing code for calculating ancestral states
+"""Module containing code for calculating ancestral states.
 """
 import math
 import sys
@@ -12,10 +12,13 @@ from analyses.lm_objects.tree import TreeWrapper
 
 # .............................................................................
 def _get_node_label(node):
-    """Returns the node label or taxon label if node is a tip
+    """Returns the node label or taxon label if node is a tip.
 
     Args:
-        node : A tree node to get the label for
+        node (Node): A tree node to get the label for.
+
+    Returns:
+        str: The node label or taxon label.
     """
     if node.label is not None:
         return node.label
@@ -25,13 +28,13 @@ def _get_node_label(node):
 
 # .............................................................................
 def calculate_ancestral_distributions(tree, char_mtx):
-    """Calculates ancestral distributions
+    """Calculates ancestral distributions.
 
     Args:
-        tree : A dendropy tree or TreeWrapper object
-        char_mtx : A Matrix object with character information.  Each row should
-            represent a tip in the tree and each column should be a bin to
-            calculate ancestral distribution
+        tree (Tree): A dendropy tree or TreeWrapper object.
+        char_mtx (Matrix): A Matrix object with character information.  Each
+            row should represent a tip in the tree and each column should be a
+            bin to calculate ancestral distribution.
 
     Returns:
         A matrix of character data with the following dimensions:
@@ -48,18 +51,17 @@ def calculate_ancestral_distributions(tree, char_mtx):
 # .............................................................................
 def calculate_continuous_ancestral_states(tree, char_mtx, sum_to_one=False,
                                           calc_std_err=False):
-    """
-    @summary: Calculates the continuous ancestral states for the nodes in a
-                tree
+    """Calculates the continuous ancestral states for the nodes in a tree.
 
     Args:
-        tree : A dendropy tree or TreeWrapper object
-        char_mtx : A Matrix object with character information.  Each row should
-            represent a tip in the tree and each column should be a variable to
-            calculate ancestral state for
-        calc_std_err : If True, calculate standard error for each variable
-        sum_to_one : If True, standardize the character matrix so that the
-            values in a row sum to one
+        tree (Tree): A dendropy tree or TreeWrapper object.
+        char_mtx (Matrix): A Matrix object with character information.  Each
+            row should represent a tip in the tree and each column should be a
+            variable to calculate ancestral state for.
+        calc_std_err (:obj:`bool`, optional): If True, calculate standard error
+            for each variable.  Defaults to False.
+        sum_to_one (:obj:`bool`, optional): If True, standardize the character
+            matrix so that the values in a row sum to one. Defaults to False.
 
     Returns:
         A matrix of character data with the following dimensions:
@@ -69,7 +71,7 @@ def calculate_continuous_ancestral_states(tree, char_mtx, sum_to_one=False,
                             standard error if desired
 
     Todo:
-        * Add function for consistent label handling
+        * Add function for consistent label handling.
     """
     # Wrap tree if dendropy tree
     if not isinstance(tree, TreeWrapper):

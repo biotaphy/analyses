@@ -1,6 +1,7 @@
-"""This module tests the analyses/lm_objects/matrix.py module
+"""This module tests the analyses/lm_objects/matrix.py module.
 
-The functions in this module are pytest style tests for the matrix.py module
+Note:
+    * These test functions are pytest style tests for the matrix.py module.
 """
 import io
 import random
@@ -14,7 +15,11 @@ from analyses.lm_objects import matrix
 
 # .............................................................................
 def get_random_matrix(*dim_size):
-    """Generates a randomized matrix with the shape provided in dim_size
+    """Generates a randomized matrix with the shape provided in dim_size.
+
+    Args:
+        *dim_size (:obj:`list` of :obj:`int`): Variable length argument list of
+            integers representing matrix dimension sizes.
     """
     headers = {}
     i = 0
@@ -26,11 +31,11 @@ def get_random_matrix(*dim_size):
 
 # .............................................................................
 class Test_Matrix(object):
-    """Test the Matrix class
+    """Test the Matrix class.
     """
     # .....................................
     def test_load(self):
-        """Test the load class method
+        """Test the load class method.
         """
         orig_mtx = get_random_matrix(5, 5)
 
@@ -62,7 +67,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_load_new(self):
-        """Test the load_new method
+        """Test the load_new method.
         """
         orig_mtx = get_random_matrix(5, 5)
 
@@ -80,12 +85,8 @@ class Test_Matrix(object):
         assert loaded_mtx.get_headers() == orig_mtx.get_headers()
 
     # .....................................
-    def test_load_from_csv(self):
-        pass
-
-    # .....................................
     def test_concatenate(self):
-        """Test the concatenate function
+        """Test the concatenate function.
         """
         mtx1 = get_random_matrix(3, 2)
         mtx2 = get_random_matrix(3, 3)
@@ -114,7 +115,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_append(self):
-        """Test append
+        """Test append.
         """
         x1, y1 = (3, 4)
         x2, y2 = (6, 4)
@@ -127,7 +128,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_flatten_2D(self):
-        """Test flatten_2D method
+        """Test flatten_2D method.
         """
         x, y, z = 5, 5, 3
         mtx = get_random_matrix(x, y, z)
@@ -147,7 +148,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_flatten_2D_higher_dim(self):
-        """Test flatten_2D method
+        """Test flatten_2D method.
         """
         a, b, c, d = 4, 5, 6, 7
         mtx = get_random_matrix(a, b, c, d)
@@ -167,7 +168,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_flatten_2D_missing_header(self):
-        """Test flatten_2D method when headers are missing
+        """Test flatten_2D method when headers are missing.
         """
         x, y, z = 5, 5, 3
         mtx = matrix.Matrix(np.random.random((x, y, z)))
@@ -187,7 +188,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_get_column_headers(self):
-        """Test get_column_headers
+        """Test get_column_headers.
         """
         mtx = get_random_matrix(3, 8)
         col_headers = mtx.get_column_headers()
@@ -196,7 +197,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_get_headers(self):
-        """Test get_headers
+        """Test get_headers.
         """
         mtx = get_random_matrix(2, 2, 4)
         headers = mtx.get_headers()
@@ -207,7 +208,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_get_row_headers(self):
-        """Test get_row_headers
+        """Test get_row_headers.
         """
         mtx = get_random_matrix(3, 8)
         row_headers = mtx.get_row_headers()
@@ -216,9 +217,9 @@ class Test_Matrix(object):
 
     # .....................................
     def test_save(self):
-        """Test the save method
+        """Test the save method.
 
-        Save should save a Matrix object to a file that can be loaded later
+        Save should save a Matrix object to a file that can be loaded later.
         """
         orig_mtx = get_random_matrix(5, 5)
 
@@ -237,7 +238,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_set_column_headers(self):
-        """Test set_column_headers
+        """Test set_column_headers.
         """
         n_rows, n_cols = (9, 6)
         mtx = get_random_matrix(n_rows, n_cols)
@@ -256,7 +257,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_set_headers(self):
-        """Test set_headers
+        """Test set_headers.
         """
         n_rows, n_cols = (8, 10)
         mtx = get_random_matrix(n_rows, n_cols)
@@ -282,7 +283,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_set_row_headers(self):
-        """Test set_row_headers
+        """Test set_row_headers.
         """
         n_rows, n_cols = (9, 6)
         mtx = get_random_matrix(n_rows, n_cols)
@@ -301,7 +302,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_slice(self):
-        """Test the slice method
+        """Test the slice method.
         """
         # Randomly generate size of matrix
         n_dim = random.randint(2, 4)
@@ -342,7 +343,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_slice_by_header(self):
-        """Test slice_by_header
+        """Test slice_by_header.
         """
         mtx = get_random_matrix(3, 3, 3)
         # Get the header to use for slicing, we'll use layer 2
@@ -365,7 +366,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_write_csv_no_slice(self):
-        """Test write_csv
+        """Test write_csv with no slicing.
         """
         mtx = get_random_matrix(10, 10)
 
@@ -379,7 +380,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_write_csv_no_slice_list_row_headers(self):
-        """Test write_csv
+        """Test write_csv with no slicing and a list of row headers.
         """
         mtx = get_random_matrix(10, 10)
         o_rh = mtx.get_row_headers()
@@ -398,7 +399,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_write_csv_no_slice_no_row_headers(self):
-        """Test write_csv
+        """Test write_csv no slicing and no row headers.
         """
         o_mtx = get_random_matrix(10, 10)
         mtx = matrix.Matrix(o_mtx.data)
@@ -413,7 +414,7 @@ class Test_Matrix(object):
 
     # .....................................
     def test_write_csv_slice(self):
-        """Test write_csv
+        """Test write_csv with slicing.
         """
         mtx = get_random_matrix(10, 10, 2)
 
@@ -428,14 +429,16 @@ class Test_Matrix(object):
 
 # .............................................................................
 class Test_ArrayStream(object):
-    """Test the ArrayStream class
+    """Test the ArrayStream class.
     """
     # .....................................
     def test_gen_1d(self):
-        """Test the gen function with a 1d array
+        """Test the gen function with a 1d array.
 
         Note:
-            gen() is an iterator and can be tested as such
+            * gen() is an iterator and can be tested as such.
+            * The ArrayStream object uses 'gen' when it is treated as an
+                iterator.
         """
         arr = np.array([1, 2, 3])
         stream = matrix.ArrayStream(arr)
@@ -445,10 +448,12 @@ class Test_ArrayStream(object):
 
     # .....................................
     def test_gen_2d(self):
-        """Test the gen function with a 2d array
+        """Test the gen function with a 2d array.
 
         Note:
-            gen() is an iterator and can be tested as such
+            * gen() is an iterator and can be tested as such.
+            * The ArrayStream object uses 'gen' when it is treated as an
+                iterator.
         """
         arr = np.array([[1, 2, 3], [4, 5, 6]])
         stream = matrix.ArrayStream(arr)
