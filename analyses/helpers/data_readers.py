@@ -31,6 +31,7 @@ def create_sequence_list_from_dict(values_dict):
 
     Note:
         * The dictionary should have structure::
+
             {
                 "{taxon_name}" : [{values}]
             }
@@ -129,6 +130,7 @@ def read_json_alignment_flo(json_flo):
 
     Note:
         * File should have structure::
+
             {
                 "headers" : [{header_names}],
                 "values" : [
@@ -138,6 +140,7 @@ def read_json_alignment_flo(json_flo):
                     }
                 ]
             }
+
     Returns:
         A list of Sequence objects and headers.
 

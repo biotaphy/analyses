@@ -350,7 +350,8 @@ class Matrix(object):
         Note:
             * Resets headers dictionary when setting values for all headers.
             * Duck types to use list of lists or dictionary to set values for
-            different axes.
+                different axes.
+
         """
         if axis is not None:
             self.headers[str(axis)] = headers

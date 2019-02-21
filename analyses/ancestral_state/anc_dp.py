@@ -38,10 +38,10 @@ def calculate_ancestral_distributions(tree, char_mtx):
 
     Returns:
         A matrix of character data with the following dimensions:
-                rows - nodes / tips in the tree
-                columns - character variables
-                depth - first is the calculated value, second layer is
-                            standard error if desired
+            * rows: nodes / tips in the tree
+            * columns: character variables
+            * depth: first is the calculated value, second layer is standard
+                error if desired
     """
     return calculate_continuous_ancestral_states(tree, char_mtx,
                                                  sum_to_one=True,
@@ -65,10 +65,10 @@ def calculate_continuous_ancestral_states(tree, char_mtx, sum_to_one=False,
 
     Returns:
         A matrix of character data with the following dimensions:
-                rows - nodes / tips in the tree
-                columns - character variables
-                depth - first is the calculated value, second layer is
-                            standard error if desired
+            * rows: nodes / tips in the tree
+            * columns: character variables
+            * depth: first is the calculated value, second layer is standard
+                error if desired
 
     Todo:
         * Add function for consistent label handling.
