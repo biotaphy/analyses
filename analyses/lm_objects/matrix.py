@@ -189,7 +189,7 @@ class Matrix(object):
 
         Note:
             * Only keeps the headers for the append axis, assumes the other
-                axes are the same.
+              axes are the same.
         """
         self.data = np.append(self.data, mtx.data, axis=axis)
         self.headers[str(axis)].append(mtx.get_headers(axis=axis))
@@ -350,7 +350,7 @@ class Matrix(object):
         Note:
             * Resets headers dictionary when setting values for all headers.
             * Duck types to use list of lists or dictionary to set values for
-                different axes.
+            different axes.
         """
         if axis is not None:
             self.headers[str(axis)] = headers
