@@ -13,7 +13,7 @@ class Test_ancestral_distribution(object):
     """
     base_dir = os.path.join(
         os.path.abspath(os.path.dirname(__file__)), '../..')
-    script_path = 'ancestral_distribution.py'
+    script_path = os.path.join(base_dir, 'bin/ancestral_distribution.py')
 
     # .....................................
     def test_package_valid(self, data_files, tmpdir):
@@ -70,7 +70,8 @@ class Test_ancestral_distribution(object):
                 out_tree_filename)
 
             # Call process
-            res = subprocess.check_call(cmd, shell=True)
+            cmd2 = 'export PYTHONPATH={}; {}'.format(self.base_dir, cmd)
+            res = subprocess.check_call(cmd2, shell=True)
 
             assert res == 0
 
