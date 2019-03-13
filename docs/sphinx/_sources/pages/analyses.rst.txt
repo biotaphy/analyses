@@ -1,0 +1,6 @@
+Analyses
+============
+
+.. toctree::
+
+    analyses/ancestral_distribution
