@@ -13,7 +13,7 @@ class Test_ancestral_distribution(object):
     """
     base_dir = os.path.join(
         os.path.abspath(os.path.dirname(__file__)), '../..')
-    script_path = os.path.join(base_dir, 'bin/ancestral_distribution.py')
+    script_path = 'ancestral_distribution.py'
 
     # .....................................
     def test_package_valid(self, data_files, tmpdir):
