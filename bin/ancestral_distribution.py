@@ -16,8 +16,8 @@ from analyses.helpers import data_readers
 from analyses.lm_objects.tree import TreeWrapper
 
 DESCRIPTION = """\
-Generates ancestral distribution estimations based on the environmental 
-distributions at the tips of the tree"""
+Generates ancestral distribution estimations based on the environmental
+ distributions at the tips of the tree"""
 
 
 # .............................................................................
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'in_tree_schema', type=str, help='The format of the tree',
         choices=['newick', 'nexml', 'nexus'])
-   
+
     parser.add_argument(
         'data_filename', type=str,
         help='Path to file with character state data')
@@ -58,20 +58,20 @@ if __name__ == '__main__':
         '-c', '--out_csv_filename', type=str,
         help='If provided, write the output character matrix CSV '
              'to this file location')
-    
+
     args = parser.parse_args()
 
     # Check that input files exist
     if not os.path.exists(args.in_tree_filename):
-       raise IOError(
-           'Input tree {} does not exist'.format(args.in_tree_filename))
+        raise IOError(
+            'Input tree {} does not exist'.format(args.in_tree_filename))
     if not os.path.exists(args.data_filename):
-       raise IOError(
-           'Input data file {} does not exist'.format(args.data_filename))
+        raise IOError(
+            'Input data file {} does not exist'.format(args.data_filename))
 
     # Read the tree
-    tree = TreeWrapper.get(path=args.in_tree_filename, 
-                           schema=args.in_tree_schema)
+    tree = TreeWrapper.get(
+        path=args.in_tree_filename, schema=args.in_tree_schema)
 
     # Read data
     if args.data_format == 'csv':
@@ -91,7 +91,7 @@ if __name__ == '__main__':
             sequences = data_readers.read_table_alignment_flo(in_file)
         headers = None
     else:
-        raise Exception, 'Unknown data format: {}'.format(args.data_format)
+        raise Exception('Unknown data format: {}'.format(args.data_format))
 
     # Get the label annotation column, or None
     label_column = None
@@ -125,7 +125,7 @@ if __name__ == '__main__':
 
     # Write the tree
     tree.write(path=args.out_tree_filename, schema=args.out_tree_schema)
-    
+
     # CSV
     if args.out_csv_filename is not None:
         with open(args.out_csv_filename, 'w') as out_csv_f:
