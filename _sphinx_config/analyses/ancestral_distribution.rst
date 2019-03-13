@@ -235,9 +235,9 @@ resulting tree be formatted as Nexus.  An example Nexus file looks like ::
     END;
 
 
-Binary
-======
-The ancestral_distribution binary can be found at 
+Executable
+==========
+The ancestral_distribution executable can be found at 
 `bin/ancestral_distribution.py`
 
 Output
