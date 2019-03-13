@@ -1,0 +1,342 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Ancestral Distribution &#8212; BiotaPhy Analyses 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ancestral-distribution">
+<h1>Ancestral Distribution<a class="headerlink" href="#ancestral-distribution" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>The ancestral distribution tool (<cite>bin/ancestral_distribution.py</cite>) uses a novel
+approach developed by S.A. Smith and B. O’Meara. Given a set of histograms for
+species, representing occupancy of environmental space in terms of common bins
+(i.e., a PNO or predicted niche occupancy profile), this approach reconstructs
+ancestral histograms of occupancy of climate space.</p>
+<p>This approach is different from those used previously, based on either sampling
+statistically from present day environmental space or summary statistics (mean,
+median, maximum, 95th percentile, etc.). Instead of sampling environmental
+space, probabilities of climate occupancy per bin are explicitly reconstructed.
+Likewise, unlike summary statistic approaches, which result either in a point
+estimate (mean/median) or a minimum and maximum constraint on ancestral
+reconstructions (min/max coding), a distribution is explicitly reconstructed
+here, revealing the potential shape of ancestral climate space. A key advantage
+of this approach is the ability to reconstruct multimodal ancestral
+distributions, whereas sampling-based approaches tend to result in normally
+distributed ancestral reconstructions regardless of extant species
+distributions.</p>
+</div>
+<div class="section" id="using">
+<h2>Using<a class="headerlink" href="#using" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">ancestral_distribution</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span> <span class="n">ANNOTATE_LABELS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="n">PLOT_DIRECTORY</span><span class="p">]</span>
+                                 <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="n">OUT_CSV_FILENAME</span><span class="p">]</span>
+                                 <span class="n">in_tree_filename</span> <span class="p">{</span><span class="n">newick</span><span class="p">,</span><span class="n">nexml</span><span class="p">,</span><span class="n">nexus</span><span class="p">}</span>
+                                 <span class="n">data_filename</span> <span class="p">{</span><span class="n">csv</span><span class="p">,</span><span class="n">json</span><span class="p">,</span><span class="n">phylip</span><span class="p">,</span><span class="n">table</span><span class="p">}</span>
+                                 <span class="n">out_tree_filename</span> <span class="p">{</span><span class="n">newick</span><span class="p">,</span><span class="n">nexml</span><span class="p">,</span><span class="n">nexus</span><span class="p">}</span>
+
+<span class="n">Generates</span> <span class="n">ancestral</span> <span class="n">distribution</span> <span class="n">estimations</span> <span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">environmental</span>
+<span class="n">distributions</span> <span class="n">at</span> <span class="n">the</span> <span class="n">tips</span> <span class="n">of</span> <span class="n">the</span> <span class="n">tree</span>
+
+<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="n">in_tree_filename</span>      <span class="n">Path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">tree</span> <span class="n">file</span>
+  <span class="p">{</span><span class="n">newick</span><span class="p">,</span><span class="n">nexml</span><span class="p">,</span><span class="n">nexus</span><span class="p">}</span>  <span class="n">The</span> <span class="nb">format</span> <span class="n">of</span> <span class="n">the</span> <span class="n">tree</span>
+  <span class="n">data_filename</span>         <span class="n">Path</span> <span class="n">to</span> <span class="n">file</span> <span class="k">with</span> <span class="n">character</span> <span class="n">state</span> <span class="n">data</span>
+  <span class="p">{</span><span class="n">csv</span><span class="p">,</span><span class="n">json</span><span class="p">,</span><span class="n">phylip</span><span class="p">,</span><span class="n">table</span><span class="p">}</span>
+                        <span class="n">The</span> <span class="nb">format</span> <span class="n">of</span> <span class="n">the</span> <span class="n">character</span> <span class="n">data</span>
+  <span class="n">out_tree_filename</span>     <span class="n">Path</span> <span class="n">to</span> <span class="n">write</span> <span class="n">the</span> <span class="n">resulting</span> <span class="n">annotated</span> <span class="n">tree</span>
+  <span class="p">{</span><span class="n">newick</span><span class="p">,</span><span class="n">nexml</span><span class="p">,</span><span class="n">nexus</span><span class="p">}</span>  <span class="n">The</span> <span class="nb">format</span> <span class="n">to</span> <span class="n">use</span> <span class="n">when</span> <span class="n">writing</span> <span class="n">the</span> <span class="n">tree</span>
+
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">-</span><span class="n">l</span> <span class="n">ANNOTATE_LABELS</span><span class="p">,</span> <span class="o">--</span><span class="n">annotate_labels</span> <span class="n">ANNOTATE_LABELS</span>
+                        <span class="n">If</span> <span class="n">provided</span><span class="p">,</span> <span class="n">annotate</span> <span class="n">the</span> <span class="n">tree</span> <span class="n">labels</span> <span class="k">with</span> <span class="n">this</span> <span class="n">data</span>
+                        <span class="n">column</span>
+  <span class="o">-</span><span class="n">p</span> <span class="n">PLOT_DIRECTORY</span><span class="p">,</span> <span class="o">--</span><span class="n">plot_directory</span> <span class="n">PLOT_DIRECTORY</span>
+                        <span class="n">If</span> <span class="n">provided</span><span class="p">,</span> <span class="n">write</span> <span class="n">distribution</span> <span class="n">plots</span> <span class="n">to</span> <span class="n">this</span>
+                        <span class="n">directory</span>
+  <span class="o">-</span><span class="n">c</span> <span class="n">OUT_CSV_FILENAME</span><span class="p">,</span> <span class="o">--</span><span class="n">out_csv_filename</span> <span class="n">OUT_CSV_FILENAME</span>
+                        <span class="n">If</span> <span class="n">provided</span><span class="p">,</span> <span class="n">write</span> <span class="n">the</span> <span class="n">output</span> <span class="n">character</span> <span class="n">matrix</span> <span class="n">CSV</span> <span class="n">to</span>
+                        <span class="n">this</span> <span class="n">file</span> <span class="n">location</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="docutils">
+<dt>Notes:</dt>
+<dd><ul class="first last simple">
+<li>Use the <cite>-l</cite> option with either a column name or column index to use the reconstructed values for
+that column as the labels of your output tree.</li>
+<li>The <cite>-p</cite> option will tell the tool to write out plots for the distributions</li>
+<li>The <cite>-c</cite> option will write out the reconstruction matrix as a CSV file for processing elsewhere</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="data-formats">
+<h2>Data formats<a class="headerlink" href="#data-formats" title="Permalink to this headline">¶</a></h2>
+<p>Alignment data can be provided as CSV [pages/format_csv]_, JSON
+[pages/format_csv]_, Phylip [pages/format_phylip]_, or an alignment table.
+Tree data can be provided as Newick [pages/format_newick]_, NeXML
+[pages/format_nexml]_, or Nexus [pages/format_nexus].</p>
+<div class="section" id="csv">
+<h3>CSV<a class="headerlink" href="#csv" title="Permalink to this headline">¶</a></h3>
+<p>For CSV data, the first row can contain headers for the columns in the file.
+Each row should have a header for the taxon that it represents.  An example CSV
+alignment file looks like</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">,</span> <span class="n">var_1</span><span class="p">,</span> <span class="n">var_2</span><span class="p">,</span> <span class="n">var_3</span><span class="p">,</span> <span class="n">var_4</span><span class="p">,</span> <span class="n">var_5</span><span class="p">,</span> <span class="n">var_6</span>
+<span class="n">A</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span>
+<span class="n">B</span><span class="p">,</span>  <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span>
+<span class="n">C</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span>
+<span class="n">D</span><span class="p">,</span>   <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span>
+<span class="n">E</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span>
+<span class="n">F</span><span class="p">,</span>  <span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span>
+<span class="n">G</span><span class="p">,</span>  <span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="json">
+<h3>JSON<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h3>
+<p>If you want to provide alignment data in JSON format, the file should have a
+key named “headers” that is an array of headers for each column of data.  It
+should also include a key named “values” that is an array of objects with keys
+for “name” (taxon name) and “values” (an array of data values).  An example
+JSON alignment file looks like</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="s2">&quot;headers&quot;</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="s2">&quot;var_1&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;var_2&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;var_3&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;var_4&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;var_5&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;var_6&quot;</span>
+   <span class="p">],</span>
+   <span class="s2">&quot;values&quot;</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+         <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;values&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+         <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;values&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+         <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;values&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+         <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;values&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+         <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;values&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+         <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;values&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+         <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;values&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span>
+      <span class="p">}</span>
+   <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="phylip">
+<h3>Phylip<a class="headerlink" href="#phylip" title="Permalink to this headline">¶</a></h3>
+<p>Phylip data should be formatted as a list of taxa with corresponding values.
+An example phylip alignment file looks like</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">7</span> <span class="mi">6</span>
+<span class="n">A</span>   <span class="mf">0.9</span> <span class="mf">0.2</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">B</span>   <span class="mf">0.01</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">C</span>   <span class="mf">0.8</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">D</span>   <span class="mf">0.3</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">E</span>   <span class="mf">0.001</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">F</span>   <span class="mf">0.11</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">G</span>   <span class="mf">0.99</span> <span class="mf">0.2</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="table">
+<h3>Table<a class="headerlink" href="#table" title="Permalink to this headline">¶</a></h3>
+<p>You can provide your alignment data as a table as well.  This format looks like
+Phylip but does not include metadata for the number of taxa or the number of
+data values.  It looks like</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">A</span>   <span class="mf">0.9</span> <span class="mf">0.2</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">B</span>   <span class="mf">0.01</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">C</span>   <span class="mf">0.8</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">D</span>   <span class="mf">0.3</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">E</span>   <span class="mf">0.001</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">F</span>   <span class="mf">0.11</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<span class="n">G</span>   <span class="mf">0.99</span> <span class="mf">0.2</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="newick">
+<h3>Newick<a class="headerlink" href="#newick" title="Permalink to this headline">¶</a></h3>
+<p>You can provide your tree data as a Newick file.  You can also request that the
+resulting tree be formatted as Newick.  An example Newick file looks like</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">A</span><span class="p">:</span><span class="mf">2.9999</span><span class="p">,((</span><span class="n">B</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span><span class="n">C</span><span class="p">:</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">,(</span><span class="n">G</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,(</span><span class="n">D</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,(</span><span class="n">E</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span><span class="n">F</span><span class="p">:</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="nexml">
+<h3>NeXML<a class="headerlink" href="#nexml" title="Permalink to this headline">¶</a></h3>
+<p>You can provide your tree data as a NeXML file.  You can also request that the
+resulting tree be formatted as NeXML.  An example NeXML file looks like</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;nex:nexml
+    version=&quot;0.9&quot;
+    xsi:schemaLocation=&quot;http://www.nexml.org/2009 ../xsd/nexml.xsd&quot;
+    xmlns=&quot;http://www.nexml.org/2009&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:xml=&quot;http://www.w3.org/XML/1998/namespace&quot;
+    xmlns:nex=&quot;http://www.nexml.org/2009&quot;
+    xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema#&quot;
+&gt;
+    &lt;otus id=&quot;d0&quot;&gt;
+        &lt;otu id=&quot;d1&quot; label=&quot;A&quot; /&gt;
+        &lt;otu id=&quot;d2&quot; label=&quot;B&quot; /&gt;
+        &lt;otu id=&quot;d3&quot; label=&quot;C&quot; /&gt;
+    &lt;/otus&gt;
+    &lt;trees id=&quot;d4&quot; otus=&quot;d0&quot;&gt;
+        &lt;tree id=&quot;d5&quot; xsi:type=&quot;nex:FloatTree&quot;&gt;
+            &lt;node id=&quot;d6&quot; /&gt;
+            &lt;node id=&quot;d7&quot; otu=&quot;d1&quot; /&gt;
+            &lt;node id=&quot;d8&quot; /&gt;
+            &lt;node id=&quot;d9&quot; otu=&quot;d2&quot; /&gt;
+            &lt;node id=&quot;d10&quot; otu=&quot;d3&quot; /&gt;
+            &lt;rootedge id=&quot;d11&quot; target=&quot;d6&quot; /&gt;
+            &lt;edge id=&quot;d12&quot; source=&quot;d6&quot; target=&quot;d7&quot; /&gt;
+            &lt;edge id=&quot;d13&quot; source=&quot;d6&quot; target=&quot;d8&quot; /&gt;
+            &lt;edge id=&quot;d14&quot; source=&quot;d8&quot; target=&quot;d9&quot; /&gt;
+            &lt;edge id=&quot;d15&quot; source=&quot;d8&quot; target=&quot;d10&quot; /&gt;
+        &lt;/tree&gt;
+    &lt;/trees&gt;
+&lt;/nex:nexml&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="nexus">
+<h3>Nexus<a class="headerlink" href="#nexus" title="Permalink to this headline">¶</a></h3>
+<p>You can provide your tree data as a Nexus file.  You can also request that the
+resulting tree be formatted as Nexus.  An example Nexus file looks like</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#NEXUS</span>
+
+<span class="n">BEGIN</span> <span class="n">TAXA</span><span class="p">;</span>
+    <span class="n">DIMENSIONS</span> <span class="n">NTAX</span><span class="o">=</span><span class="mi">7</span><span class="p">;</span>
+    <span class="n">TAXLABELS</span>
+        <span class="n">A</span>
+        <span class="n">B</span>
+        <span class="n">C</span>
+        <span class="n">G</span>
+        <span class="n">D</span>
+        <span class="n">E</span>
+        <span class="n">F</span>
+  <span class="p">;</span>
+<span class="n">END</span><span class="p">;</span>
+
+<span class="n">BEGIN</span> <span class="n">TREES</span><span class="p">;</span>
+    <span class="n">TREE</span> <span class="mi">1</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span><span class="p">:</span><span class="mf">2.9999</span><span class="p">,((</span><span class="n">B</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span><span class="n">C</span><span class="p">:</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">,(</span><span class="n">G</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,(</span><span class="n">D</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,(</span><span class="n">E</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span><span class="n">F</span><span class="p">:</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">);</span>
+<span class="n">END</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="binary">
+<h2>Binary<a class="headerlink" href="#binary" title="Permalink to this headline">¶</a></h2>
+<p>The ancestral_distribution binary can be found at
+<cite>bin/ancestral_distribution.py</cite></p>
+</div>
+<div class="section" id="output">
+<h2>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<p>The ancestral distribution analysis creates an annotated version of the input
+tree with the reconstructed values that were computed.  Additionally, character
+data can be written to a CSV file if the <cite>-c</cite> option is provided.  You can also
+generate plots of the ancestral distributions by providing a directory to the
+<cite>-p</cite> option.</p>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, BiotaPhy Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
+    </div>
+  </body>
+</html>
