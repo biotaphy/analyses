@@ -4,7 +4,7 @@
  - [ ] Other
  
 ## Status
- - [ ] REady
+ - [ ] Ready
  - [ ] In development
  - [ ] Hold
 
