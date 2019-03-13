@@ -185,7 +185,7 @@ class Test_calculate_continuous_ancestral_states(object):
 
 
 # .............................................................................
-class Test_ancestal_distribution(object):
+class Test_ancestral_distribution(object):
     """Tests ancestral distribution reconstruction.
     """
     # .....................................

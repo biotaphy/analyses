@@ -57,33 +57,35 @@ def calculate_phylo_beta_diversity_jaccard(pam, tree):
     species_lookup = get_species_index_lookup(pam)
 
     # Build a header dictionary, all of the returned matricies will have the
-    #    same headers, taxa rows by taxa columns.
-    # Note: This will differ from the R method because each taxa will be
+    #    same headers, site rows by site columns.
+    # Note: This will differ from the R method because each site will be
     #    present in both the rows and the columns.
-    sp_headers = {
-        '0': pam.get_column_headers(),  # Row headers
-        '1': pam.get_column_headers()  # Column headers
-        }
+    mtx_headers = {
+        '0': pam.get_row_headers(),  # Row headers
+        '1': pam.get_row_headers()  # Column headers
+    }
+
+    num_sites = pam.data.shape[0]  # Get the number of sites in the PAM
 
     # Note: For ease of development, use these numpy arrays for the
     #    computations.  They will be wrapped into a Matrix object when they are
     #    returned from the function.
-    beta_jtu_data = np.zeros((num_species, num_species), dtype=np.float)
-    phylo_beta_jtu_data = np.zeros((num_species, num_species), dtype=np.float)
-    beta_jne_data = np.zeros((num_species, num_species), dtype=np.float)
-    phylo_beta_jne_data = np.zeros((num_species, num_species), dtype=np.float)
-    beta_jac_data = np.zeros((num_species, num_species), dtype=np.float)
-    phylo_beta_jac_data = np.zeros((num_species, num_species), dtype=np.float)
+    beta_jtu_data = np.zeros((num_sites, num_sites), dtype=np.float)
+    phylo_beta_jtu_data = np.zeros((num_sites, num_sites), dtype=np.float)
+    beta_jne_data = np.zeros((num_sites, num_sites), dtype=np.float)
+    phylo_beta_jne_data = np.zeros((num_sites, num_sites), dtype=np.float)
+    beta_jac_data = np.zeros((num_sites, num_sites), dtype=np.float)
+    phylo_beta_jac_data = np.zeros((num_sites, num_sites), dtype=np.float)
 
     # TODO: Compute phylo beta diversity for jaccard index family
 
     return (
-        Matrix(beta_jtu_data, headers=sp_headers),
-        Matrix(phylo_beta_jtu_data, headers=sp_headers),
-        Matrix(beta_jne_data, headers=sp_headers),
-        Matrix(phylo_beta_jne, headers=sp_headers),
-        Matrix(beta_jac_data, headers=sp_headers),
-        Matrix(phylo_beta_jac_data, headers=sp_headers))
+        Matrix(beta_jtu_data, headers=mtx_headers),
+        Matrix(phylo_beta_jtu_data, headers=mtx_headers),
+        Matrix(beta_jne_data, headers=mtx_headers),
+        Matrix(phylo_beta_jne_data, headers=mtx_headers),
+        Matrix(beta_jac_data, headers=mtx_headers),
+        Matrix(phylo_beta_jac_data, headers=mtx_headers))
 
 
 # .............................................................................
@@ -114,30 +116,32 @@ def calculate_phylo_beta_diversity_sorensen(pam, tree):
     species_lookup = get_species_index_lookup(pam)
 
     # Build a header dictionary, all of the returned matricies will have the
-    #    same headers, taxa rows by taxa columns.
-    # Note: This will differ from the R method because each taxa will be
+    #    same headers, site rows by site columns.
+    # Note: This will differ from the R method because each site will be
     #    present in both the rows and the columns.
-    sp_headers = {
-        '0': pam.get_column_headers(),  # Row headers
-        '1': pam.get_column_headers()  # Column headers
-        }
+    mtx_headers = {
+        '0': pam.get_row_headers(),  # Row headers
+        '1': pam.get_row_headers()  # Column headers
+    }
+
+    num_sites = pam.data.shape[0]  # Get the number of sites in the PAM
 
     # Note: For ease of development, use these numpy arrays for the
     #    computations.  They will be wrapped into a Matrix object when they are
     #    returned from the function.
-    beta_sim_data = np.zeros((num_species, num_species), dtype=np.float)
-    phylo_beta_sim_data = np.zeros((num_species, num_species), dtype=np.float)
-    beta_sne_data = np.zeros((num_species, num_species), dtype=np.float)
-    phylo_beta_sne_data = np.zeros((num_species, num_species), dtype=np.float)
-    beta_sor_data = np.zeros((num_species, num_species), dtype=np.float)
-    phylo_beta_sor_data = np.zeros((num_species, num_species), dtype=np.float)
+    beta_sim_data = np.zeros((num_sites, num_sites), dtype=np.float)
+    phylo_beta_sim_data = np.zeros((num_sites, num_sites), dtype=np.float)
+    beta_sne_data = np.zeros((num_sites, num_sites), dtype=np.float)
+    phylo_beta_sne_data = np.zeros((num_sites, num_sites), dtype=np.float)
+    beta_sor_data = np.zeros((num_sites, num_sites), dtype=np.float)
+    phylo_beta_sor_data = np.zeros((num_sites, num_sites), dtype=np.float)
 
     # TODO: Compute phylo beta diversity for sorensen index family
 
     return (
-        Matrix(beta_sim_data, headers=sp_headers),
-        Matrix(phylo_beta_sim_data, headers=sp_headers),
-        Matrix(beta_sne_data, headers=sp_headers),
-        Matrix(phylo_beta_sne, headers=sp_headers),
-        Matrix(beta_sor_data, headers=sp_headers),
-        Matrix(phylo_beta_sor_data, headers=sp_headers))
+        Matrix(beta_sim_data, headers=mtx_headers),
+        Matrix(phylo_beta_sim_data, headers=mtx_headers),
+        Matrix(beta_sne_data, headers=mtx_headers),
+        Matrix(phylo_beta_sne_data, headers=mtx_headers),
+        Matrix(beta_sor_data, headers=mtx_headers),
+        Matrix(phylo_beta_sor_data, headers=mtx_headers))
