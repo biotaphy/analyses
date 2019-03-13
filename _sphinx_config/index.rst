@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to BioaPhy Analyses documentation!
+Welcome to BiotaPhy Analyses documentation!
 ============================================
 
 The BiotaPhy Analyses repository contains various bio- and phylo- diversity
