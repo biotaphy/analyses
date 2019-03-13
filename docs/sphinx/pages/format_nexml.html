@@ -1,0 +1,169 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>NeXML &#8212; BiotaPhy Analyses 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Nexus" href="format_nexus.html" />
+    <link rel="prev" title="Newick" href="format_newick.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="format_nexus.html" title="Nexus"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="format_newick.html" title="Newick"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="data_formats.html" accesskey="U">Data Formats</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="nexml">
+<h1>NeXML<a class="headerlink" href="#nexml" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>NeXML <a class="footnote-reference" href="#f1" id="id1">[1]</a> <a class="footnote-reference" href="#f2" id="id2">[2]</a> is an XML-based data format used for representing phylogenetic
+data.</p>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span>&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;nex:nexml
+    version=&quot;0.9&quot;
+    xsi:schemaLocation=&quot;http://www.nexml.org/2009 ../xsd/nexml.xsd&quot;
+    xmlns=&quot;http://www.nexml.org/2009&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xmlns:xml=&quot;http://www.w3.org/XML/1998/namespace&quot;
+    xmlns:nex=&quot;http://www.nexml.org/2009&quot;
+    xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema#&quot;
+&gt;
+    &lt;otus id=&quot;d0&quot;&gt;
+        &lt;otu id=&quot;d1&quot; label=&quot;A&quot; /&gt;
+        &lt;otu id=&quot;d2&quot; label=&quot;B&quot; /&gt;
+        &lt;otu id=&quot;d3&quot; label=&quot;C&quot; /&gt;
+    &lt;/otus&gt;
+    &lt;trees id=&quot;d4&quot; otus=&quot;d0&quot;&gt;
+        &lt;tree id=&quot;d5&quot; xsi:type=&quot;nex:FloatTree&quot;&gt;
+            &lt;node id=&quot;d6&quot; /&gt;
+            &lt;node id=&quot;d7&quot; otu=&quot;d1&quot; /&gt;
+            &lt;node id=&quot;d8&quot; /&gt;
+            &lt;node id=&quot;d9&quot; otu=&quot;d2&quot; /&gt;
+            &lt;node id=&quot;d10&quot; otu=&quot;d3&quot; /&gt;
+            &lt;rootedge id=&quot;d11&quot; target=&quot;d6&quot; /&gt;
+            &lt;edge id=&quot;d12&quot; source=&quot;d6&quot; target=&quot;d7&quot; /&gt;
+            &lt;edge id=&quot;d13&quot; source=&quot;d6&quot; target=&quot;d8&quot; /&gt;
+            &lt;edge id=&quot;d14&quot; source=&quot;d8&quot; target=&quot;d9&quot; /&gt;
+            &lt;edge id=&quot;d15&quot; source=&quot;d8&quot; target=&quot;d10&quot; /&gt;
+        &lt;/tree&gt;
+    &lt;/trees&gt;
+&lt;/nex:nexml&gt;
+</pre></div>
+</div>
+</div></blockquote>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="http://www.nexml.org/">http://www.nexml.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Rutger A. Vos, James P. Balhoff, Jason A. Caravas, Mark T. Holder,
+Hilmar Lapp, Wayne P. Maddison, Peter E. Midford, Anurag Priyam,
+Jeet Sukumaran, Xuhua Xia, Arlin Stoltzfus; NeXML: Rich, Extensible,
+and Verifiable Representation of Comparative Data and Metadata,
+Systematic Biology, Volume 61, Issue 4, 1 July 2012, Pages 675–689,
+<a class="reference external" href="https://doi.org/10.1093/sysbio/sys025">https://doi.org/10.1093/sysbio/sys025</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="format_newick.html"
+                        title="previous chapter">Newick</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="format_nexus.html"
+                        title="next chapter">Nexus</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="format_nexus.html" title="Nexus"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="format_newick.html" title="Newick"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="data_formats.html" >Data Formats</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, BiotaPhy Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
+    </div>
+  </body>
+</html>
