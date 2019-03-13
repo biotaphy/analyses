@@ -4,15 +4,16 @@ import numpy as np
 import os
 import pytest
 import subprocess
+import sys
 
 
 # .............................................................................
 class Test_ancestral_distribution(object):
     """Test ancestral distribution reconstruction
     """
-    script_path = os.path.join(
-        os.path.abspath(os.path.dirname(__file__)),
-        '../../bin/ancestral_distribution.py')
+    base_dir = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)), '../..')
+    script_path = os.path.join(base_dir, 'bin/ancestral_distribution.py')
 
     # .....................................
     def test_package_valid(self, data_files, tmpdir):
@@ -62,6 +63,7 @@ class Test_ancestral_distribution(object):
 
             csv_filename = os.path.join(tmpdir.dirname, 'test_out.csv')
             out_tree_filename = os.path.join(tmpdir.dirname, 'test_out.nex')
+            print(sys.path)
             cmd = '{} -c {} {} {} {} {} {} nexus'.format(
                 self.script_path, csv_filename, tree_filename,
                 tree_schema, alignment_filename, alignment_format,
