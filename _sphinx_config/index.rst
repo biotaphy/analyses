@@ -9,9 +9,9 @@ Welcome to BioaPhy Analyses documentation!
 The BiotaPhy Analyses repository contains various bio- and phylo- diversity
 metrics for provided data.  These computations utilize Lifemapper objects so
 that they can then be deployed in high-throughput environments such as a 
-`Rocks Cluster <http://www.rocksclusters.org/>` or even an 
-`XSEDE <https://www.xsede.org/>` resource such as 
-`Comet <https://portal.xsede.org/sdsc-comet>`.  At this time, analyses are
+`Rocks Cluster <http://www.rocksclusters.org/>`_ or even an 
+`XSEDE <https://www.xsede.org/>`_ resource such as 
+`Comet <https://portal.xsede.org/sdsc-comet>`_.  At this time, analyses are
 limited to those that can be calculated using Presence Absence Matrices (PAMs)
 and Phylogenetic trees.  
 
