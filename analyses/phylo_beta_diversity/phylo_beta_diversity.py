@@ -9,6 +9,7 @@ import numpy as np
 
 from analyses.lm_objects.matrix import Matrix
 
+
 # .............................................................................
 def get_species_index_lookup(pam):
     """Creates a lookup dictionary for species in a matrix
@@ -22,6 +23,7 @@ def get_species_index_lookup(pam):
     """
     return dict(
         [(sp, idx) for (idx, sp) in enumerate(pam.get_column_headers())])
+
 
 # .............................................................................
 def calculate_phylo_beta_diversity_jaccard(pam, tree):
@@ -59,10 +61,10 @@ def calculate_phylo_beta_diversity_jaccard(pam, tree):
     # Note: This will differ from the R method because each taxa will be
     #    present in both the rows and the columns.
     sp_headers = {
-        '0': pam.get_column_headers(), # Row headers
-        '1': pam.get_column_headers() # Column headers
+        '0': pam.get_column_headers(),  # Row headers
+        '1': pam.get_column_headers()  # Column headers
         }
-    
+
     # Note: For ease of development, use these numpy arrays for the
     #    computations.  They will be wrapped into a Matrix object when they are
     #    returned from the function.
@@ -75,7 +77,6 @@ def calculate_phylo_beta_diversity_jaccard(pam, tree):
 
     # TODO: Compute phylo beta diversity for jaccard index family
 
-    
     return (
         Matrix(beta_jtu_data, headers=sp_headers),
         Matrix(phylo_beta_jtu_data, headers=sp_headers),
@@ -83,6 +84,7 @@ def calculate_phylo_beta_diversity_jaccard(pam, tree):
         Matrix(phylo_beta_jne, headers=sp_headers),
         Matrix(beta_jac_data, headers=sp_headers),
         Matrix(phylo_beta_jac_data, headers=sp_headers))
+
 
 # .............................................................................
 def calculate_phylo_beta_diversity_sorensen(pam, tree):
@@ -116,10 +118,10 @@ def calculate_phylo_beta_diversity_sorensen(pam, tree):
     # Note: This will differ from the R method because each taxa will be
     #    present in both the rows and the columns.
     sp_headers = {
-        '0': pam.get_column_headers(), # Row headers
-        '1': pam.get_column_headers() # Column headers
+        '0': pam.get_column_headers(),  # Row headers
+        '1': pam.get_column_headers()  # Column headers
         }
-    
+
     # Note: For ease of development, use these numpy arrays for the
     #    computations.  They will be wrapped into a Matrix object when they are
     #    returned from the function.
@@ -132,7 +134,6 @@ def calculate_phylo_beta_diversity_sorensen(pam, tree):
 
     # TODO: Compute phylo beta diversity for sorensen index family
 
-    
     return (
         Matrix(beta_sim_data, headers=sp_headers),
         Matrix(phylo_beta_sim_data, headers=sp_headers),
