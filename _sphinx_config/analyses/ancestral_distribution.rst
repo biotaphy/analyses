@@ -10,9 +10,9 @@ species, representing occupancy of environmental space in terms of common bins
 (i.e., a PNO or predicted niche occupancy profile), this approach reconstructs 
 ancestral histograms of occupancy of climate space. 
 
-This approach is different from those used previously, based on either sampling 
-statistically from present day environmental space or summary statistics (mean, 
-median, maximum, 95th percentile, etc.). Instead of sampling environmental 
+This approach is different from those used previously, based either on (1) summary 
+statistics (mean, median, maximum, 95th percentile, etc.), or (2) sampling 
+statistically from present day environmental space. Instead of sampling environmental 
 space, probabilities of climate occupancy per bin are explicitly reconstructed. 
 Likewise, unlike summary statistic approaches, which result either in a point 
 estimate (mean/median) or a minimum and maximum constraint on ancestral 
@@ -21,7 +21,9 @@ here, revealing the potential shape of ancestral climate space. A key advantage
 of this approach is the ability to reconstruct multimodal ancestral 
 distributions, whereas sampling-based approaches tend to result in normally 
 distributed ancestral reconstructions regardless of extant species 
-distributions.
+distributions. 
+
+Input species data must have common bins or results will be meaningless.
 
 
 Using
