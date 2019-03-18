@@ -5,7 +5,7 @@ Phylip
 Description
 ===========
 
-The Phylip format [#f1]_ can be used used to store character data for a set of taxa.  The
+The Phylip format [#f1]_ can be used to store character data for a set of taxa.  The
 "strict" Phylip format requires that the first line indicate the number of taxa
 in the file and the number of characters each taxon will have.  The following
 lines should include a label for each taxon (up to 10 characters) and the
