@@ -194,7 +194,7 @@ def pytest_generate_tests(metafunc):
         * We are catching this function to parameterize tests here in a central
             location rather than for each test instance
     """
-    df = data_files()
+    df = SampleDataFiles()
     # Tuples of (fixture name, parameterization lists)
     fixture_tuples = [
         ('invalid_ancestral_distribution_package',
