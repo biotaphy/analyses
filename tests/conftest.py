@@ -180,3 +180,42 @@ def data_files():
         A `SampleDataFiles` object.
     """
     return SampleDataFiles()
+
+
+# .............................................................................
+def pytest_generate_tests(metafunc):
+    """Pytest function for generating tests
+
+    Args:
+        metafunc (:obj:`pytest.Metafunc`): Pytest metafunc object passed to
+            test hook.
+
+    Note:
+        * We are catching this function to parameterize tests here in a central
+            location rather than for each test instance
+    """
+    df = data_files()
+    # Tuples of (fixture name, parameterization lists)
+    fixture_tuples = [
+        ('invalid_ancestral_distribution_package',
+            df.get_ancestral_distribution_packages(False)),
+        ('invalid_ancestral_state_package',
+            df.get_ancestral_state_packages(False)),
+        ('invalid_csv_alignment', df.get_alignments('csv', False)),
+        ('invalid_json_alignment', df.get_alignments('json', False)),
+        ('invalid_phylip_alignment', df.get_alignments('phylip', False)),
+        ('invalid_table_alignment', df.get_alignments('table', False)),
+        ('valid_ancestral_distribution_package',
+            df.get_ancestral_distribution_packages(True)),
+        ('valid_ancestral_state_package',
+            df.get_ancestral_state_packages(True)),
+        ('valid_csv_alignment', df.get_alignments('csv', True)),
+        ('valid_json_alignment', df.get_alignments('json', True)),
+        ('valid_newick_tree', df.get_trees('newick', True)),
+        ('valid_nexus_tree', df.get_trees('nexus', True)),
+        ('valid_phylip_alignment', df.get_alignments('phylip', True)),
+        ('valid_table_alignment', df.get_alignments('table', True))
+    ]
+    for fixture_name, fixture_values in fixture_tuples:
+        if fixture_name in metafunc.fixturenames:
+            metafunc.parametrize(fixture_name, fixture_values)
