@@ -22,7 +22,7 @@ A clear and concise description of what you expected to happen.
 **Data**
 If possible, provide sample data that the problem occurs with.
 
-**Sytem (please complete the following information):**
+**System (please complete the following information):**
  - OS: [e.g. iOS]
  - Version [e.g. 22]
 
