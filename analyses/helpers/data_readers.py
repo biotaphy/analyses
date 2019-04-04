@@ -36,6 +36,7 @@ def create_sequence_list_from_dict(values_dict):
                 "{taxon_name}" : [{values}]
             }
 
+
     Returns:
         A list of Sequence objects and None for headers.
 
