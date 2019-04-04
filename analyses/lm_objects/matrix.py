@@ -113,7 +113,7 @@ class Matrix(object):
             data_bytes.write(zip_f.read(DATA_FILENAME))
             data_bytes.seek(0)
             tmp = np.load(data_bytes)
-            data = tmp[list(tmp.keys())[0]]
+            data = np.array(tmp[list(tmp.keys())[0]])
             data_bytes.close()
 
         return cls(data, headers=my_obj[HEADERS_KEY])
