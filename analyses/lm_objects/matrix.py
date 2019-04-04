@@ -109,7 +109,7 @@ class Matrix(object):
         """
         with zipfile.ZipFile(flo) as zip_f:
             with zip_f.open(HEADERS_FILENAME) as obj_in:
-                my_obj = json.load(obj_in)
+                my_obj = json.loads(obj_in.read())
             data_bytes = io.BytesIO()
             data_bytes.write(zip_f.read(DATA_FILENAME))
             data_bytes.seek(0)
