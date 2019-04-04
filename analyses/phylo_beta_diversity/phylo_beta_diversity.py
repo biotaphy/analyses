@@ -61,6 +61,68 @@ def pdnew( pam, tree ):
     # return values.
     return PD_mat
 
+
+# .............................................................................
+def core_Beta_calc( pam, tree ):
+    """Creates an array of core metrics used to asses components of beta diversity.
+
+    Args:
+        pam (:obj:'Matrix'): A Lifemapper Matrix object with presence absence
+            values.
+
+        tree (:obj:'TreeWrapper'): A TreeWrapper object for a wrapped Dendropy
+            phylogenetic tree.
+
+    Returns:
+        List of arrays, see Details.
+
+    Details:
+        In general, the metrics returned represent different contributions to beta diversity arising from how communities are combined together.
+        Metrics:
+            shared_array: how many spp are shared in each pairwise combo of communities.
+            not_shared_array: what is not shared between each pairwise combination of communities.
+            sum_not_shared:
+            max_not_shared:
+            min_not_shared:
+        
+    """
+    # Convert pam to float type for later calculations.
+    pam.data = pam.data.astype( float )
+    # Create matrix saying how many spp are shared in each pairwise combo of communities.
+    shared_array = np.matmul( pam.data, np.matrix.transpose( pam.data ) )
+    # print shared_array, "\n"
+    # print shared_array[:,0], "\n"
+
+    # Pull out diagonal of shared array.
+    my_diag = np.diagonal( shared_array )
+    # print my_diag
+
+    # Create matrix of what is not shared between each pairwise combination of communities.
+    not_shared_array = abs( np.subtract( shared_array, my_diag ) )
+    # print not_shared_array
+
+    # Rch variables.
+    # sumSi = sum( my_diag )
+    # St = sum( [1 if i > 0 else 0 for i in np.sum( pam.data, axis = 0 ) ] )
+    # a = sumSi - St
+    # print sumSi, St, a, "\n"
+
+    # Comparison matrices for later calculations.
+    ns_trnps = np.matrix.transpose( not_shared_array )
+    sum_not_shared = np.add( not_shared_array, ns_trnps )
+    # print "Sum not shared: \n", sum_not_shared
+
+    min_not_shared = np.minimum( not_shared_array, ns_trnps )
+    # print "\nMin not shrared: \n", min_not_shared
+
+    max_not_shared = np.maximum( not_shared_array, ns_trnps )
+    # print "\nMax not shared: \n", max_not_shared, "\n"
+
+    # Return values.
+    return( shared_array, not_shared_array,
+            sum_not_shared, max_not_shared, min_not_shared )
+
+
 # .............................................................................
 def core_PD_calc( pam, tree ):
     """Creates an array of core metrics used to asses components of beta diversity.
@@ -171,6 +233,7 @@ def core_PD_calc( pam, tree ):
     # return values.
     return core_calc
 
+
 # .............................................................................
 def get_species_index_lookup(pam):
     """Creates a lookup dictionary for species in a matrix
@@ -232,27 +295,24 @@ def calculate_phylo_beta_diversity_jaccard(pam, tree):
     #    computations.  They will be wrapped into a Matrix object when they are
     #    returned from the function.
     beta_jtu_data = np.zeros( ( num_sites, num_sites ), dtype = np.float )
-    
     phylo_beta_jtu_data = np.zeros( ( num_sites, num_sites ), dtype = np.float )
-    
     beta_jne_data = np.zeros( ( num_sites, num_sites ), dtype = np.float )
-    
     phylo_beta_jne_data = np.zeros( ( num_sites, num_sites ), dtype = np.float )
-    
     beta_jac_data = np.zeros( ( num_sites, num_sites ), dtype = np.float )
-    
     phylo_beta_jac_data = np.zeros( ( num_sites, num_sites ), dtype = np.float )
 
     # TODO: Compute phylo beta diversity for jaccard index family
-    core_calc = core_PD_calc( pam, tree )
+
+    # Get core metrics related to phylogeny.
+    core_calc = core_PD_calc( pam, tree ) # Matrix object.
 
     # print core_calc.data
     # print core_calc.get_row_headers()
     # print core_calc.get_column_headers()
 
-    # This loop will populate arrays with beta diversity metrics.
+    # This loop will populate arrays with all beta diversity metrics.
     for my_row in range( core_calc.data.shape[0] ):
-        # Pull out the numeric values.
+        # Pull out the phylogentic core numeric values.
         my_dat = core_calc.data[ my_row, 0:4 ]
         # Get index values for placing into output arrays.
         my_dim = core_calc.get_row_headers()[ my_row ]
@@ -266,14 +326,30 @@ def calculate_phylo_beta_diversity_jaccard(pam, tree):
 
         phylo_beta_jne_data[ my_dim[0], my_dim[1] ] = ( ( my_dat[1] - my_dat[0] ) / ( my_dat[3] + my_dat[2]) ) * ( my_dat[3] / ( ( 2*my_dat[0] ) + my_dat[3] ) )
         phylo_beta_jne_data[ my_dim[1], my_dim[0] ] = phylo_beta_jne_data[ my_dim[0], my_dim[1] ]
+    
+    # Get core metrics for simple beta diversity (no phylo component)
+    core_beta = core_Beta_calc( pam, tree ) # list of arrays. 0==shared; 1==not shared; 2==sum not shared; 3==max not shared; 4==min not shared.
 
-    # Just to match Biotaphy test file expectations.
+    # print "\nCore Beta: \n", core_beta, "\n"
+
+    # Populate arrays.
+    beta_jtu_data = ( 2 * core_beta[4] ) / ( ( 2 * core_beta[4] ) + core_beta[0] )
+    beta_jne_data = ( ( core_beta[3] - core_beta[4] ) / ( core_beta[0] + core_beta[2] ) ) * ( core_beta[0] / ( ( 2 * core_beta[4] ) + core_beta[0] ) )
+    beta_jac_data = core_beta[2] / ( core_beta[0] + core_beta[2] )
+
+
+    # Ensure diagonals are 1 just to match Biotaphy test file expectations (R doesn't deal with them, only half diagonal, but the test files have 1s in diag).
     for i in range( num_sites ):
         phylo_beta_jtu_data[ i, i ] = 1.
         phylo_beta_jac_data[ i, i ] = 1.
         phylo_beta_jne_data[ i, i ] = 1.
-    
-    print "\nJTU\n", phylo_beta_jtu_data, "\nJAC\n", phylo_beta_jac_data, "\nJNE\n", phylo_beta_jne_data
+        beta_jtu_data[ i, i ] = 1.
+        beta_jac_data[ i, i ] = 1.
+        beta_jne_data[ i, i ] = 1.
+
+    # Print check values.
+    #print "\nJTU\n", beta_jtu_data, "\nJAC\n", beta_jac_data, "\nJNE\n", beta_jne_data
+    #print "\nphy_JTU\n", phylo_beta_jtu_data, "\nphy_JAC\n", phylo_beta_jac_data, "\nphy_JNE\n", phylo_beta_jne_data
 
     return (
         Matrix(beta_jtu_data, headers=mtx_headers),
@@ -354,13 +430,30 @@ def calculate_phylo_beta_diversity_sorensen(pam, tree):
 
         phylo_beta_sne_data[ my_dim[0], my_dim[1] ] = ( ( my_dat[1] - my_dat[0] ) / ( ( 2*my_dat[3] ) + my_dat[2] ) ) * ( my_dat[3] / ( my_dat[0] + my_dat[3] ) )
         phylo_beta_sne_data[ my_dim[1], my_dim[0] ] = phylo_beta_sne_data[ my_dim[0], my_dim[1] ]
+    
+
+    # Get core metrics for simple beta diversity (no phylo component)
+    core_beta = core_Beta_calc( pam, tree ) # list of arrays. 0==shared; 1==not shared; 2==sum not shared; 3==max not shared; 4==min not shared.
+    # print "\nCore Beta: \n", core_beta, "\n"
+
+    # Populate arrays.
+    beta_sim_data = core_beta[4] / ( core_beta[4] + core_beta[0] )
+    beta_sor_data = core_beta[2] / ( ( 2 * core_beta[0] ) + core_beta[2] )
+    beta_sne_data = ( ( core_beta[3] - core_beta[4] ) / ( ( 2 * core_beta[0] ) + core_beta[2] ) ) * ( core_beta[0] / ( core_beta[4] + core_beta[0] ) )
+
+
     # Just to match formatting across scripts.
     for i in range( num_sites ):
         phylo_beta_sim_data[ i, i ] = 1.
         phylo_beta_sne_data[ i, i ] = 1.
         phylo_beta_sor_data[ i, i ] = 1.
+        beta_sim_data[ i, i ] = 1.
+        beta_sne_data[ i, i ] = 1.
+        beta_sor_data[ i, i ] = 1.
 
-    print "\nSIM\n", phylo_beta_sim_data, "\nSOR\n", phylo_beta_sor_data, "\nSNE\n", phylo_beta_sne_data
+    # Visualize     
+    #print "\nSIM\n", beta_sim_data, "\nSOR\n", beta_sor_data, "\nSNE\n", beta_sne_data
+    #print "\nphy_SIM\n", phylo_beta_sim_data, "\nphy_SOR\n", phylo_beta_sor_data, "\nphy_SNE\n", phylo_beta_sne_data
 
     return (
         Matrix(beta_sim_data, headers=mtx_headers),
@@ -372,18 +465,20 @@ def calculate_phylo_beta_diversity_sorensen(pam, tree):
 
 
 
-pam = Matrix(np.array( [ [1, 1, 1, 0, 0, 0],
-                         [0, 1, 1, 1, 0, 0],
-                         [0, 0, 1, 1, 1, 0],
-                         [0, 0, 1, 1, 1, 1],
-                         [0, 0, 0, 1, 1, 1],
-                         [1, 0, 0, 1, 1, 1] ]   ),
-                        headers = { '0': ['A', 'B', 'C', 'D', 'E', 'F'],
-                                    '1': ['sp1', 'sp2', 'sp3', 'sp4', 'sp5', 'sp6'] } )
+# For testing purposes only.
+# pam = Matrix(np.array( [ [1, 1, 1, 0, 0, 0],
+#                          [0, 1, 1, 1, 0, 0],
+#                          [0, 0, 1, 1, 1, 0],
+#                          [0, 0, 1, 1, 1, 1],
+#                          [0, 0, 0, 1, 1, 1],
+#                          [1, 0, 0, 1, 1, 1] ]   ),
+#                         headers = { '0': ['A', 'B', 'C', 'D', 'E', 'F'],
+#                                     '1': ['sp1', 'sp2', 'sp3', 'sp4', 'sp5', 'sp6'] } )
 
-tree = TreeWrapper.get( data = '(((sp1:1,sp2:1):5,(sp3:3,sp4:3):3):2,(sp5:7,sp6:7):1);',
-                        schema = 'newick' )
+# tree = TreeWrapper.get( data = '(((sp1:1,sp2:1):5,(sp3:3,sp4:3):3):2,(sp5:7,sp6:7):1);',
+#                         schema = 'newick' )
 
-a = calculate_phylo_beta_diversity_jaccard( pam, tree )
-b = calculate_phylo_beta_diversity_sorensen( pam, tree )
+# a = calculate_phylo_beta_diversity_jaccard( pam, tree )
+# print "\n*****\n" 
+# b = calculate_phylo_beta_diversity_sorensen( pam, tree )
 
