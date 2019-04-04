@@ -83,6 +83,43 @@ def get_character_matrix_from_sequences_list(sequences, var_headers=None):
 
 
 # .............................................................................
+def load_alignment_from_filename(filename):
+    """Attempts to load an alignment from a file path by guessing schema
+
+    Args:
+        filename (str): The file location containing the alignment
+
+    Raises:
+        RuntimeError: Raised with the method needed to load the alignment
+            cannot be determined.
+
+    Returns:
+        tuple: Containing a list of sequences and headers
+    """
+    _, ext = os.path.splitext(filename)
+    if ext == '.csv':
+        load_method = read_csv_alignment_flo
+    elif ext == '.json':
+        load_method = read_json_alignment_flo
+    elif ext == '.phylip':
+        load_method = read_phylip_alignment_flo
+    elif ext == '.tbl':
+        load_method = read_table_alignment_flo
+    else:
+        raise RuntimeError(
+            'Cannot determine load method for {} -- extension {}'.format(
+                filename, ext))
+    with open(filename) as align_file:
+        ret = load_method(align_file)
+    try:
+        sequences, headers = ret
+    except:
+        sequences = ret
+        headers = None
+    return sequences, headers
+
+
+# .............................................................................
 def read_csv_alignment_flo(csv_flo):
     """Reads a CSV file-like object and return a list of sequences and headers.
 
