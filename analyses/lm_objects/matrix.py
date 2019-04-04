@@ -80,7 +80,8 @@ class Matrix(object):
         # Try loading the Matrix object
         try:
             return cls.load_new(flo)
-        except:
+        except Exception as e1:
+            print(str(e1))
             # Try loading a numpy array
             try:
                 # Seek back to start of file
