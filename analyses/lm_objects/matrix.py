@@ -108,8 +108,7 @@ class Matrix(object):
             Matrix: The newly loaded Matrix object.
         """
         with zipfile.ZipFile(flo) as zip_f:
-            with zip_f.open(HEADERS_FILENAME) as obj_in:
-                my_obj = json.loads(obj_in.read())
+            my_obj = json.loads(zip_f.read(HEADERS_FILENAME).decode('utf-8'))
             data_bytes = io.BytesIO()
             data_bytes.write(zip_f.read(DATA_FILENAME))
             data_bytes.seek(0)
