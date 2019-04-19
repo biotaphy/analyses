@@ -1,6 +1,6 @@
 # BiotaPhy analyses
 
-[![Latest release](https://img.shields.io/github/release/biotaphy/analyses.svg)](https://github.com/biotaphy/analyses/releases)
+[![Latest release](https://img.shields.io/github/release/biotaphy/analyses.svg)](https://github.com/biotaphy/analyses/releases/latest)
 [![Build Status](https://travis-ci.org/biotaphy/analyses.svg?branch=master)](https://travis-ci.org/biotaphy/analyses) [![Coverage Status](https://coveralls.io/repos/github/biotaphy/analyses/badge.svg?branch=master)](https://coveralls.io/github/biotaphy/analyses?branch=master)
 [![License Badge](https://img.shields.io/github/license/biotaphy/analyses.svg)](https://github.com/biotaphy/analyses/blob/master/LICENSE)
 
