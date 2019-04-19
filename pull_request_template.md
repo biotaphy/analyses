@@ -1,6 +1,7 @@
 ## Pull Request Type
  - [ ] Bug Fix
  - [ ] New Feature
+ - [ ] Documentation
  - [ ] Other
  
 ## Status
@@ -18,6 +19,7 @@ What issue(s) does this pull request address?  Both bugs and feature requests.  
 - [ ] Tests
 - [ ] Documentation
 - [ ] Sample Data
+- [ ] Build Sphinx Documentation
 
 ## Added dependencies
 Describe any dependencies this pull request would add

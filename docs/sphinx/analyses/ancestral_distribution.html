@@ -22,7 +22,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data Formats" href="../pages/data_formats.html" />
+    <link rel="prev" title="Analyses" href="analyses.html" /> 
   </head>
   <body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -34,7 +36,14 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="../pages/data_formats.html" title="Data Formats"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="analyses.html" title="Analyses"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="analyses.html" accesskey="U">Analyses</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,9 +61,9 @@ approach developed by S.A. Smith and B. O’Meara. Given a set of histograms for
 species, representing occupancy of environmental space in terms of common bins
 (i.e., a PNO or predicted niche occupancy profile), this approach reconstructs
 ancestral histograms of occupancy of climate space.</p>
-<p>This approach is different from those used previously, based on either sampling
-statistically from present day environmental space or summary statistics (mean,
-median, maximum, 95th percentile, etc.). Instead of sampling environmental
+<p>This approach is different from those used previously, based either on (1) summary
+statistics (mean, median, maximum, 95th percentile, etc.), or (2) sampling
+statistically from present day environmental space. Instead of sampling environmental
 space, probabilities of climate occupancy per bin are explicitly reconstructed.
 Likewise, unlike summary statistic approaches, which result either in a point
 estimate (mean/median) or a minimum and maximum constraint on ancestral
@@ -64,6 +73,7 @@ of this approach is the ability to reconstruct multimodal ancestral
 distributions, whereas sampling-based approaches tend to result in normally
 distributed ancestral reconstructions regardless of extant species
 distributions.</p>
+<p>Input species data must have common bins or results will be meaningless.</p>
 </div>
 <div class="section" id="using">
 <h2>Using<a class="headerlink" href="#using" title="Permalink to this headline">¶</a></h2>
@@ -284,9 +294,9 @@ resulting tree be formatted as Nexus.  An example Nexus file looks like</p>
 </div>
 </div>
 </div>
-<div class="section" id="binary">
-<h2>Binary<a class="headerlink" href="#binary" title="Permalink to this headline">¶</a></h2>
-<p>The ancestral_distribution binary can be found at
+<div class="section" id="executable">
+<h2>Executable<a class="headerlink" href="#executable" title="Permalink to this headline">¶</a></h2>
+<p>The ancestral_distribution executable can be found at
 <cite>bin/ancestral_distribution.py</cite></p>
 </div>
 <div class="section" id="output">
@@ -299,6 +309,8 @@ generate plots of the ancestral distributions by providing a directory to the
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p>Folk, R. A., Visger, C. J., Soltis, P. S., Soltis, D. E., &amp; Guralnick, R. P. (2018). Geographic range dynamics drove ancient hybridization in a lineage of angiosperms. The American Naturalist, 192(2), 171-187.</p>
+<p>Smith, S. A., &amp; Donoghue, M. J. (2010). Combining historical biogeography with niche modeling in the Caprifolium clade of Lonicera (Caprifoliaceae, Dipsacales). Systematic biology, 59(3), 322-341.</p>
 </div>
 </div>
 
@@ -308,6 +320,12 @@ generate plots of the ancestral distributions by providing a directory to the
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="analyses.html"
+                        title="previous chapter">Analyses</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../pages/data_formats.html"
+                        title="next chapter">Data Formats</a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -331,7 +349,14 @@ generate plots of the ancestral distributions by providing a directory to the
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="../pages/data_formats.html" title="Data Formats"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="analyses.html" title="Analyses"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="analyses.html" >Analyses</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

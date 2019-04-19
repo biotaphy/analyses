@@ -49,23 +49,38 @@ class Test_TreeWrapper(object):
     they work properly.
     """
     # .....................................
-    def test_from_base_tree(self, data_files):
+    def test_from_base_newick_tree(self, valid_newick_tree):
         """Attempt to get a tree using Dendropy and then wrap it.
 
         Try to retrieve a tree using Dendropy and then send it through the
         wrapper function to determine if it produces a correctly wrapped tree.
 
         Args:
-            data_files (:obj: `pytest.fixture`): A pytest fixture that provides
-                access to test data.
+            valid_newick_tree (pytest.fixture): A parameterized pytest fixture
+                that provides valid newick trees, one at a time, to this test
+                function.
         """
-        schemas = ['newick', 'nexus']
-        for schema in schemas:
-            for tree_filename in data_files.get_trees(schema, True):
-                dendropy_tree = dendropy.Tree.get(
-                    path=tree_filename, schema=schema)
-                wrapped_tree = tree.TreeWrapper.from_base_tree(dendropy_tree)
-                assert isinstance(wrapped_tree, tree.TreeWrapper)
+        dendropy_tree = dendropy.Tree.get(
+            path=valid_newick_tree, schema='newick')
+        wrapped_tree = tree.TreeWrapper.from_base_tree(dendropy_tree)
+        assert isinstance(wrapped_tree, tree.TreeWrapper)
+
+    # .....................................
+    def test_from_base_nexus_tree(self, valid_nexus_tree):
+        """Attempt to get a tree using Dendropy and then wrap it.
+
+        Try to retrieve a tree using Dendropy and then send it through the
+        wrapper function to determine if it produces a correctly wrapped tree.
+
+        Args:
+            valid_nexus_tree (pytest.fixture): A parameterized pytest fixture
+                that provides valid nexus trees, one at a time, to this test
+                function.
+        """
+        dendropy_tree = dendropy.Tree.get(
+            path=valid_nexus_tree, schema='nexus')
+        wrapped_tree = tree.TreeWrapper.from_base_tree(dendropy_tree)
+        assert isinstance(wrapped_tree, tree.TreeWrapper)
 
     # .....................................
     def test_add_node_labels_no_prefix_no_overwrite(self):

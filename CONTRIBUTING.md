@@ -41,6 +41,23 @@ $ py.test tests/ --pep8 analyses -v --cov analyses --cov-report term-missing
 $ py.test-3 tests/ --pep8 analyses -v --cov analyses --cov-report term-missing
 ```
 
+#### You want to update documentation
+
+* Update the documentation in a new branch
+
+* If you update in-line documentation, make sure to rebuild the API doc RST files
+
+```
+$ sphinx-apidoc -o ./_sphinx_config/source ./analyses/
+```
+
+* If you edit any RST docs (or update API docs), rebuild the html pages
+
+```
+$ sphinx-build -b html ./_sphinx_config/ ./docs/sphinx/
+```
+
+* Open and submit a new pull request for your updates
 
 Thanks!
 
