@@ -93,7 +93,7 @@ class Test_phylo_beta_diversity_jaccard(object):
                     0.20689655],
                 [0.24561404, 0.22510823, 0.22727273, 0.07435345, 0.20689655,
                     1.0]]),
-            headers=site_headers) #0.3826087 [b,c]
+            headers=site_headers)  # 0.3826087 [b,c]
 
         test_phylo_beta_jac = Matrix(
             np.array([
@@ -186,7 +186,7 @@ class Test_phylo_beta_diversity_sorensen(object):
                 [0.7142857, 0.4285714, 0.1428571, 1.0, 0.1428571, 0.25],
                 [1.0, 0.6666667, 0.3333333, 0.1428571, 1.0, 0.1428571],
                 [0.7142857, 0.7142857, 0.4285714, 0.25, 0.1428571, 1.0]]),
-            headers=site_headers) #0.1428571 -> 0.4285714
+            headers=site_headers)  # 0.1428571 -> 0.4285714
 
         test_phylo_beta_sim = Matrix(
             np.array([
@@ -198,7 +198,7 @@ class Test_phylo_beta_diversity_sorensen(object):
                 [0.46666667, 0.35294118, 0.0, 1.0, 0.0, 0.11538462],
                 [0.66666667, 0.52941176, 0.15789474, 0.0, 1.0, 0.0],
                 [0.26666667, 0.23529412, 0.15789474, 0.11538462, 0.0, 1.0]]),
-            headers=site_headers) #pylo
+            headers=site_headers)  # phylo
 
         test_phylo_beta_sne = Matrix(
             np.array([
@@ -213,7 +213,7 @@ class Test_phylo_beta_diversity_sorensen(object):
                     0.11538462],
                 [0.23333333, 0.19948849, 0.1754386, 0.04825175, 0.11538462,
                     1.0]]),
-            headers=site_headers) #pylo; 0.5833333 -> 0.05833333
+            headers=site_headers)  # phylo; 0.5833333 -> 0.05833333
 
         test_phylo_beta_sor = Matrix(
             np.array([
@@ -225,7 +225,7 @@ class Test_phylo_beta_diversity_sorensen(object):
                     0.16363636],
                 [0.73684211, 0.6, 0.23809524, 0.06122449, 1.0, 0.11538462],
                 [0.5, 0.43478261, 0.33333333, 0.16363636, 0.11538462, 1.0]]),
-            headers=site_headers) #pylo
+            headers=site_headers)  # phylo
 
         (beta_sim, phylo_beta_sim, beta_sne, phylo_beta_sne, beta_sor,
          phylo_beta_sor) = pbd.calculate_phylo_beta_diversity_sorensen(

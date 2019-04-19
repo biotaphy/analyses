@@ -317,24 +317,24 @@ def calculate_phylo_beta_diversity_jaccard(pam, tree):
         my_dim = core_calc.get_row_headers()[my_row]
 
         # Populate arrays.
-        phylo_beta_jtu_data[my_dim[0], my_dim[1]] =
-        (2*my_dat[0]) / ((2*my_dat[0]) + my_dat[3])
+        phylo_beta_jtu_data[my_dim[0], my_dim[1]] = (
+            2*my_dat[0]) / ((2*my_dat[0]) + my_dat[3])
 
-        phylo_beta_jtu_data[my_dim[1], my_dim[0]] =
-        phylo_beta_jtu_data[my_dim[0], my_dim[1]]
+        phylo_beta_jtu_data[my_dim[1], my_dim[0]] = phylo_beta_jtu_data[
+            my_dim[0], my_dim[1]]
 
-        phylo_beta_jac_data[my_dim[0], my_dim[1]] =
-        my_dat[2] / (my_dat[3] + my_dat[2])
+        phylo_beta_jac_data[my_dim[0], my_dim[1]] = (
+            my_dat[2] / (my_dat[3] + my_dat[2]))
 
-        phylo_beta_jac_data[my_dim[1], my_dim[0]] =
-        phylo_beta_jac_data[my_dim[0], my_dim[1]]
+        phylo_beta_jac_data[my_dim[1], my_dim[0]] = phylo_beta_jac_data[
+            my_dim[0], my_dim[1]]
 
-        phylo_beta_jne_data[my_dim[0], my_dim[1]] =
-        ((my_dat[1] - my_dat[0]) / (my_dat[3] + my_dat[2])) *
-        (my_dat[3] / ((2 * my_dat[0]) + my_dat[3]))
+        phylo_beta_jne_data[my_dim[0], my_dim[1]] = (
+            (my_dat[1] - my_dat[0]) / (my_dat[3] + my_dat[2])) * (
+                my_dat[3] / ((2 * my_dat[0]) + my_dat[3]))
 
-        phylo_beta_jne_data[my_dim[1], my_dim[0]] =
-        phylo_beta_jne_data[my_dim[0], my_dim[1]]
+        phylo_beta_jne_data[my_dim[1], my_dim[0]] = phylo_beta_jne_data[
+            my_dim[0], my_dim[1]]
 
     # Get core metrics for simple beta diversity (no phylo component).
     '''
@@ -344,15 +344,13 @@ def calculate_phylo_beta_diversity_jaccard(pam, tree):
     core_beta = core_Beta_calc(pam, tree)
 
     # Populate arrays.
-    beta_jtu_data =
-    (2 * core_beta[4]) / ((2 * core_beta[4]) + core_beta[0])
+    beta_jtu_data = (2 * core_beta[4]) / ((2 * core_beta[4]) + core_beta[0])
 
-    beta_jne_data =
-    ((core_beta[3] - core_beta[4]) / (core_beta[0] + core_beta[2])) *
-    (core_beta[0] / ((2 * core_beta[4]) + core_beta[0]))
+    beta_jne_data = (
+        (core_beta[3] - core_beta[4]) / (core_beta[0] + core_beta[2])) * (
+            core_beta[0] / ((2 * core_beta[4]) + core_beta[0]))
 
-    beta_jac_data =
-    core_beta[2] / (core_beta[0] + core_beta[2])
+    beta_jac_data = core_beta[2] / (core_beta[0] + core_beta[2])
 
     # Ensure diagonals are 1 just to match Biotaphy test file expectations.
     for i in range(num_sites):
@@ -429,24 +427,24 @@ def calculate_phylo_beta_diversity_sorensen(pam, tree):
         my_dat = core_calc.data[my_row, 0:4]
         my_dim = core_calc.get_row_headers()[my_row]
 
-        phylo_beta_sim_data[my_dim[0], my_dim[1]] =
-        my_dat[0] / (my_dat[0] + my_dat[3])
+        phylo_beta_sim_data[my_dim[0], my_dim[1]] = (
+            my_dat[0] / (my_dat[0] + my_dat[3]))
 
-        phylo_beta_sim_data[my_dim[1], my_dim[0]] =
-        phylo_beta_sim_data[my_dim[0], my_dim[1]]
+        phylo_beta_sim_data[my_dim[1], my_dim[0]] = phylo_beta_sim_data[
+            my_dim[0], my_dim[1]]
 
-        phylo_beta_sor_data[my_dim[0], my_dim[1]] =
-        my_dat[2] / ((2*my_dat[3]) + my_dat[2])
+        phylo_beta_sor_data[my_dim[0], my_dim[1]] = (
+            my_dat[2] / ((2*my_dat[3]) + my_dat[2]))
 
-        phylo_beta_sor_data[my_dim[1], my_dim[0]] =
-        phylo_beta_sor_data[my_dim[0], my_dim[1]]
+        phylo_beta_sor_data[my_dim[1], my_dim[0]] = phylo_beta_sor_data[
+            my_dim[0], my_dim[1]]
 
-        phylo_beta_sne_data[my_dim[0], my_dim[1]] =
-        ((my_dat[1] - my_dat[0]) / ((2*my_dat[3]) + my_dat[2])) *
-        (my_dat[3] / (my_dat[0] + my_dat[3]))
+        phylo_beta_sne_data[my_dim[0], my_dim[1]] = (
+            (my_dat[1] - my_dat[0]) / ((2*my_dat[3]) + my_dat[2])) * (
+                my_dat[3] / (my_dat[0] + my_dat[3]))
 
-        phylo_beta_sne_data[my_dim[1], my_dim[0]] =
-        phylo_beta_sne_data[my_dim[0], my_dim[1]]
+        phylo_beta_sne_data[my_dim[1], my_dim[0]] = phylo_beta_sne_data[
+            my_dim[0], my_dim[1]]
 
     # Get core metrics for simple beta diversity (no phylo component).
     '''
@@ -456,15 +454,13 @@ def calculate_phylo_beta_diversity_sorensen(pam, tree):
     core_beta = core_Beta_calc(pam, tree)
 
     # Populate arrays.
-    beta_sim_data =
-    core_beta[4] / (core_beta[4] + core_beta[0])
+    beta_sim_data = core_beta[4] / (core_beta[4] + core_beta[0])
 
-    beta_sor_data =
-    core_beta[2] / ((2 * core_beta[0]) + core_beta[2])
+    beta_sor_data = core_beta[2] / ((2 * core_beta[0]) + core_beta[2])
 
-    beta_sne_data =
-    ((core_beta[3] - core_beta[4]) / ((2 * core_beta[0]) + core_beta[2])) *
-    (core_beta[0] / (core_beta[4] + core_beta[0]))
+    beta_sne_data = (
+        (core_beta[3] - core_beta[4]) / ((2 * core_beta[0]) + core_beta[2])
+        ) * (core_beta[0] / (core_beta[4] + core_beta[0]))
 
     # Just to match formatting across scripts.
     for i in range(num_sites):
