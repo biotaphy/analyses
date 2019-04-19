@@ -1,72 +1,37 @@
 # BiotaPhy analyses
 
+![Latest release](https://img.shields.io/github/release/biotaphy/analyses.svg)
 [![Build Status](https://travis-ci.org/biotaphy/analyses.svg?branch=master)](https://travis-ci.org/biotaphy/analyses) [![Coverage Status](https://coveralls.io/repos/github/biotaphy/analyses/badge.svg?branch=master)](https://coveralls.io/github/biotaphy/analyses?branch=master)
+![License Badge](https://img.shields.io/github/license/biotaphy/analyses.svg)
 
-The ancestral distribution code (`ancestral_distribution.py`) uses a novel approach developed by S.A. Smith and B. O'Meara. Given a set of histograms for species, representing occupancy of environmental space in terms of common bins (i.e., a PNO or predicted niche occupancy profile), this approach reconstructs ancestral histograms of occupancy of climate space. 
+The BiotaPhy Analyses repository is an open source project, initially,
+containing tools generated as part of the BiotaPhy project for computing bio
+and phylo diversity for Presence Absence Matrices and Phylogenetic trees.
+BiotaPhy is a collaboration between [iDigBio](https://idigbio.org) at The
+University of Florida, [Lifemapper](http://lifemapper.org) at The University
+of Kansas, and [The Open Tree of Life](https://tree.opentreeoflife.org/opentree)
+at The University of Michigan originally supported by NSF BIO Award #1458422.
+For project documentation, visit our [GitHub pages site](https://biotaphy.github.io/analyses/).
 
-This approach is different from those used previously, based on either sampling statistically from present day environmental space or summary statistics (mean, median, maximum, 95th percentile, etc.). Instead of sampling environmental space, probabilities of climate occupancy per bin are explicitly reconstructed. Likewise, unlike summary statistic approaches, which result either in a point estimate (mean/median) or a minimum and maximum constraint on ancestral reconstructions (min/max coding), a distribution is explicitly reconstructed here, revealing the potential shape of ancestral climate space. A key advantage of this approach is the ability to reconstruct multimodal ancestral distributions, whereas sampling-based approaches tend to result in normally distributed ancestral reconstructions regardless of extant species distributions. It is also straight-forward to parallelize this approach, and it is very fast.
+![iDigBio](https://biotaphy.github.io/analyses/sphinx/_images/idigbio_logo.png)
+![Lifemapper](https://biotaphy.github.io/analyses/sphinx/_images/lm_logo.png)
+![Open Tree of Life](https://biotaphy.github.io/analyses/sphinx/_images/otl_logo.png)
+
 
 ## Install
-```
-$ python setup.py install
-```
 
-## Usage
+Installation help can be found at https://biotaphy.github.io/analyses/sphinx/pages/installation.html
 
-### ancestral_distribution.py
-```
-usage: ancestral_distribution.py [-h] [-l ANNOTATE_LABELS] [-p PLOT_DIRECTORY]
-                                 [-c OUT_CSV_FILENAME]
-                                 in_tree_filename {newick,nexml,nexus}
-                                 data_filename {csv,json,phylip,table}
-                                 out_tree_filename {newick,nexml,nexus}
+## Getting help
 
-Generates ancestral distribution estimations based on the environmental
-distributions at the tips of the tree
+A this time, the easiest way to get help is to [file a bug report](https://github.com/biotaphy/analyses/issues/new?labels=&template=bug_report.md&title=).
 
-positional arguments:
-  in_tree_filename      Path to the tree file
-  {newick,nexml,nexus}  The format of the tree
-  data_filename         Path to file with character state data
-  {csv,json,phylip,table}
-                        The format of the character data
-  out_tree_filename     Path to write the resulting annotated tree
-  {newick,nexml,nexus}  The format to use when writing the tree
+## Contributing
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -l ANNOTATE_LABELS, --annotate_labels ANNOTATE_LABELS
-                        If provided, annotate the tree labels with this data
-                        column
-  -p PLOT_DIRECTORY, --plot_directory PLOT_DIRECTORY
-                        If provided, write distribution plots to this
-                        directory
-  -c OUT_CSV_FILENAME, --out_csv_filename OUT_CSV_FILENAME
-                        If provided, write the output character matrix CSV to
-                        this file location
-```
+Did you find a bug?  Do you have an idea for an analysis?  Do you want to write
+some documentation?  Head over to [our contributing page](CONTRIBUTING.md)
+for more information about how you can help out.
 
-Notes:
-  * Use the `-l` option with either a column name or column index to use the reconstructed values for 
-    that column as the labels of your output tree.
-  * The `-p` option will tell the tool to write out plots for the distributions
-  * The `-c` option will write out the reconstruction matrix as a CSV file for processing elsewhere
+## License
 
-
-## Formats
-
-### CSV Alignment file
-
-CSV alignment files can have a header row, where each entry is a label for one of the variables.
-
-The first column of each data row should be a tree tip label followed by the values corresponding with variables in each column.
-
-Each variable can be for a single value, such as mean value, or it can be for a histogram bin.
-```
-Tip label, Var A, Var B, Var C, Var D - bin 1, Var D - bin 2, Var D - bin 3, Var D - bin 4, Var D - bin 5
-Tip A, 1.0, 1.3, 0.5, 3.1, 3.7, 4.1, 3.3, 2.7
-Tip B, 0.3, 0.3, 3.0, 0.3, 0.6, 0.2, 0.1, 0.1
-Tip C, 0.9, 0.1, 2.5, 1.8, 0.3, 2.1, 2.4, 2.9
-Tip D, 1.4, 2.0, 4.3, 3.2, 2.1, 2.3, 1.9, 1.8
-...
-```
+The BiotaPhy analyses repository is released under the [GPL 3.0 License](LICENSE).

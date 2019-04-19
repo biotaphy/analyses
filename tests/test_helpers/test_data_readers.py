@@ -90,91 +90,83 @@ class Test_read_csv_alignment_flo(object):
     """Tests the dr.read_csv_alignment_flo method.
     """
     # .....................................
-    def test_file_invalid(self, data_files):
+    def test_file_invalid(self, invalid_csv_alignment):
         """Tests that the invalid alignment files fail properly.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            invalid_csv_alignment (pytest.fixture): A parameterized pytest
+                fixture providing invalid csv alignment filenames.
         """
-        invalid_csv_alignments = data_files.get_alignments('csv', False)
-        for fn in invalid_csv_alignments:
-            with open(fn) as in_csv:
-                with pytest.raises(dr.AlignmentIOError):
-                    dr.read_csv_alignment_flo(in_csv)
+        with open(invalid_csv_alignment) as in_csv:
+            with pytest.raises(dr.AlignmentIOError):
+                dr.read_csv_alignment_flo(in_csv)
 
     # .....................................
-    def test_file_valid(self, data_files):
+    def test_file_valid(self, valid_csv_alignment):
         """Tests that the valid alignment files do not fail.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            valid_csv_alignment (pytest.fixture): A parameterized pytest
+                fixture providing valid csv alignment filenames.
         """
-        valid_csv_alignments = data_files.get_alignments('csv', True)
-        for fn in valid_csv_alignments:
-            with open(fn) as in_csv:
-                try:
-                    sequence_list, headers = dr.read_csv_alignment_flo(in_csv)
-                    assert len(headers) > 0
-                    assert len(sequence_list) > 0
-                    for i in sequence_list:
-                        assert isinstance(i, Sequence)
-                        assert isinstance(i.name, string_formats)
-                        assert len(i.cont_values) > 0
-                except Exception as e:
-                    print('Raised exception: {}'.format(str(e)))
-                    assert False
+        with open(valid_csv_alignment) as in_csv:
+            try:
+                sequence_list, headers = dr.read_csv_alignment_flo(in_csv)
+                assert len(headers) > 0
+                assert len(sequence_list) > 0
+                for i in sequence_list:
+                    assert isinstance(i, Sequence)
+                    assert isinstance(i.name, string_formats)
+                    assert len(i.cont_values) > 0
+            except Exception as e:
+                print('Raised exception: {}'.format(str(e)))
+                assert False
 
     # .....................................
-    def test_stringio_invalid(self, data_files):
+    def test_stringio_invalid(self, invalid_csv_alignment):
         """Tests that invalid alignment files cause the proper failure.
 
         Tests that the invalid alignment files fail properly when loaded into
         StringIO objects.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            invalid_csv_alignment (pytest.fixture): A parameterized pytest
+                fixture providing invalid csv alignment filenames.
         """
-        invalid_csv_alignments = data_files.get_alignments('csv', False)
-        for fn in invalid_csv_alignments:
-            with open(fn) as in_csv:
-                csv_stringio = StringIO()
-                csv_stringio.write(in_csv.read())
-                csv_stringio.seek(0)
-                with pytest.raises(dr.AlignmentIOError):
-                    dr.read_csv_alignment_flo(csv_stringio)
+        with open(invalid_csv_alignment) as in_csv:
+            csv_stringio = StringIO()
+            csv_stringio.write(in_csv.read())
+            csv_stringio.seek(0)
+            with pytest.raises(dr.AlignmentIOError):
+                dr.read_csv_alignment_flo(csv_stringio)
 
     # .....................................
-    def test_stringio_valid(self, data_files):
+    def test_stringio_valid(self, valid_csv_alignment):
         """Tests that alignments are read properly with valid input data.
 
         Tests that the valid alignment files do not fail when loaded into
         StringIO objects.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            valid_csv_alignment (pytest.fixture): A parameterized pytest
+                fixture providing valid csv alignment filenames.
         """
-        valid_csv_alignments = data_files.get_alignments('csv', True)
-        for fn in valid_csv_alignments:
-            with open(fn) as in_csv:
-                csv_stringio = StringIO()
-                csv_stringio.write(in_csv.read())
-                csv_stringio.seek(0)
-                try:
-                    (sequence_list, headers) = dr.read_csv_alignment_flo(
-                        csv_stringio)
-                    assert len(headers) > 0
-                    assert len(sequence_list) > 0
-                    for i in sequence_list:
-                        assert isinstance(i, Sequence)
-                        assert isinstance(i.name, string_formats)
-                        assert len(i.cont_values) > 0
-                except Exception as e:
-                    print('Raised exception: {}'.format(str(e)))
-                    assert False
+        with open(valid_csv_alignment) as in_csv:
+            csv_stringio = StringIO()
+            csv_stringio.write(in_csv.read())
+            csv_stringio.seek(0)
+            try:
+                (sequence_list, headers) = dr.read_csv_alignment_flo(
+                    csv_stringio)
+                assert len(headers) > 0
+                assert len(sequence_list) > 0
+                for i in sequence_list:
+                    assert isinstance(i, Sequence)
+                    assert isinstance(i.name, string_formats)
+                    assert len(i.cont_values) > 0
+            except Exception as e:
+                print('Raised exception: {}'.format(str(e)))
+                assert False
 
 
 # .............................................................................
@@ -182,94 +174,86 @@ class Test_read_json_alignment_flo(object):
     """Test class for the dr.read_json_alignment_flo method.
     """
     # .....................................
-    def test_file_invalid(self, data_files):
+    def test_file_invalid(self, invalid_json_alignment):
         """Tests that the invalid alignment files fail properly.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            invalid_json_alignment (pytest.fixture): A parameterized pytest
+                fixture providing invalid json alignment filenames.
         """
-        invalid_json_alignments = data_files.get_alignments('json', False)
-        for fn in invalid_json_alignments:
-            with open(fn) as in_json:
-                with pytest.raises(dr.AlignmentIOError):
-                    dr.read_json_alignment_flo(in_json)
+        with open(invalid_json_alignment) as in_json:
+            with pytest.raises(dr.AlignmentIOError):
+                dr.read_json_alignment_flo(in_json)
 
     # .....................................
-    def test_file_valid(self, data_files):
+    def test_file_valid(self, valid_json_alignment):
         """Tests that the valid alignment files do not fail.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            valid_json_alignment (pytest.fixture): A parameterized pytest
+                fixture providing valid json alignment filenames.
         """
-        valid_json_alignments = data_files.get_alignments('json', True)
-        for fn in valid_json_alignments:
-            with open(fn) as in_json:
-                try:
-                    (sequence_list, headers
-                     ) = dr.read_json_alignment_flo(in_json)
-                    if headers is not None:
-                        assert len(headers) > 0
-                    assert len(sequence_list) > 0
-                    for i in sequence_list:
-                        assert isinstance(i, Sequence)
-                        assert isinstance(i.name, string_formats)
-                        assert len(i.cont_values) > 0
-                except Exception as e:
-                    print('Raised exception: {}'.format(str(e)))
-                    assert False
+        with open(valid_json_alignment) as in_json:
+            try:
+                (sequence_list, headers
+                 ) = dr.read_json_alignment_flo(in_json)
+                if headers is not None:
+                    assert len(headers) > 0
+                assert len(sequence_list) > 0
+                for i in sequence_list:
+                    assert isinstance(i, Sequence)
+                    assert isinstance(i.name, string_formats)
+                    assert len(i.cont_values) > 0
+            except Exception as e:
+                print('Raised exception: {}'.format(str(e)))
+                assert False
 
     # .....................................
-    def test_stringio_invalid(self, data_files):
+    def test_stringio_invalid(self, invalid_json_alignment):
         """Tests that invalid alignment files fail properly.
 
         Tests that the invalid alignment files fail properly when loaded into
         StringIO objects.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            invalid_json_alignment (pytest.fixture): A parameterized pytest
+                fixture providing invalid json alignment filenames.
         """
-        invalid_json_alignments = data_files.get_alignments('json', False)
-        for fn in invalid_json_alignments:
-            with open(fn) as in_json:
-                json_stringio = StringIO()
-                json_stringio.write(in_json.read())
-                json_stringio.seek(0)
-                with pytest.raises(dr.AlignmentIOError):
-                    dr.read_json_alignment_flo(json_stringio)
+        with open(invalid_json_alignment) as in_json:
+            json_stringio = StringIO()
+            json_stringio.write(in_json.read())
+            json_stringio.seek(0)
+            with pytest.raises(dr.AlignmentIOError):
+                dr.read_json_alignment_flo(json_stringio)
 
     # .....................................
-    def test_stringio_valid(self, data_files):
+    def test_stringio_valid(self, valid_json_alignment):
         """Tests that valid JSON alignment files do not fail.
 
         Tests that the valid alignment files do not fail when loaded into
         StringIO objects.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            valid_json_alignment (pytest.fixture): A parameterized pytest
+                fixture providing valid json alignment filenames.
         """
-        valid_json_alignments = data_files.get_alignments('json', True)
-        for fn in valid_json_alignments:
-            with open(fn) as in_json:
-                json_stringio = StringIO()
-                json_stringio.write(in_json.read())
-                json_stringio.seek(0)
-                try:
-                    (sequence_list, headers
-                     ) = dr.read_json_alignment_flo(json_stringio)
-                    if headers is not None:
-                        assert len(headers) > 0
-                    assert len(sequence_list) > 0
-                    for i in sequence_list:
-                        assert isinstance(i, Sequence)
-                        assert isinstance(i.name, string_formats)
-                        assert len(i.cont_values) > 0
-                except Exception as e:
-                    print('Raised exception: {}'.format(str(e)))
-                    assert False
+        with open(valid_json_alignment) as in_json:
+            json_stringio = StringIO()
+            json_stringio.write(in_json.read())
+            json_stringio.seek(0)
+            try:
+                (sequence_list, headers
+                 ) = dr.read_json_alignment_flo(json_stringio)
+                if headers is not None:
+                    assert len(headers) > 0
+                assert len(sequence_list) > 0
+                for i in sequence_list:
+                    assert isinstance(i, Sequence)
+                    assert isinstance(i.name, string_formats)
+                    assert len(i.cont_values) > 0
+            except Exception as e:
+                print('Raised exception: {}'.format(str(e)))
+                assert False
 
 
 # .............................................................................
@@ -277,110 +261,81 @@ class Test_read_phylip_alignment_flo(object):
     """Test class for the dr.read_phylip_alignment_flo method.
     """
     # .....................................
-    def test_file_invalid(self, data_files):
+    def test_file_invalid(self, invalid_phylip_alignment):
         """Tests that the invalid alignment files fail properly.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            invalid_phylip_alignment (pytest.fixture): A parameterized pytest
+                fixture providing invalid phylip alignment filenames.
         """
-        invalid_phylip_alignments = data_files.get_alignments('phylip', False)
-        for fn in invalid_phylip_alignments:
-            with open(fn) as in_phylip:
-                with pytest.raises(dr.AlignmentIOError):
-                    dr.read_phylip_alignment_flo(in_phylip)
+        with open(invalid_phylip_alignment) as in_phylip:
+            with pytest.raises(dr.AlignmentIOError):
+                dr.read_phylip_alignment_flo(in_phylip)
 
     # .....................................
-    def test_file_valid(self, data_files):
+    def test_file_valid(self, valid_phylip_alignment):
         """Tests that the valid alignment files do not fail.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            valid_phylip_alignment (pytest.fixture): A parameterized pytest
+                fixture providing valid phylip alignment filenames.
         """
-        valid_phylip_alignments = data_files.get_alignments('phylip', True)
-        for fn in valid_phylip_alignments:
-            with open(fn) as in_phylip:
-                try:
-                    sequence_list = dr.read_phylip_alignment_flo(in_phylip)
-                    assert len(sequence_list) > 0
-                    for i in sequence_list:
-                        assert isinstance(i, Sequence)
-                        assert isinstance(i.name, string_formats)
-                        assert i.seq is not None
-                except Exception as e:
-                    print('Raised exception: {}'.format(str(e)))
-                    assert False
+        with open(valid_phylip_alignment) as in_phylip:
+            try:
+                sequence_list = dr.read_phylip_alignment_flo(in_phylip)
+                assert len(sequence_list) > 0
+                for i in sequence_list:
+                    assert isinstance(i, Sequence)
+                    assert isinstance(i.name, string_formats)
+                    assert i.seq is not None
+            except Exception as e:
+                print('Raised exception: {}'.format(str(e)))
+                assert False
 
     # .....................................
-    def test_stringio_invalid(self, data_files):
+    def test_stringio_invalid(self, invalid_phylip_alignment):
         """Test that invalid phylip alignment files cause a failure.
 
         Tests that the invalid alignment files fail properly when loaded into
         StringIO objects.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            invalid_phylip_alignment (pytest.fixture): A parameterized pytest
+                fixture providing invalid phylip alignment filenames.
         """
-        invalid_phylip_alignments = data_files.get_alignments('phylip', False)
-        for fn in invalid_phylip_alignments:
-            with open(fn) as in_phylip:
-                phylip_stringio = StringIO()
-                phylip_stringio.write(in_phylip.read())
-                phylip_stringio.seek(0)
-                with pytest.raises(dr.AlignmentIOError):
-                    dr.read_phylip_alignment_flo(phylip_stringio)
+        with open(invalid_phylip_alignment) as in_phylip:
+            phylip_stringio = StringIO()
+            phylip_stringio.write(in_phylip.read())
+            phylip_stringio.seek(0)
+            with pytest.raises(dr.AlignmentIOError):
+                dr.read_phylip_alignment_flo(phylip_stringio)
 
     # .....................................
-    def test_stringio_valid(self, data_files):
+    def test_stringio_valid(self, valid_phylip_alignment):
         """Tests that valid phylip alignment files are loaded properly.
 
         Tests that the valid alignment files do not fail when loaded into
         StringIO objects.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            valid_phylip_alignment (pytest.fixture): A parameterized pytest
+                fixture providing valid phylip alignment filenames.
         """
-        valid_phylip_alignments = data_files.get_alignments('phylip', True)
-        for fn in valid_phylip_alignments:
-            with open(fn) as in_phylip:
-                phylip_stringio = StringIO()
-                phylip_stringio.write(in_phylip.read())
-                phylip_stringio.seek(0)
-                try:
-                    sequence_list = dr.read_phylip_alignment_flo(
-                        phylip_stringio)
-                    assert len(sequence_list) > 0
-                    for i in sequence_list:
-                        assert isinstance(i, Sequence)
-                        assert isinstance(i.name, string_formats)
-                        assert i.seq is not None
-                except Exception as e:
-                    print('Raised exception: {}'.format(str(e)))
-                    assert False
-
-
-# .............................................................................
-class Test_read_phylip_continuous_alignment_flo(object):
-    """Test class for the read_phylip_continuous_alignment_flo method.
-    """
-    # .....................................
-    def test_file_invalid(self, data_files):
-        pass
-
-    # .....................................
-    def test_file_valid(self, data_files):
-        pass
-
-    # .....................................
-    def test_stringio_invalid(self, data_files):
-        pass
-
-    # .....................................
-    def test_stringio_valid(self, data_files):
-        pass
+        with open(valid_phylip_alignment) as in_phylip:
+            phylip_stringio = StringIO()
+            phylip_stringio.write(in_phylip.read())
+            phylip_stringio.seek(0)
+            try:
+                sequence_list = dr.read_phylip_alignment_flo(
+                    phylip_stringio)
+                assert len(sequence_list) > 0
+                for i in sequence_list:
+                    assert isinstance(i, Sequence)
+                    assert isinstance(i.name, string_formats)
+                    assert i.seq is not None
+            except Exception as e:
+                print('Raised exception: {}'.format(str(e)))
+                assert False
 
 
 # .............................................................................
@@ -388,85 +343,77 @@ class Test_read_table_continuous_alignment_flo(object):
     """Test class for the read_table_continuous_alignment_flo method.
     """
     # .....................................
-    def test_file_invalid(self, data_files):
+    def test_file_invalid(self, invalid_table_alignment):
         """Tests that the invalid alignment files fail properly.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            invalid_table_alignment (pytest.fixture): A parameterized pytest
+                fixture providing invalid table alignment filenames.
         """
-        invalid_table_alignments = data_files.get_alignments('table', False)
-        for fn in invalid_table_alignments:
-            with open(fn) as in_table:
-                with pytest.raises(dr.AlignmentIOError):
-                    dr.read_table_alignment_flo(in_table)
+        with open(invalid_table_alignment) as in_table:
+            with pytest.raises(dr.AlignmentIOError):
+                dr.read_table_alignment_flo(in_table)
 
     # .....................................
-    def test_file_valid(self, data_files):
+    def test_file_valid(self, valid_table_alignment):
         """Tests that the valid alignment files do not fail.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            valid_table_alignment (pytest.fixture): A parameterized pytest
+                fixture providing valid table alignment filenames.
         """
-        valid_table_alignments = data_files.get_alignments('table', True)
-        for fn in valid_table_alignments:
-            with open(fn) as in_table:
-                try:
-                    sequence_list = dr.read_table_alignment_flo(in_table)
-                    assert len(sequence_list) > 0
-                    for i in sequence_list:
-                        assert isinstance(i, Sequence)
-                        assert isinstance(i.name, string_formats)
-                        assert len(i.cont_values) > 0
-                except Exception as e:
-                    print('Raised exception: {}'.format(str(e)))
-                    assert False
+        with open(valid_table_alignment) as in_table:
+            try:
+                sequence_list = dr.read_table_alignment_flo(in_table)
+                assert len(sequence_list) > 0
+                for i in sequence_list:
+                    assert isinstance(i, Sequence)
+                    assert isinstance(i.name, string_formats)
+                    assert len(i.cont_values) > 0
+            except Exception as e:
+                print('Raised exception: {}'.format(str(e)))
+                assert False
 
     # .....................................
-    def test_stringio_invalid(self, data_files):
+    def test_stringio_invalid(self, invalid_table_alignment):
         """Tests that invalid table alignment files cause a failure.
 
         Tests that the invalid alignment files fail properly when loaded into
         StringIO objects.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            invalid_table_alignment (pytest.fixture): A parameterized pytest
+                fixture providing invalid table alignment filenames.
         """
-        invalid_table_alignments = data_files.get_alignments('table', False)
-        for fn in invalid_table_alignments:
-            with open(fn) as in_table:
-                table_stringio = StringIO()
-                table_stringio.write(in_table.read())
-                table_stringio.seek(0)
-                with pytest.raises(dr.AlignmentIOError):
-                    dr.read_table_alignment_flo(table_stringio)
+        with open(invalid_table_alignment) as in_table:
+            table_stringio = StringIO()
+            table_stringio.write(in_table.read())
+            table_stringio.seek(0)
+            with pytest.raises(dr.AlignmentIOError):
+                dr.read_table_alignment_flo(table_stringio)
 
     # .....................................
-    def test_stringio_valid(self, data_files):
+    def test_stringio_valid(self, valid_table_alignment):
         """Tests that valid table alignment files are loaded correctly.
 
         Tests that the valid alignment files do not fail when loaded into
         StringIO objects.
 
         Args:
-            data_files (pytest.fixture): A pytest fixture defined in
-                conftest.py for retrieving test data.
+            valid_table_alignment (pytest.fixture): A parameterized pytest
+                fixture providing valid table alignment filenames.
         """
-        valid_table_alignments = data_files.get_alignments('table', True)
-        for fn in valid_table_alignments:
-            with open(fn) as in_table:
-                table_stringio = StringIO()
-                table_stringio.write(in_table.read())
-                table_stringio.seek(0)
-                try:
-                    sequence_list = dr.read_table_alignment_flo(table_stringio)
-                    assert len(sequence_list) > 0
-                    for i in sequence_list:
-                        assert isinstance(i, Sequence)
-                        assert isinstance(i.name, string_formats)
-                        assert len(i.cont_values) > 0
-                except Exception as e:
-                    print('Raised exception: {}'.format(str(e)))
-                    assert False
+        with open(valid_table_alignment) as in_table:
+            table_stringio = StringIO()
+            table_stringio.write(in_table.read())
+            table_stringio.seek(0)
+            try:
+                sequence_list = dr.read_table_alignment_flo(table_stringio)
+                assert len(sequence_list) > 0
+                for i in sequence_list:
+                    assert isinstance(i, Sequence)
+                    assert isinstance(i.name, string_formats)
+                    assert len(i.cont_values) > 0
+            except Exception as e:
+                print('Raised exception: {}'.format(str(e)))
+                assert False
