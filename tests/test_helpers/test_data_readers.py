@@ -86,6 +86,87 @@ class Test_get_character_matrix_from_sequences_list(object):
 
 
 # .............................................................................
+class Test_load_alignment_from_filename(object):
+    """Tests the dr.load_alignment_from_filename method.
+    """
+    # .....................................
+    def test_csv_file(self, valid_csv_alignment):
+        """Tests that a valid CSV file can be loaded into an alignment.
+
+        Args:
+            valid_csv_alignment (pytest.fixture): A parameterized pytest
+                fixture providing valid csv alignment filenames.
+        """
+        sequences, headers = dr.load_alignment_from_filename(
+            valid_csv_alignment)
+        assert len(headers) > 0
+        assert len(sequences) > 0
+        for i in sequences:
+            assert isinstance(i, Sequence)
+            assert isinstance(i.name, string_formats)
+            assert len(i.cont_values) > 0
+
+    # .....................................
+    def test_invalid_file(self):
+        """Tests that an invalid file fails properly on load.
+        """
+        with pytest.raises(RuntimeError):
+            dr.load_alignment_from_filename('./file_with_bad_ext.bad')
+
+    # .....................................
+    def test_json_file(self, valid_json_alignment):
+        """Tests that a valid JSON file can be loaded into an alignment.
+
+        Args:
+            valid_json_alignment (pytest.fixture): A parameterized pytest
+                fixture providing valid json alignment filenames.
+        """
+        sequences, headers = dr.load_alignment_from_filename(
+            valid_json_alignment)
+        if headers is not None:
+            assert len(headers) > 0
+        assert len(sequences) > 0
+        for i in sequences:
+            assert isinstance(i, Sequence)
+            assert isinstance(i.name, string_formats)
+            assert len(i.cont_values) > 0
+
+    # .....................................
+    def test_phylip_file(self, valid_phylip_alignment):
+        """Tests that a valid phylip file can be loaded into an alignment.
+
+        Args:
+            valid_phylip_alignment (pytest.fixture): A parameterized pytest
+                fixture providing valid phylip alignment filenames.
+        """
+        sequences, headers = dr.load_alignment_from_filename(
+            valid_phylip_alignment)
+        assert headers is None
+        assert len(sequences) > 0
+        for i in sequences:
+            assert isinstance(i, Sequence)
+            assert isinstance(i.name, string_formats)
+            assert i.seq is not None
+
+    # .....................................
+    def test_table_file(self, valid_table_alignment):
+        """Tests that a valid table file can be loaded into an alignment.
+
+        Args:
+            valid_table_alignment (pytest.fixture): A parameterized pytest
+                fixture providing valid table alignment filenames.
+        """
+        sequences, headers = dr.load_alignment_from_filename(
+            valid_table_alignment)
+        assert headers is None
+        assert len(sequences) > 0
+        for i in sequences:
+            assert isinstance(i, Sequence)
+            assert isinstance(i.name, string_formats)
+            assert len(i.cont_values) > 0
+
+
+# .............................................................................
 class Test_read_csv_alignment_flo(object):
     """Tests the dr.read_csv_alignment_flo method.
     """
