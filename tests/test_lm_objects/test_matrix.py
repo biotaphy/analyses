@@ -66,6 +66,63 @@ class Test_Matrix(object):
             mtx = matrix.Matrix.load(io.BytesIO())
 
     # .....................................
+    def test_load_csv(self):
+        """Test the load_csv method.
+        """
+        orig_mtx = get_random_matrix(5, 5)
+
+        with io.StringIO() as out_str:
+            orig_mtx.write_csv(out_str)
+            out_str.seek(0)
+
+            # Attempt to load matrix
+            loaded_mtx = matrix.Matrix.load_csv(
+                out_str, num_header_rows=1, num_header_cols=1)
+
+        print(loaded_mtx.get_headers())
+        print(orig_mtx.get_headers())
+
+        # Verify data and headers are the same
+        assert np.allclose(loaded_mtx.data, orig_mtx.data)
+        assert loaded_mtx.get_headers() == orig_mtx.get_headers()
+
+    # .....................................
+    def test_load_csv_multi_headers(self):
+        """Test the load_csv method.
+        """
+        orig_mtx = get_random_matrix(5, 5)
+        new_row_headers = []
+        new_col_headers = []
+        orig_row_headers = orig_mtx.get_row_headers()
+        orig_col_headers = orig_mtx.get_column_headers()
+
+        for h in orig_row_headers:
+            new_row_headers.append([h, '{}-2'.format(h)])
+        orig_mtx.set_row_headers(new_row_headers)
+        for h in orig_col_headers:
+            new_col_headers.append([h, '{}-2'.format(h)])
+        orig_mtx.set_column_headers(new_col_headers)
+
+        print(orig_mtx.get_headers())
+
+        with io.StringIO() as out_str:
+            orig_mtx.write_csv(out_str)
+            out_str.seek(0)
+            print(out_str.getvalue())
+            out_str.seek(0)
+
+            # Attempt to load matrix
+            loaded_mtx = matrix.Matrix.load_csv(
+                out_str, num_header_rows=2, num_header_cols=2)
+
+        print(loaded_mtx.get_headers())
+        print(orig_mtx.get_headers())
+
+        # Verify data and headers are the same
+        assert np.allclose(loaded_mtx.data, orig_mtx.data)
+        assert loaded_mtx.get_headers() == orig_mtx.get_headers()
+
+    # .....................................
     def test_load_new(self):
         """Test the load_new method.
         """

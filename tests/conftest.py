@@ -110,6 +110,8 @@ class SampleDataFiles(object):
             return '.tre'
         elif fmt.lower() == 'nexus':
             return '.nex'
+        elif fmt.lower() == 'nexml':
+            return '.xml'
         elif fmt.lower() == 'phylip':
             return '.phylip'
         elif fmt.lower() == 'table':
@@ -212,6 +214,7 @@ def pytest_generate_tests(metafunc):
         ('valid_csv_alignment', df.get_alignments('csv', True)),
         ('valid_json_alignment', df.get_alignments('json', True)),
         ('valid_newick_tree', df.get_trees('newick', True)),
+        ('valid_nexml_tree', df.get_trees('nexml', True)),
         ('valid_nexus_tree', df.get_trees('nexus', True)),
         ('valid_phylip_alignment', df.get_alignments('phylip', True)),
         ('valid_table_alignment', df.get_alignments('table', True))

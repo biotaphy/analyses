@@ -5,6 +5,8 @@ Todo:
     * Add method to remove annotations.
     * Move label method out of internal functions.
 """
+import os
+
 import dendropy
 import numpy as np
 
@@ -58,6 +60,33 @@ class TreeWrapper(dendropy.Tree):
             TreeWrapper: The newly wrapped tree.
         """
         return cls.get(data=tree.as_string('nexus'), schema='nexus')
+
+    # ..............................
+    @classmethod
+    def from_filename(cls, filename):
+        """Creates a TreeWrapper object by loading a file.
+
+        Args:
+            filename (str): A file path to a tree file that should be loaded.
+
+        Returns:
+            TreeWrapper: The newly loaded tree.
+
+        Raises:
+            IOError: Raised if the tree file cannot be loaded based on the file
+                extension.
+        """
+        _, tree_ext = os.path.splitext(filename)
+        if tree_ext == '.nex':
+            tree_schema = 'nexus'
+        elif tree_ext == '.xml':
+            tree_schema = 'nexml'
+        elif tree_ext == '.tre':
+            tree_schema = 'newick'
+        else:
+            raise IOError(
+                'Cannot handle tree with extension: {}'.format(tree_ext))
+        return cls.get(path=filename, schema=tree_schema)
 
     # ..............................
     def add_node_labels(self, prefix=None, overwrite=False):

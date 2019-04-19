@@ -83,6 +83,58 @@ class Test_TreeWrapper(object):
         assert isinstance(wrapped_tree, tree.TreeWrapper)
 
     # .....................................
+    def test_from_filename_newick_tree(self, valid_newick_tree):
+        """Attempt to get a tree using a newick file.
+
+        Args:
+            valid_newick_tree (pytest.fixture): A parameterized pytest fixture
+                that provides valid newick trees, one at a time, to this test
+                function.
+        """
+        loaded_tree = tree.TreeWrapper.from_filename(valid_newick_tree)
+        assert isinstance(loaded_tree, tree.TreeWrapper)
+
+    # .....................................
+    def test_from_filename_nexml_tree(self, valid_nexml_tree):
+        """Attempt to get a tree using a nexml file.
+
+        Args:
+            valid_nexml_tree (pytest.fixture): A parameterized pytest fixture
+                that provides valid nexml trees, one at a time, to this test
+                function.
+        """
+        loaded_tree = tree.TreeWrapper.from_filename(valid_nexml_tree)
+        assert isinstance(loaded_tree, tree.TreeWrapper)
+
+    # .....................................
+    def test_from_filename_nexus_tree(self, valid_nexus_tree):
+        """Attempt to get a tree using a nexus file.
+
+        Args:
+            valid_nexus_tree (pytest.fixture): A parameterized pytest fixture
+                that provides valid nexus trees, one at a time, to this test
+                function.
+        """
+        loaded_tree = tree.TreeWrapper.from_filename(valid_nexus_tree)
+        assert isinstance(loaded_tree, tree.TreeWrapper)
+
+    # .....................................
+    def test_from_filename_invalid_file(self, invalid_csv_alignment):
+        """Attempt to get a tree using a nexus file.
+
+        Args:
+            invalid_csv_alignment (pytest.fixture): A parameterized pytest
+                fixture that provides a CSV filename, one at a time, to test
+                this function.  Trees cannot be loaded from CSV, so this should
+                raise an IOError.
+            valid_nexus_tree (pytest.fixture): A parameterized pytest fixture
+                that provides valid nexus trees, one at a time, to this test
+                function.
+        """
+        with pytest.raises(IOError):
+            tree.TreeWrapper.from_filename(invalid_csv_alignment)
+
+    # .....................................
     def test_add_node_labels_no_prefix_no_overwrite(self):
         """Test that node labels are added correctly to a tree.
 
