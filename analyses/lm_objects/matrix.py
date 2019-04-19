@@ -95,6 +95,60 @@ class Matrix(object):
 
     # ...........................
     @classmethod
+    def load_csv(cls, flo, dtype=np.float, num_header_rows=0,
+                 num_header_cols=0):
+        """Attempts to load a Matrix object from a CSV file-like object.
+
+        Args:
+            flo (file-like): A file-like object with matrix data.
+            dtype (:obj:`method`, optional): The data type for the data.  Will
+                be used to cast data when adding to matrix.
+            num_header_rows (:obj:`int`, optional): The number of header rows
+                in the CSV file.
+            num_header_cols (:obj:`int`, optional): The number of header
+                columns in the CSV file.
+
+        Returns:
+            Matrix: The newly loaded Matrix object.
+        """
+        col_headers = []
+        row_headers = []
+        header_lines = []  # Leading rows that are headers
+        data = []
+        i = 0
+        for line in flo:
+            items = line.strip().split(',')
+            # If header row, add to header rows for processing
+            if i < num_header_rows:
+                # Add the headers to header lines for processing
+                header_lines.append(items[num_header_cols:])
+            else:
+                if num_header_cols == 1:
+                    row_headers.append(items[0])
+                elif num_header_cols > 1:
+                    row_headers.append(items[:num_header_cols])
+                data.append([dtype(x) for x in items[num_header_cols:]])
+
+            i += 1
+
+        print(header_lines)
+
+        # Process header columns from header rows
+        if num_header_rows == 1:
+            col_headers = header_lines[0]
+        elif num_header_rows > 1:
+            for j in range(len(header_lines[0])):
+                h = []
+                for x in range(num_header_rows):
+                    h.append(header_lines[x][j])
+                col_headers.append(h)
+
+        data_array = np.array(data)
+
+        return cls(data_array, headers={'0': row_headers, '1': col_headers})
+
+    # ...........................
+    @classmethod
     def load_new(cls, flo):
         """Attempts to load a Matrix object from a file.
 
@@ -529,11 +583,20 @@ class Matrix(object):
 
             # Start with the header row, if we have one
             if '1' in mtx.headers and mtx.headers['1']:
-                # Add a blank entry if we have row headers
-                header_row = ['']*len(listify(
-                                    row_headers[0]) if row_headers else [])
-                header_row.extend(mtx.headers['1'])
-                yield header_row
+                # Make column headers lists of lists
+                if not isinstance(mtx.headers['1'][0], (tuple, list)):
+                    header_row = ['']*len(
+                        listify(row_headers[0]) if row_headers else [])
+                    header_row.extend(mtx.headers['1'])
+                    yield header_row
+                else:
+                    for i in range(len(mtx.headers['1'][0])):
+                        header_row = ['']*len(
+                            listify(row_headers[0]) if row_headers else [])
+                        header_row.extend(
+                            [mtx.headers['1'][j][i] for j in range(
+                                len(mtx.headers['1']))])
+                        yield header_row
             # For each row in the data set
             for i in range(mtx.data.shape[0]):
                 # Add the row headers if exists
