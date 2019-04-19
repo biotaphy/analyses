@@ -12,6 +12,7 @@ import pytest
 ALIGNMENTS_DIR = 'alignments'
 ANC_STATE_PACKAGES_DIR = 'ancestral_state_packages'
 ANC_DIST_PACKAGES_DIR = 'ancestral_distribution_packages'
+PHYLO_BETA_DIV_PACKAGES_DIR = 'phylo_beta_diversity'
 TREES_DIR = 'trees'
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -71,6 +72,86 @@ class SampleDataFiles(object):
         """
         packages_path = os.path.join(SAMPLE_DATA_PATH, ANC_STATE_PACKAGES_DIR)
         return self._get_packages(packages_path, is_valid)
+
+    # .....................................
+    def get_phylo_beta_diversity_packages(self, is_valid):
+        """Gets a list of the available phylo beta diversity packages.
+
+        Args:
+            is_valid (bool): Return valid data files if true, invalid files if
+                not.
+
+        Returns:
+            A list of (pam, tree, beta_jac_csv, beta_jne_csv, beta_jtu_csv,
+                phylo_beta_jac_csv, phylo_beta_jne_csv, phylo_beta_jtu_csv,
+                ) tuples.
+        """
+        packages_path = os.path.join(
+            SAMPLE_DATA_PATH, PHYLO_BETA_DIV_PACKAGES_DIR)
+        if is_valid:
+            valid_str = 'valid'
+        else:
+            valid_str = 'invalid'
+        package_dirs = glob.glob(os.path.join(packages_path, valid_str, '*'))
+        packages = []
+        for pkg_dir in package_dirs:
+            pam_fn = None
+            tree_fn = None
+            beta_jac_fn = None
+            beta_jne_fn = None
+            beta_jtu_fn = None
+            phylo_beta_jac_fn = None
+            phylo_beta_jne_fn = None
+            phylo_beta_jtu_fn = None
+            beta_sim_fn = None
+            beta_sne_fn = None
+            beta_sor_fn = None
+            phylo_beta_sim_fn = None
+            phylo_beta_sne_fn = None
+            phylo_beta_sor_fn = None
+
+            for fn in glob.glob(os.path.join(pkg_dir, '*')):
+                basename = os.path.basename(fn)
+                if basename.lower().startswith('beta_jac'):
+                    beta_jac_fn = fn
+                elif basename.lower().startswith('beta_jne'):
+                    beta_jne_fn = fn
+                elif basename.lower().startswith('beta_jtu'):
+                    beta_jtu_fn = fn
+                elif basename.lower().startswith('beta_sim'):
+                    beta_sim_fn = fn
+                elif basename.lower().startswith('beta_sne'):
+                    beta_sne_fn = fn
+                elif basename.lower().startswith('beta_sor'):
+                    beta_sor_fn = fn
+                elif basename.lower().startswith('pam'):
+                    pam_fn = fn
+                elif basename.lower().startswith('phylo_beta_jac'):
+                    phylo_beta_jac_fn = fn
+                elif basename.lower().startswith('phylo_beta_jne'):
+                    phylo_beta_jne_fn = fn
+                elif basename.lower().startswith('phylo_beta_jtu'):
+                    phylo_beta_jtu_fn = fn
+                elif basename.lower().startswith('phylo_beta_sim'):
+                    phylo_beta_sim_fn = fn
+                elif basename.lower().startswith('phylo_beta_sne'):
+                    phylo_beta_sne_fn = fn
+                elif basename.lower().startswith('phylo_beta_sor'):
+                    phylo_beta_sor_fn = fn
+                elif basename.lower().startswith('tree'):
+                    tree_fn = fn
+
+            if all([pam_fn, tree_fn, beta_jac_fn, beta_jne_fn, beta_jtu_fn,
+                   beta_sim_fn, beta_sne_fn, beta_sor_fn, phylo_beta_jac_fn,
+                   phylo_beta_jne_fn, phylo_beta_jtu_fn, phylo_beta_sim_fn,
+                   phylo_beta_sne_fn, phylo_beta_sor_fn]):
+                packages.append(
+                    (pam_fn, tree_fn, beta_jac_fn, beta_jne_fn, beta_jtu_fn,
+                     beta_sim_fn, beta_sne_fn, beta_sor_fn, phylo_beta_jac_fn,
+                     phylo_beta_jne_fn, phylo_beta_jtu_fn, phylo_beta_sim_fn,
+                     phylo_beta_sne_fn, phylo_beta_sor_fn))
+
+        return packages
 
     # .....................................
     def get_trees(self, fmt, is_valid):
@@ -217,6 +298,8 @@ def pytest_generate_tests(metafunc):
         ('valid_nexml_tree', df.get_trees('nexml', True)),
         ('valid_nexus_tree', df.get_trees('nexus', True)),
         ('valid_phylip_alignment', df.get_alignments('phylip', True)),
+        ('valid_phylo_beta_diversity_package',
+         df.get_phylo_beta_diversity_packages(True)),
         ('valid_table_alignment', df.get_alignments('table', True))
     ]
     for fixture_name, fixture_values in fixture_tuples:

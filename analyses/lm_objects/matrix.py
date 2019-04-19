@@ -81,7 +81,6 @@ class Matrix(object):
         try:
             return cls.load_new(flo)
         except Exception as e1:
-            print(str(e1))
             # Try loading a numpy array
             try:
                 # Seek back to start of file
@@ -124,23 +123,22 @@ class Matrix(object):
                 header_lines.append(items[num_header_cols:])
             else:
                 if num_header_cols == 1:
-                    row_headers.append(items[0])
+                    row_headers.append(items[0].strip())
                 elif num_header_cols > 1:
-                    row_headers.append(items[:num_header_cols])
+                    row_headers.append(
+                        [q.strip() for q in items[:num_header_cols]])
                 data.append([dtype(x) for x in items[num_header_cols:]])
 
             i += 1
 
-        print(header_lines)
-
         # Process header columns from header rows
         if num_header_rows == 1:
-            col_headers = header_lines[0]
+            col_headers = [q.strip() for q in header_lines[0]]
         elif num_header_rows > 1:
             for j in range(len(header_lines[0])):
                 h = []
                 for x in range(num_header_rows):
-                    h.append(header_lines[x][j])
+                    h.append(header_lines[x][j].strip())
                 col_headers.append(h)
 
         data_array = np.array(data)
@@ -204,7 +202,6 @@ class Matrix(object):
                     else:
                         header_lines.append(str_line)
             except Exception as e:
-                print(str(e))
                 data_stream.write(line)
                 # data_lines.append(line)
 
