@@ -10,6 +10,7 @@ Todo:
 from copy import deepcopy
 import io
 import json
+import zipfile
 
 import numpy as np
 
@@ -17,7 +18,9 @@ import numpy as np
 HEADERS_KEY = 'headers'
 DATA_KEY = 'data'
 VERSION_KEY = 'version'
-VERSION = '2.0.0'
+VERSION = '3.0.0'
+HEADERS_FILENAME = 'headers.json'
+DATA_FILENAME = 'data.npz'
 
 
 # .............................................................................
@@ -77,7 +80,8 @@ class Matrix(object):
         # Try loading the Matrix object
         try:
             return cls.load_new(flo)
-        except:
+        except Exception as e1:
+            print(str(e1))
             # Try loading a numpy array
             try:
                 # Seek back to start of file
@@ -103,6 +107,35 @@ class Matrix(object):
         Returns:
             Matrix: The newly loaded Matrix object.
         """
+        with zipfile.ZipFile(flo) as zip_f:
+            my_obj = json.loads(zip_f.read(HEADERS_FILENAME).decode('utf-8'))
+            data_bytes = io.BytesIO()
+            data_bytes.write(zip_f.read(DATA_FILENAME))
+            data_bytes.seek(0)
+            tmp = np.load(data_bytes)
+            data = tmp[tmp.files[0]]
+            # data = np.array(tmp[list(tmp.keys())[0]])
+            data_bytes.close()
+
+        return cls(data, headers=my_obj[HEADERS_KEY])
+
+    # ...........................
+    @classmethod
+    def load_our_format_old(cls, flo):  # pragma: no cover
+        """Attempts to load a Matrix object from a file.
+
+        Note:
+            * This is obsolete and should only be used for legacy data
+
+        Args:
+            flo (file-like): A file-like object with matrix data.
+
+        Todo:
+            * Merge this into main load method.
+
+        Returns:
+            Matrix: The newly loaded Matrix object.
+        """
         header_lines = []
         data_lines = []
         do_headers = True
@@ -113,9 +146,11 @@ class Matrix(object):
                 if do_headers:
                     if str_line.startswith(DATA_KEY):
                         do_headers = False
+                        break
                     else:
                         header_lines.append(str_line)
-            except:
+            except Exception as e:
+                print(str(e))
                 data_stream.write(line)
                 # data_lines.append(line)
 
@@ -304,8 +339,8 @@ class Matrix(object):
     def save(self, flo):
         """Saves the Matrix to a file-like object.
 
-        Saves the Matrix object in a JSON / Numpy hybrid format to the
-            file-like object.
+        Saves the Matrix object in a JSON / Numpy zip file to the file-like
+        object.
 
         Args:
             flo (file-like): The file-like object to write to.
@@ -313,16 +348,19 @@ class Matrix(object):
         my_obj = {}
         my_obj[HEADERS_KEY] = self.headers
         my_obj[VERSION_KEY] = VERSION
-        try:  # pragma: no cover
-            flo.write('{}\n'.format(json.dumps(my_obj, indent=3,
-                                               default=float)))
-            flo.write('{}\n'.format(DATA_KEY))
-            np.savez_compressed(flo, self.data)
-        except:  # pragma: no cover
-            my_obj_str = '{}\n{}\n'.format(
-                json.dumps(my_obj, indent=3, default=float), DATA_KEY)
-            flo.write(bytes(my_obj_str, 'utf8'))
-            np.savez_compressed(flo, self.data)
+
+        np_bytes = io.BytesIO()
+        np.savez_compressed(np_bytes, self.data)
+        np_bytes.seek(0)
+        zip_np_str = np_bytes.getvalue()
+        np_bytes.close()
+
+        with zipfile.ZipFile(
+            flo, mode='w', compression=zipfile.ZIP_DEFLATED,
+                allowZip64=True) as zip_f:
+
+            zip_f.writestr(HEADERS_FILENAME, json.dumps(my_obj, default=float))
+            zip_f.writestr(DATA_FILENAME, zip_np_str)
 
     # ...........................
     def set_column_headers(self, headers):

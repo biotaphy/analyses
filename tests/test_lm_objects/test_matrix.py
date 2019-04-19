@@ -49,7 +49,7 @@ class Test_Matrix(object):
         mtx_bytesio.close()
 
         # Verify data and headers are the same
-        assert np.all(np.isclose(loaded_mtx.data, orig_mtx.data))
+        assert np.allclose(loaded_mtx.data, orig_mtx.data)
         assert loaded_mtx.get_headers() == orig_mtx.get_headers()
 
         # Write to temp file
@@ -59,7 +59,7 @@ class Test_Matrix(object):
             np_mtx = matrix.Matrix.load(out_f)
 
         # Verify that the data is the same
-        assert np.all(np.isclose(np_mtx.data, orig_mtx.data))
+        assert np.allclose(np_mtx.data, orig_mtx.data)
 
         # Verify load fails with empty file
         with pytest.raises(IOError):
@@ -81,7 +81,7 @@ class Test_Matrix(object):
         mtx_bytesio.close()
 
         # Verify data and headers are the same
-        assert np.all(np.isclose(loaded_mtx.data, orig_mtx.data))
+        assert np.allclose(loaded_mtx.data, orig_mtx.data)
         assert loaded_mtx.get_headers() == orig_mtx.get_headers()
 
     # .....................................
@@ -233,7 +233,7 @@ class Test_Matrix(object):
             loaded_mtx = matrix.Matrix.load(save_f)
 
         # Verify data and headers are the same
-        assert np.all(np.isclose(loaded_mtx.data, orig_mtx.data))
+        assert np.allclose(loaded_mtx.data, orig_mtx.data)
         assert loaded_mtx.get_headers() == orig_mtx.get_headers()
 
     # .....................................
@@ -339,7 +339,7 @@ class Test_Matrix(object):
             test_data = test_data.take(range(dim_lower, dim_upper), axis=i)
 
         # Check data
-        assert np.all(np.isclose(test_data, sliced_mtx.data))
+        assert np.allclose(test_data, sliced_mtx.data)
 
     # .....................................
     def test_slice_by_header(self):
@@ -356,7 +356,7 @@ class Test_Matrix(object):
         assert sliced_mtx.data.shape == (3, 3, 1)
 
         # Check that data is the second layer
-        assert np.all(np.isclose(sliced_mtx.data[:, :, 0], mtx.data[:, :, 1]))
+        assert np.allclose(sliced_mtx.data[:, :, 0], mtx.data[:, :, 1])
 
         # Check that the headers are what we expect
         assert mtx.get_row_headers() == sliced_mtx.get_row_headers()
