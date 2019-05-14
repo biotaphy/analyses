@@ -5,6 +5,7 @@ import numpy as np
 
 from analyses.lm_objects.matrix import Matrix
 
+
 # .............................................................................
 def compare_absolute_values(obs, rand):
     """Compares the absolute value of the observed data and the random data
@@ -15,6 +16,7 @@ def compare_absolute_values(obs, rand):
     """
     return np.abs(rand) > np.abs(obs)
 
+
 # .............................................................................
 def compare_signed_values(obs, rand):
     """Compares the signed value of the observed data and the random data
@@ -24,6 +26,7 @@ def compare_signed_values(obs, rand):
         rand (:obj: `Numpy array`): A numpy array of random values
     """
     return rand > obs
+
 
 # .............................................................................
 def correct_p_values(p_values_matrix, false_discovery_rate=0.05):
@@ -42,9 +45,8 @@ def correct_p_values(p_values_matrix, false_discovery_rate=0.05):
     """
     # Reshape data into one-dimensional array
     p_flat = p_values_matrix.data.flatten()
-    
+
     num_vals = p_flat.size
-    
     # 1. Order p-values
     # 2. Assign rank
     # 3. Create critical values
@@ -68,6 +70,7 @@ def correct_p_values(p_values_matrix, false_discovery_rate=0.05):
     sig_values = (p_values_matrix.data <= comp_p).astype(int)
     return Matrix(sig_values, headers=headers)
 
+
 # .............................................................................
 def get_p_values(observed_matrix, test_matrices,
                  compare_func=compare_absolute_values):
@@ -87,12 +90,12 @@ def get_p_values(observed_matrix, test_matrices,
     p_val_headers = deepcopy(observed_matrix.headers)
     ndim = observed_matrix.data.ndim
     p_val_headers[str(ndim)] = ['P-Values']
-    
+
     # Create the P-values matrix.  The shape should be the same as the observed
     #    data with one extra dimension if the last dimension has size > 1
-    if observed_matrix.data.shape[-1] == 1:
+    if observed_matrix.data.shape[-1] == 1:  # pragma: nocover
         p_vals_shape = observed_matrix.data.shape
-    else:
+    else:  # pragma: nocover
         p_vals_shape = list(observed_matrix.data.shape) + [1]
     p_values = Matrix(np.zeros(p_vals_shape), headers=observed_matrix.headers)
 
@@ -100,8 +103,9 @@ def get_p_values(observed_matrix, test_matrices,
     for rand in test_matrices:
         # If the random matrices are a stack with more dimensions or more
         #    layers, compare each layer to observed
-        if rand.data.ndim > ndim or \
-            rand.data.shape[-1] > observed_matrix.data.shape[-1]:
+        if rand.data.ndim > ndim or (
+                rand.data.shape[-1] > observed_matrix.data.shape[-1]
+                ):  # pragma: nocover
             # Determine shape of test matrix
             if rand.data.ndim > ndim:
                 test_shape = list(rand.data.shape)[:-1]
@@ -114,7 +118,11 @@ def get_p_values(observed_matrix, test_matrices,
                     # Slice off one test layer
                     rand.data[..., i].reshape(test_shape))
                 num_permutations += 1
-        else:
+        elif rand.data.ndim < len(p_vals_shape):  # pragma: nocover
+            p_values.data += compare_func(
+                observed_matrix.data, rand.data).reshape(p_vals_shape)
+            num_permutations += 1
+        else:  # pragma: nocover
             p_values.data += compare_func(observed_matrix.data, rand.data)
             num_permutations += 1
 
