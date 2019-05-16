@@ -8,8 +8,10 @@ Note:
 import numpy as np
 import itertools as it  # new dependency.
 import dendropy
-from analyses.lm_objects.matrix import Matrix
-from analyses.lm_objects.tree import TreeWrapper
+from matrix import Matrix
+from tree import TreeWrapper
+import random as rd
+import RunningStats as rs  # new dependency for statistical analyses.
 
 
 # .............................................................................
@@ -39,12 +41,21 @@ def pdnew(pam, tree):
         # Pull out the data for current sample.
         my_samp = pam.data[sample]
 
+        # print my_samp
+        # print pam.get_row_headers(),"\n"
+
         # Pull out which spp are present & which are absent from the sample.
         # yields lists of strings --> spp names.
         sp_pres = list(it.compress(pam.get_column_headers(), my_samp))
+        sp_pres = [i.replace( "_", " ") for i in sp_pres] # dendropy labels don't keep "_"
+
+        # print "The following spp are present in the sample:\n", sp_pres,"\n"
+        # print tree
 
         # Get a tree of the spp present in the sample.
         tree_pres = tree.extract_tree_with_taxa_labels(sp_pres)
+
+        # print tree_pres,"\n**********\n"
 
         # Get sum of edge lengths for each sub tree.
         PD_pres = tree_pres.length()
@@ -184,6 +195,7 @@ def core_PD_calc(pam, tree):
     com_tot_multi = [1 if i > 0 else 0 for i in com_tot_multi]
     # Calculate the PD.
     sp_pres = list(it.compress(pam.get_column_headers(), com_tot_multi))
+    sp_pres = [i.replace( "_", " ") for i in sp_pres] # dendropy labels don't keep "_"
     tree_pres = tree.extract_tree_with_taxa_labels(sp_pres)
     pd_tot_multi = tree_pres.length()
 
@@ -293,6 +305,10 @@ def calculate_phylo_beta_diversity_jaccard(pam, tree):
     }
 
     num_sites = pam.data.shape[0]  # Get the number of sites in the PAM
+
+    # print pam.data, "\n"
+    # print pam.get_column_headers(),"\n"
+    # print pam.get_row_headers(),"\n"
 
     # Note: For ease of development, use these numpy arrays for the
     #    computations.  They will be wrapped into a Matrix object when they are
@@ -478,3 +494,213 @@ def calculate_phylo_beta_diversity_sorensen(pam, tree):
         Matrix(phylo_beta_sne_data, headers=mtx_headers),
         Matrix(beta_sor_data, headers=mtx_headers),
         Matrix(phylo_beta_sor_data, headers=mtx_headers))
+
+
+# .............................................................................
+def calc_phylo_jac_distr(pam, tree, nrand = 5):
+    """Calculates distribution of jaccard metrics based on randomization 
+        of phylogenetic relationships.
+
+    Args:
+        pam (:obj:`Matrix`): A Lifemapper Matrix object with presence absence
+            values (site rows by species columns).
+        tree (:obj:`TreeWrapper`): A TreeWrapper object for a wrapped Dendropy
+            phylogenetic tree.
+
+    Returns:
+        Mean & SD of distribution of Jaccard-based metrics from randomizations.
+
+    Todo:
+        * Fill in method documentation
+        * Fill in method
+    """
+    # Get a lookup dictionary for the matrix index of each species in the PAM
+    #    in case they are not in the same order as the taxa in the tree
+    species_lookup = get_species_index_lookup(pam)
+
+    # Build a header dictionary, all of the returned matricies will have the
+    #    same headers, site rows by site columns.
+    # Note: This will differ from the R method because each site will be
+    #    present in both the rows and the columns.
+    mtx_headers = {
+        '0': pam.get_row_headers(),  # Row headers
+        '1': pam.get_row_headers()  # Column headers
+    }
+
+    num_sites = pam.data.shape[0]  # Get the number of sites in the PAM
+
+    # Matrices to hold means & SD in returnable format.
+    pjtu_av = np.zeros((num_sites, num_sites, 2), dtype=np.float)
+    pjne_av = np.zeros((num_sites, num_sites, 2), dtype=np.float)
+    pjac_av = np.zeros((num_sites, num_sites, 2), dtype=np.float)
+
+    # TODO: Randomize tree, calc. metrics, save running average & SD.
+    init_tree = tree  # just making a copy in case is needed.
+
+    # These lists hold objects for calc. running stats.
+    pjtu_rs = []
+    pjne_rs = []
+    pjac_rs = []
+    # Populate lists with RunningStats objects.
+    for row in range(num_sites):
+    	pjtu_rs.append([])
+    	pjne_rs.append([])
+    	pjac_rs.append([])
+    	for col in range(num_sites):
+    		pjtu_rs[row].append(rs.RunningStats())
+    		pjne_rs[row].append(rs.RunningStats())
+    		pjac_rs[row].append(rs.RunningStats())
+
+    # Populate rs arrays with beta-diversity metrics.
+    for trial in range(nrand):
+        # Randomize tip labels of tree.
+        # print "****\n", tree.print_plot(), "\n"
+    	tree.shuffle_taxa()  # modifies tree in-place.
+    	# tree.randomly_assign_taxa() #  modifies tree in-place.
+    	# print tree.print_plot(), "\n****\n"
+
+    	# Get core metrics.
+    	new_core = core_PD_calc(pam,tree)
+
+    	# This loop will populate arrays with all beta diversity metrics.
+    	for my_row in range(new_core.data.shape[0]):
+    		# Pull out the phylogentic core numeric values.
+	        my_dat = new_core.data[my_row, 0:4]
+
+	        # Get index values for placing into output arrays.
+	        my_dim = new_core.get_row_headers()[my_row]
+	        
+	        # Populate arrays.
+	        pjtu_rs[my_dim[0]][my_dim[1]].push(
+	            (2*my_dat[0]) / ((2*my_dat[0]) + my_dat[3]))
+
+	        pjtu_rs[my_dim[1]][my_dim[0]].push(
+	            (2*my_dat[0]) / ((2*my_dat[0]) + my_dat[3]))
+
+	        pjac_rs[my_dim[0]][my_dim[1]].push(
+	            my_dat[2] / (my_dat[3] + my_dat[2]))
+
+	        pjac_rs[my_dim[1]][my_dim[0]].push(
+	            my_dat[2] / (my_dat[3] + my_dat[2]))
+
+	        pjne_rs[my_dim[0]][my_dim[1]].push(
+	            ((my_dat[1] - my_dat[0]) / (my_dat[3] + my_dat[2])) * (
+	                my_dat[3] / ((2 * my_dat[0]) + my_dat[3])))
+
+	        pjne_rs[my_dim[1]][my_dim[0]].push(
+	            ((my_dat[1] - my_dat[0]) / (my_dat[3] + my_dat[2])) * (
+	                my_dat[3] / ((2 * my_dat[0]) + my_dat[3])))
+
+	# Populate returnable arrays with av. & SD.
+	for row in range(num_sites):
+		for col in range(num_sites):
+			if row == col:
+				# averages.
+				pjtu_av[row][col][0] = 1.
+				pjne_av[row][col][0] = 1.
+				pjac_av[row][col][0] = 1.
+				# sd.
+				pjtu_av[row][col][1] = 0.
+				pjne_av[row][col][1] = 0.
+				pjac_av[row][col][1] = 0.
+			else:
+				# averages.
+				pjtu_av[row][col][0] = pjtu_rs[row][col].mean()
+				pjne_av[row][col][0] = pjne_rs[row][col].mean()
+				pjac_av[row][col][0] = pjac_rs[row][col].mean()
+				# sd.
+				pjtu_av[row][col][1] = pjtu_rs[row][col].variance()
+				pjne_av[row][col][1] = pjne_rs[row][col].variance()
+				pjac_av[row][col][1] = pjac_rs[row][col].variance()
+
+    return (
+        Matrix(pjtu_av, headers=mtx_headers),
+        Matrix(pjne_av, headers=mtx_headers),
+        Matrix(pjac_av, headers=mtx_headers))
+
+
+# .............................................................................
+def calc_sig_phylo_sor(pam, tree):
+    """Calculates phylogenetic beta diversity for the sorensen index family.
+
+    Args:
+        pam (:obj:`Matrix`): A Lifemapper Matrix object with presence absence
+            values.
+        tree (:obj:`TreeWrapper`): A TreeWrapper object for a wrapped Dendropy
+            phylogenetic tree.
+
+    Returns:
+        Phylogenetic beta diversity matrics (species by species)
+            * beta_sim: ADD DESCRIPTION
+            * phylo_beta_sim: ADD DESCRIPTION
+            * beta_sne: ADD DESCRIPTION
+            * phylo_beta_sne: ADD DESCRIPTION
+            * beta_sor: ADD DESCRIPTION
+            * phylo_beta_sor: ADD DESCRIPTION
+
+    Todo:
+        * Fill in method documentation
+        * Fill in method
+    """
+    # Get a lookup dictionary for the matrix index of each species in the PAM
+    #    in case they are not in the same order as the taxa in the tree
+    species_lookup = get_species_index_lookup(pam)
+
+    # Build a header dictionary, all of the returned matricies will have the
+    #    same headers, site rows by site columns.
+    # Note: This will differ from the R method because each site will be
+    #    present in both the rows and the columns.
+    mtx_headers = {
+        '0': pam.get_row_headers(),  # Row headers
+        '1': pam.get_row_headers()  # Column headers
+    }
+
+    num_sites = pam.data.shape[0]  # Get the number of sites in the PAM
+
+    # Note: For ease of development, use these numpy arrays for the
+    #    computations.  They will be wrapped into a Matrix object when they are
+    #    returned from the function.
+    phylo_beta_sim_data = np.zeros((num_sites, num_sites), dtype=np.float)
+    phylo_beta_sne_data = np.zeros((num_sites, num_sites), dtype=np.float)
+    phylo_beta_sor_data = np.zeros((num_sites, num_sites), dtype=np.float)
+
+    # TODO: Compute phylo beta diversity for sorensen index family
+    core_calc = core_PD_calc(pam, tree)
+
+    # This loop will populate arrays with beta diversity metrics.
+    for my_row in range(core_calc.data.shape[0]):
+
+        my_dat = core_calc.data[my_row, 0:4]
+        my_dim = core_calc.get_row_headers()[my_row]
+
+        phylo_beta_sim_data[my_dim[0], my_dim[1]] = (
+            my_dat[0] / (my_dat[0] + my_dat[3]))
+
+        phylo_beta_sim_data[my_dim[1], my_dim[0]] = phylo_beta_sim_data[
+            my_dim[0], my_dim[1]]
+
+        phylo_beta_sor_data[my_dim[0], my_dim[1]] = (
+            my_dat[2] / ((2*my_dat[3]) + my_dat[2]))
+
+        phylo_beta_sor_data[my_dim[1], my_dim[0]] = phylo_beta_sor_data[
+            my_dim[0], my_dim[1]]
+
+        phylo_beta_sne_data[my_dim[0], my_dim[1]] = (
+            (my_dat[1] - my_dat[0]) / ((2*my_dat[3]) + my_dat[2])) * (
+                my_dat[3] / (my_dat[0] + my_dat[3]))
+
+        phylo_beta_sne_data[my_dim[1], my_dim[0]] = phylo_beta_sne_data[
+            my_dim[0], my_dim[1]]
+
+    # Just to match formatting across scripts.
+    for i in range(num_sites):
+        phylo_beta_sim_data[i, i] = 1.
+        phylo_beta_sne_data[i, i] = 1.
+        phylo_beta_sor_data[i, i] = 1.
+
+    return (
+        Matrix(phylo_beta_sim_data, headers=mtx_headers),
+        Matrix(phylo_beta_sne_data, headers=mtx_headers),
+        Matrix(phylo_beta_sor_data, headers=mtx_headers))
+
+
