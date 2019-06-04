@@ -16,13 +16,16 @@ Todo:
 """
 import argparse
 import os
-import data_readers
-from tree import TreeWrapper
-import phylo_beta_diversity
+import numpy as np
 
-# from analyses.lm_objects.tree import TreeWrapper
-# from analyses.helpers import data_readers
-# from analyses.phylo_beta_diversity import phylo_beta_diversity
+# import data_readers
+# from tree import TreeWrapper
+# import phylo_beta_diversity
+
+
+from analyses.lm_objects.tree import TreeWrapper
+from analyses.helpers import data_readers
+from analyses.phylo_beta_diversity import phylo_beta_diversity
 
 DESCRIPTION = """\
 Computes phylogenetic & ecological beta diversity components for Sorensen and Jaccard Indices."""
@@ -84,6 +87,13 @@ if __name__ == '__main__':
         help='The alpha value to determine significance') # make default = 0.05
 
     args = parser.parse_args()
+
+    # Number of iterations
+    if args.number_permutations == None:
+        nrand = 10
+    else:
+        nrand = int(args.number_permutations)
+    print(nrand)
 
     # Check that input files exist
     if not os.path.exists(args.in_tree_filename):
@@ -167,7 +177,12 @@ if __name__ == '__main__':
             results[table].write_csv(out_csv_f)
        
     # Test randomization:
-    # x = phylo_beta_diversity.calc_phylo_jac_distr(pam, tree, nrand = 1000)
+    # List of lists: 0:JTU; 1:JNE; 2:JAC.
+    print (res_names[5])
+    x = phylo_beta_diversity.calc_phylo_jac_distr(pam, tree, obs = results[5], metric = "jne", nrand = nrand)
+    print(x.data)
+    # print x[1].data[0]#[1][0]
+    # print x[1].data[1][0]
     # for i in range(len(x)):
     #     print(x[i].data)
 

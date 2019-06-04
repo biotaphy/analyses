@@ -5,13 +5,17 @@ Note:
         free to take advantage of those to libraries as they are already
         dependencies.
 """
+from math import * 
 import numpy as np
 import itertools as it  # new dependency.
 import dendropy
-from matrix import Matrix
-from tree import TreeWrapper
 import random as rd
-import RunningStats as rs  # new dependency for statistical analyses.
+
+from analyses.helpers import RunningStats as rs # new dependency for statistical analyses.
+from analyses.lm_objects.tree import TreeWrapper
+from analyses.lm_objects.matrix import Matrix
+
+
 
 
 # .............................................................................
@@ -497,7 +501,7 @@ def calculate_phylo_beta_diversity_sorensen(pam, tree):
 
 
 # .............................................................................
-def calc_phylo_jac_distr(pam, tree, nrand = 5):
+def calc_phylo_jac_distr(pam, tree, obs, metric = "jac", nrand = 10):
     """Calculates distribution of jaccard metrics based on randomization 
         of phylogenetic relationships.
 
@@ -529,94 +533,75 @@ def calc_phylo_jac_distr(pam, tree, nrand = 5):
 
     num_sites = pam.data.shape[0]  # Get the number of sites in the PAM
 
-    # Matrices to hold means & SD in returnable format.
-    pjtu_av = np.zeros((num_sites, num_sites, 2), dtype=np.float)
-    pjne_av = np.zeros((num_sites, num_sites, 2), dtype=np.float)
-    pjac_av = np.zeros((num_sites, num_sites, 2), dtype=np.float)
+    # Matrices to hold means in returnable format.
+    SES = np.zeros((num_sites, num_sites), dtype=np.float)
 
     # TODO: Randomize tree, calc. metrics, save running average & SD.
     init_tree = tree  # just making a copy in case is needed.
 
     # These lists hold objects for calc. running stats.
-    pjtu_rs = []
-    pjne_rs = []
-    pjac_rs = []
+    rs_mat = []
     # Populate lists with RunningStats objects.
     for row in range(num_sites):
-    	pjtu_rs.append([])
-    	pjne_rs.append([])
-    	pjac_rs.append([])
-    	for col in range(num_sites):
-    		pjtu_rs[row].append(rs.RunningStats())
-    		pjne_rs[row].append(rs.RunningStats())
-    		pjac_rs[row].append(rs.RunningStats())
+        rs_mat.append([])
+        for col in range(num_sites):
+            rs_mat[row].append(rs.RunningStats())
 
     # Populate rs arrays with beta-diversity metrics.
     for trial in range(nrand):
         # Randomize tip labels of tree.
         # print "****\n", tree.print_plot(), "\n"
-    	tree.shuffle_taxa()  # modifies tree in-place.
-    	# tree.randomly_assign_taxa() #  modifies tree in-place.
-    	# print tree.print_plot(), "\n****\n"
+        tree.shuffle_taxa()  # modifies tree in-place.
+        # tree.randomly_assign_taxa() #  modifies tree in-place.
+        # print tree.print_plot(), "\n****\n"
 
-    	# Get core metrics.
-    	new_core = core_PD_calc(pam,tree)
+        # Get core metrics.
+        new_core = core_PD_calc(pam,tree)
 
-    	# This loop will populate arrays with all beta diversity metrics.
-    	for my_row in range(new_core.data.shape[0]):
-    		# Pull out the phylogentic core numeric values.
-	        my_dat = new_core.data[my_row, 0:4]
+        # This loop will populate arrays with all beta diversity metrics.
+        for my_row in range(new_core.data.shape[0]):
+            # Pull out the phylogentic core numeric values.
+            my_dat = new_core.data[my_row, 0:4]
 
-	        # Get index values for placing into output arrays.
-	        my_dim = new_core.get_row_headers()[my_row]
-	        
-	        # Populate arrays.
-	        pjtu_rs[my_dim[0]][my_dim[1]].push(
-	            (2*my_dat[0]) / ((2*my_dat[0]) + my_dat[3]))
+            # Get index values for placing into output arrays.
+            my_dim = new_core.get_row_headers()[my_row]
 
-	        pjtu_rs[my_dim[1]][my_dim[0]].push(
-	            (2*my_dat[0]) / ((2*my_dat[0]) + my_dat[3]))
+            if metric == 'jtu':
+                rs_mat[my_dim[0]][my_dim[1]].push(
+                    (2*my_dat[0]) / ((2*my_dat[0]) + my_dat[3]))
 
-	        pjac_rs[my_dim[0]][my_dim[1]].push(
-	            my_dat[2] / (my_dat[3] + my_dat[2]))
+                rs_mat[my_dim[1]][my_dim[0]].push(
+                    (2*my_dat[0]) / ((2*my_dat[0]) + my_dat[3]))
 
-	        pjac_rs[my_dim[1]][my_dim[0]].push(
-	            my_dat[2] / (my_dat[3] + my_dat[2]))
+            elif metric == 'jac':
+                rs_mat[my_dim[0]][my_dim[1]].push(
+                    my_dat[2] / (my_dat[3] + my_dat[2]))
 
-	        pjne_rs[my_dim[0]][my_dim[1]].push(
-	            ((my_dat[1] - my_dat[0]) / (my_dat[3] + my_dat[2])) * (
-	                my_dat[3] / ((2 * my_dat[0]) + my_dat[3])))
+                rs_mat[my_dim[1]][my_dim[0]].push(
+                    my_dat[2] / (my_dat[3] + my_dat[2]))
 
-	        pjne_rs[my_dim[1]][my_dim[0]].push(
-	            ((my_dat[1] - my_dat[0]) / (my_dat[3] + my_dat[2])) * (
-	                my_dat[3] / ((2 * my_dat[0]) + my_dat[3])))
+            elif metric == 'jne':
+                rs_mat[my_dim[0]][my_dim[1]].push(
+                    ((my_dat[1] - my_dat[0]) / (my_dat[3] + my_dat[2])) * (
+                        my_dat[3] / ((2 * my_dat[0]) + my_dat[3])))
+
+                rs_mat[my_dim[1]][my_dim[0]].push(
+                    ((my_dat[1] - my_dat[0]) / (my_dat[3] + my_dat[2])) * (
+                        my_dat[3] / ((2 * my_dat[0]) + my_dat[3])))
 
 	# Populate returnable arrays with av. & SD.
-	for row in range(num_sites):
-		for col in range(num_sites):
-			if row == col:
-				# averages.
-				pjtu_av[row][col][0] = 1.
-				pjne_av[row][col][0] = 1.
-				pjac_av[row][col][0] = 1.
-				# sd.
-				pjtu_av[row][col][1] = 0.
-				pjne_av[row][col][1] = 0.
-				pjac_av[row][col][1] = 0.
-			else:
-				# averages.
-				pjtu_av[row][col][0] = pjtu_rs[row][col].mean()
-				pjne_av[row][col][0] = pjne_rs[row][col].mean()
-				pjac_av[row][col][0] = pjac_rs[row][col].mean()
-				# sd.
-				pjtu_av[row][col][1] = pjtu_rs[row][col].variance()
-				pjne_av[row][col][1] = pjne_rs[row][col].variance()
-				pjac_av[row][col][1] = pjac_rs[row][col].variance()
+    for row in range(num_sites):
+        for col in range(num_sites):
+            if row == col:
+                # ses matrix
+                SES[row][col] = 0.
 
-    return (
-        Matrix(pjtu_av, headers=mtx_headers),
-        Matrix(pjne_av, headers=mtx_headers),
-        Matrix(pjac_av, headers=mtx_headers))
+            else:
+                # standardized effect size calculation
+                SES[row][col] = obs.data[row][col] - rs_mat[row][col].mean() / sqrt(rs_mat[row][col].variance())
+
+
+    return(Matrix(SES, headers=mtx_headers))
 
 
 # .............................................................................
