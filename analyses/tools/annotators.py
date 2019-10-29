@@ -17,7 +17,7 @@ def add_all_annotations(lm_tree, node_matrix, update=False):
     for i, node_name in enumerate(node_matrix.get_row_headers()):
         anns = {}
         for j, col_name in enumerate(node_matrix.get_column_headers()):
-            anns[col_name] = node_matrix.data[i, j, 0]
+            anns[col_name] = node_matrix[i, j, 0]
         annotations[node_name] = anns
     lm_tree.annotate_tree(annotations, update=update)
 
@@ -35,5 +35,5 @@ def annotate_tree_with_label(lm_tree, node_matrix, label_column=0):
     """
     annotations = {}
     for i, node_name in enumerate(node_matrix.get_row_headers()):
-        annotations[node_name] = node_matrix.data[i, label_column, 0]
+        annotations[node_name] = node_matrix[i, label_column, 0]
     lm_tree.annotate_tree(annotations, label_attribute=None)
