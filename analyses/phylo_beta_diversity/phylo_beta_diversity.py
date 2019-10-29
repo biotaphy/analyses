@@ -8,8 +8,8 @@ Note:
 import numpy as np
 import itertools as it  # new dependency.
 import dendropy
-from analyses.lm_objects.matrix import Matrix
-from analyses.lm_objects.tree import TreeWrapper
+
+from lmpy import Matrix, TreeWrapper
 
 
 # .............................................................................
@@ -37,7 +37,7 @@ def pdnew(pam, tree):
     # This loop will calculate the PD value for each sample in 'pam'.
     for sample in range(nsamp):
         # Pull out the data for current sample.
-        my_samp = pam.data[sample]
+        my_samp = pam[sample]
 
         # Pull out which spp are present & which are absent from the sample.
         # yields lists of strings --> spp names.
@@ -90,9 +90,9 @@ def core_Beta_calc(pam, tree):
             min_not_shared:
     """
     # Convert pam to float type for later calculations.
-    pam.data = pam.data.astype(float)
+    pam = pam.astype(float)
     # Create matrix of how many spp are shared in each pairwise combo.
-    shared_array = np.matmul(pam.data, np.matrix.transpose(pam.data))
+    shared_array = np.matmul(pam, np.matrix.transpose(pam))
 
     # Pull out diagonal of shared array.
     my_diag = np.diagonal(shared_array)
@@ -152,8 +152,8 @@ def core_PD_calc(pam, tree):
     # 1 == spp present in at least 1 sample; 0 == spp absent from both samples.
     for pair in range(len(combin)):
         # Assign each site's data to new variable for convenience.
-        site0 = pam.data[combin[pair][0]]
-        site1 = pam.data[combin[pair][1]]
+        site0 = pam[combin[pair][0]]
+        site1 = pam[combin[pair][1]]
 
         # Is each spp present in at least 1 sample.
         for idx in range(len(site0)):
@@ -175,11 +175,11 @@ def core_PD_calc(pam, tree):
     # I.e. treats each sample separately.
     sum_pd_pair = []
     for pair in range(len(combin)):
-        tmp = pd.data[combin[pair][0], 0] + pd.data[combin[pair][1], 0]
+        tmp = pd[combin[pair][0], 0] + pd[combin[pair][1], 0]
         sum_pd_pair.append(tmp)
 
     # PD of all communities combined.
-    com_tot_multi = np.sum(pam.data, axis=0)
+    com_tot_multi = np.sum(pam, axis=0)
     # Convert to presence/ absence (i.e. 1,0).
     com_tot_multi = [1 if i > 0 else 0 for i in com_tot_multi]
     # Calculate the PD.
@@ -189,7 +189,7 @@ def core_PD_calc(pam, tree):
 
     # Contribution of PD that is not shared beteen two sites:
     # pull out just PD values.
-    pd_sites = pd.data[0:len(pd.get_row_headers()), 0]
+    pd_sites = pd[0:len(pd.get_row_headers()), 0]
     # create list of all pairwise combinations.
     pd_combos = list(it.combinations(pd_sites, 2))
 
@@ -203,7 +203,7 @@ def core_PD_calc(pam, tree):
         site2 = pd_combos[pair][1]  # PD site 2
 
         # Pull out the PD of the 2 sites combined.
-        pdpair = pd_tot_pair.data[pair][0]
+        pdpair = pd_tot_pair[pair][0]
         # Pull out the sum of the separate PD values.
         sum_pair = sum_pd_pair[pair]
 
@@ -292,7 +292,7 @@ def calculate_phylo_beta_diversity_jaccard(pam, tree):
         '1': pam.get_row_headers()  # Column headers
     }
 
-    num_sites = pam.data.shape[0]  # Get the number of sites in the PAM
+    num_sites = pam.shape[0]  # Get the number of sites in the PAM
 
     # Note: For ease of development, use these numpy arrays for the
     #    computations.  They will be wrapped into a Matrix object when they are
@@ -310,9 +310,9 @@ def calculate_phylo_beta_diversity_jaccard(pam, tree):
     core_calc = core_PD_calc(pam, tree)  # Matrix object.
 
     # This loop will populate arrays with all beta diversity metrics.
-    for my_row in range(core_calc.data.shape[0]):
+    for my_row in range(core_calc.shape[0]):
         # Pull out the phylogentic core numeric values.
-        my_dat = core_calc.data[my_row, 0:4]
+        my_dat = core_calc[my_row, 0:4]
         # Get index values for placing into output arrays.
         my_dim = core_calc.get_row_headers()[my_row]
 
@@ -406,7 +406,7 @@ def calculate_phylo_beta_diversity_sorensen(pam, tree):
         '1': pam.get_row_headers()  # Column headers
     }
 
-    num_sites = pam.data.shape[0]  # Get the number of sites in the PAM
+    num_sites = pam.shape[0]  # Get the number of sites in the PAM
 
     # Note: For ease of development, use these numpy arrays for the
     #    computations.  They will be wrapped into a Matrix object when they are
@@ -422,9 +422,9 @@ def calculate_phylo_beta_diversity_sorensen(pam, tree):
     core_calc = core_PD_calc(pam, tree)
 
     # This loop will populate arrays with beta diversity metrics.
-    for my_row in range(core_calc.data.shape[0]):
+    for my_row in range(core_calc.shape[0]):
 
-        my_dat = core_calc.data[my_row, 0:4]
+        my_dat = core_calc[my_row, 0:4]
         my_dim = core_calc.get_row_headers()[my_row]
 
         phylo_beta_sim_data[my_dim[0], my_dim[1]] = (

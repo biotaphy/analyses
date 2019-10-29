@@ -28,7 +28,7 @@ def create_distribution_plots(lm_tree, node_matrix, output_directory):
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
     node_names = node_matrix.get_row_headers()
-    num_cats = node_matrix.data.shape[1]
+    num_cats = node_matrix.shape[1]
     low = 0
     high = num_cats
 
@@ -37,11 +37,11 @@ def create_distribution_plots(lm_tree, node_matrix, output_directory):
         # TODO(CJ) : Variable figure size
         plt.figure(figsize=(6, 4))
         # TODO(CJ) : Variable alpha
-        plt.plot(x_grid, node_matrix.data[i, :, 0], alpha=0.05)
-        if np.any(node_matrix.data[i, :, 1] > 0.0):
+        plt.plot(x_grid, node_matrix[i, :, 0], alpha=0.05)
+        if np.any(node_matrix[i, :, 1] > 0.0):
             # TODO(CJ) : Options for high and low value lines
-            high_vals = node_matrix.data[i, :, 0] + node_matrix.data[i, :, 1]
-            low_vals = node_matrix.data[i, :, 0] - node_matrix.data[i, :, 1]
+            high_vals = node_matrix[i, :, 0] + node_matrix[i, :, 1]
+            low_vals = node_matrix[i, :, 0] - node_matrix[i, :, 1]
             plt.plot(x_grid, high_vals, '--', alpha=0.55,)
             plt.plot(x_grid, low_vals, '--', alpha=0.55,)
         # TODO(CJ) : Does this print to screen?  Remove it?
