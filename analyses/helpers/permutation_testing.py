@@ -3,7 +3,7 @@
 from copy import deepcopy
 import numpy as np
 
-from analyses.lm_objects.matrix import Matrix
+from lmpy import Matrix
 
 
 # .............................................................................

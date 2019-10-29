@@ -8,8 +8,8 @@ import os
 import numpy as np
 import pytest
 
-from analyses.lm_objects.matrix import Matrix
-from analyses.lm_objects.tree import TreeWrapper
+from lmpy import Matrix, TreeWrapper
+
 from analyses.tools.plots import create_distribution_plots
 
 

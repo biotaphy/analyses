@@ -5,8 +5,8 @@ Notes:
 """
 import numpy as np
 
-from analyses.lm_objects.matrix import Matrix
-from analyses.lm_objects.tree import TreeWrapper
+from lmpy import Matrix, TreeWrapper
+
 from analyses.phylo_beta_diversity import phylo_beta_diversity as pbd
 
 

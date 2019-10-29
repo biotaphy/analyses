@@ -6,8 +6,7 @@ import sys
 import numpy as np
 import scipy.linalg as la
 
-from analyses.lm_objects.matrix import Matrix
-from analyses.lm_objects.tree import TreeWrapper
+from lmpy import Matrix, TreeWraper
 
 
 # .............................................................................

@@ -6,8 +6,9 @@ Note:
 import numpy as np
 import pytest
 
+from lmpy import Matrix
+
 import analyses.helpers.permutation_testing as perm_testing
-from analyses.lm_objects.matrix import Matrix
 
 
 # .............................................................................

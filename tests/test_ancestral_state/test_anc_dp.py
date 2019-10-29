@@ -13,9 +13,10 @@ import dendropy
 import numpy as np
 import pytest
 
+from lmpy import TreeWrapper
+
 from analyses.ancestral_state import anc_dp
 import analyses.helpers.data_readers as data_readers
-from analyses.lm_objects.tree import TreeWrapper
 
 
 # .............................................................................
