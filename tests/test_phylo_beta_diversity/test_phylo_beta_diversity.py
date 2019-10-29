@@ -5,8 +5,8 @@ Notes:
 """
 import numpy as np
 
-from analyses.lm_objects.matrix import Matrix
-from analyses.lm_objects.tree import TreeWrapper
+from lmpy import Matrix, TreeWrapper
+
 from analyses.phylo_beta_diversity import phylo_beta_diversity as pbd
 
 
@@ -52,12 +52,12 @@ class Test_phylo_beta_diversity_jaccard(object):
          phylo_beta_jac) = pbd.calculate_phylo_beta_diversity_jaccard(
              pam, tree)
         # Check matrix outputs to see if they are within tolerance
-        assert np.allclose(beta_jtu.data, test_beta_jtu.data)
-        assert np.allclose(phylo_beta_jtu.data, test_phylo_beta_jtu.data)
-        assert np.allclose(beta_jne.data, test_beta_jne.data)
-        assert np.allclose(phylo_beta_jne.data, test_phylo_beta_jne.data)
-        assert np.allclose(beta_jac.data, test_beta_jac.data)
-        assert np.allclose(phylo_beta_jac.data, test_phylo_beta_jac.data)
+        assert np.allclose(beta_jtu, test_beta_jtu)
+        assert np.allclose(phylo_beta_jtu, test_phylo_beta_jtu)
+        assert np.allclose(beta_jne, test_beta_jne)
+        assert np.allclose(phylo_beta_jne, test_phylo_beta_jne)
+        assert np.allclose(beta_jac, test_beta_jac)
+        assert np.allclose(phylo_beta_jac, test_phylo_beta_jac)
 
     # .....................................
     def test_extra_species_in_pam(self):
@@ -111,12 +111,12 @@ class Test_phylo_beta_diversity_sorensen(object):
          phylo_beta_sor) = pbd.calculate_phylo_beta_diversity_sorensen(
              pam, tree)
         # Check matrix outputs to see if they are within tolerance
-        assert np.allclose(beta_sim.data, test_beta_sim.data)
-        assert np.allclose(phylo_beta_sim.data, test_phylo_beta_sim.data)
-        assert np.allclose(beta_sne.data, test_beta_sne.data)
-        assert np.allclose(phylo_beta_sne.data, test_phylo_beta_sne.data)
-        assert np.allclose(beta_sor.data, test_beta_sor.data)
-        assert np.allclose(phylo_beta_sor.data, test_phylo_beta_sor.data)
+        assert np.allclose(beta_sim, test_beta_sim)
+        assert np.allclose(phylo_beta_sim, test_phylo_beta_sim)
+        assert np.allclose(beta_sne, test_beta_sne)
+        assert np.allclose(phylo_beta_sne, test_phylo_beta_sne)
+        assert np.allclose(beta_sor, test_beta_sor)
+        assert np.allclose(phylo_beta_sor, test_phylo_beta_sor)
 
     # .....................................
     def test_extra_species_in_pam(self):

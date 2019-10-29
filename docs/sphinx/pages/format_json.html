@@ -1,32 +1,24 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>JSON &#8212; BiotaPhy Analyses 1.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>JSON &#8212; BiotaPhy Analyses 2.0.0 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Newick" href="format_newick.html" />
     <link rel="prev" title="CSV" href="format_csv.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +34,7 @@
         <li class="right" >
           <a href="format_csv.html" title="CSV"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 2.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="data_formats.html" accesskey="U">Data Formats</a> &#187;</li> 
       </ul>
     </div>  
@@ -56,7 +48,7 @@
 <h1>JSON<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p>JSON (JavaScript Object Notation) <a class="footnote-reference" href="#f1" id="id1">[1]</a> is a text-based data format designed
+<p>JSON (JavaScript Object Notation) <a class="footnote-reference brackets" href="#f1" id="id1">1</a> is a text-based data format designed
 to be easy for humans and machines to read and understand.  It has a simple
 schema of objects, arrays, and values that can be nested.  It is compatible
 with a Python dictionary.</p>
@@ -64,29 +56,27 @@ with a Python dictionary.</p>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><dl class="docutils">
-<dt>::</dt>
-<dd><dl class="first docutils">
-<dt>{</dt>
-<dd><p class="first">“key1” : “value 1”,
+<div><dl>
+<dt>::</dt><dd><dl>
+<dt>{</dt><dd><p>“key1” : “value 1”,
 “my_array” : [1, 2, 3, 4],
 “my_obj” : {</p>
 <blockquote>
-<div>“another key” : “Sub object key”</div></blockquote>
-<p class="last">}</p>
+<div><p>“another key” : “Sub object key”</p>
+</div></blockquote>
+<p>}</p>
 </dd>
 </dl>
-<p class="last">}</p>
+<p>}</p>
 </dd>
 </dl>
 </div></blockquote>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="f1" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="https://www.json.org/">https://www.json.org/</a></td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p><a class="reference external" href="https://www.json.org/">https://www.json.org/</a></p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -103,13 +93,13 @@ with a Python dictionary.</p>
   <p class="topless"><a href="format_newick.html"
                         title="next chapter">Newick</a></p>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -131,13 +121,13 @@ with a Python dictionary.</p>
         <li class="right" >
           <a href="format_csv.html" title="CSV"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 2.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="data_formats.html" >Data Formats</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, BiotaPhy Team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

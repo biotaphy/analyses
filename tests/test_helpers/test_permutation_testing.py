@@ -6,8 +6,9 @@ Note:
 import numpy as np
 import pytest
 
+from lmpy import Matrix
+
 import analyses.helpers.permutation_testing as perm_testing
-from analyses.lm_objects.matrix import Matrix
 
 
 # .............................................................................
@@ -86,7 +87,7 @@ class Test_get_p_values(object):
             obs_matrix, [rand_1, rand_2],
             compare_func=perm_testing.compare_absolute_values)
         assert np.all(
-            p_vals.data[:, :, 0] == np.array(
+            p_vals[:, :, 0] == np.array(
                 [[1, 0.5, 0], [0.5, 0, 1], [1, 0, 0.5]]))
 
     # .....................................
@@ -100,5 +101,5 @@ class Test_get_p_values(object):
             obs_matrix, [rand_1, rand_2],
             compare_func=perm_testing.compare_signed_values)
         assert np.all(
-            p_vals.data[:, :, 0] == np.array(
+            p_vals[:, :, 0] == np.array(
                 [[1, 0.5, 0], [0.5, 0, 0.5], [0.5, 0, 0]]))

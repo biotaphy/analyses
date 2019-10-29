@@ -9,11 +9,12 @@ Todo:
 import argparse
 import os
 
+from lmpy import TreeWrapper
+
 from analyses.ancestral_state import anc_dp
 import analyses.tools.annotators as annotators
 import analyses.tools.plots as tree_plots
 from analyses.helpers import data_readers
-from analyses.lm_objects.tree import TreeWrapper
 
 DESCRIPTION = """\
 Generates ancestral distribution estimations based on the environmental

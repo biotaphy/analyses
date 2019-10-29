@@ -1,32 +1,24 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Ancestral Distribution &#8212; BiotaPhy Analyses 1.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Ancestral Distribution &#8212; BiotaPhy Analyses 2.0.0 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Data Formats" href="../pages/data_formats.html" />
     <link rel="prev" title="Analyses" href="analyses.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +34,7 @@
         <li class="right" >
           <a href="analyses.html" title="Analyses"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 2.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="analyses.html" accesskey="U">Analyses</a> &#187;</li> 
       </ul>
     </div>  
@@ -78,7 +70,7 @@ distributions.</p>
 <div class="section" id="using">
 <h2>Using<a class="headerlink" href="#using" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">ancestral_distribution</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span> <span class="n">ANNOTATE_LABELS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="n">PLOT_DIRECTORY</span><span class="p">]</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">ancestral_distribution</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span> <span class="n">ANNOTATE_LABELS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="n">PLOT_DIRECTORY</span><span class="p">]</span>
                                  <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="n">OUT_CSV_FILENAME</span><span class="p">]</span>
                                  <span class="n">in_tree_filename</span> <span class="p">{</span><span class="n">newick</span><span class="p">,</span><span class="n">nexml</span><span class="p">,</span><span class="n">nexus</span><span class="p">}</span>
                                  <span class="n">data_filename</span> <span class="p">{</span><span class="n">csv</span><span class="p">,</span><span class="n">json</span><span class="p">,</span><span class="n">phylip</span><span class="p">,</span><span class="n">table</span><span class="p">}</span>
@@ -110,13 +102,12 @@ distributions.</p>
 </pre></div>
 </div>
 </div></blockquote>
-<dl class="docutils">
-<dt>Notes:</dt>
-<dd><ul class="first last simple">
-<li>Use the <cite>-l</cite> option with either a column name or column index to use the reconstructed values for
-that column as the labels of your output tree.</li>
-<li>The <cite>-p</cite> option will tell the tool to write out plots for the distributions</li>
-<li>The <cite>-c</cite> option will write out the reconstruction matrix as a CSV file for processing elsewhere</li>
+<dl class="simple">
+<dt>Notes:</dt><dd><ul class="simple">
+<li><p>Use the <cite>-l</cite> option with either a column name or column index to use the reconstructed values for
+that column as the labels of your output tree.</p></li>
+<li><p>The <cite>-p</cite> option will tell the tool to write out plots for the distributions</p></li>
+<li><p>The <cite>-c</cite> option will write out the reconstruction matrix as a CSV file for processing elsewhere</p></li>
 </ul>
 </dd>
 </dl>
@@ -132,7 +123,7 @@ Tree data can be provided as Newick [pages/format_newick]_, NeXML
 <p>For CSV data, the first row can contain headers for the columns in the file.
 Each row should have a header for the taxon that it represents.  An example CSV
 alignment file looks like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">,</span> <span class="n">var_1</span><span class="p">,</span> <span class="n">var_2</span><span class="p">,</span> <span class="n">var_3</span><span class="p">,</span> <span class="n">var_4</span><span class="p">,</span> <span class="n">var_5</span><span class="p">,</span> <span class="n">var_6</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">,</span> <span class="n">var_1</span><span class="p">,</span> <span class="n">var_2</span><span class="p">,</span> <span class="n">var_3</span><span class="p">,</span> <span class="n">var_4</span><span class="p">,</span> <span class="n">var_5</span><span class="p">,</span> <span class="n">var_6</span>
 <span class="n">A</span><span class="p">,</span>   <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span>
 <span class="n">B</span><span class="p">,</span>  <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span>
 <span class="n">C</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span>
@@ -150,7 +141,7 @@ key named “headers” that is an array of headers for each column of data.  It
 should also include a key named “values” that is an array of objects with keys
 for “name” (taxon name) and “values” (an array of data values).  An example
 JSON alignment file looks like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
    <span class="s2">&quot;headers&quot;</span> <span class="p">:</span> <span class="p">[</span>
       <span class="s2">&quot;var_1&quot;</span><span class="p">,</span>
       <span class="s2">&quot;var_2&quot;</span><span class="p">,</span>
@@ -197,7 +188,7 @@ JSON alignment file looks like</p>
 <h3>Phylip<a class="headerlink" href="#phylip" title="Permalink to this headline">¶</a></h3>
 <p>Phylip data should be formatted as a list of taxa with corresponding values.
 An example phylip alignment file looks like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">7</span> <span class="mi">6</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">7</span> <span class="mi">6</span>
 <span class="n">A</span>   <span class="mf">0.9</span> <span class="mf">0.2</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
 <span class="n">B</span>   <span class="mf">0.01</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
 <span class="n">C</span>   <span class="mf">0.8</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
@@ -213,7 +204,7 @@ An example phylip alignment file looks like</p>
 <p>You can provide your alignment data as a table as well.  This format looks like
 Phylip but does not include metadata for the number of taxa or the number of
 data values.  It looks like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">A</span>   <span class="mf">0.9</span> <span class="mf">0.2</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">A</span>   <span class="mf">0.9</span> <span class="mf">0.2</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
 <span class="n">B</span>   <span class="mf">0.01</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
 <span class="n">C</span>   <span class="mf">0.8</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
 <span class="n">D</span>   <span class="mf">0.3</span> <span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span> <span class="mf">0.4</span> <span class="mf">0.4</span>
@@ -227,7 +218,7 @@ data values.  It looks like</p>
 <h3>Newick<a class="headerlink" href="#newick" title="Permalink to this headline">¶</a></h3>
 <p>You can provide your tree data as a Newick file.  You can also request that the
 resulting tree be formatted as Newick.  An example Newick file looks like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">A</span><span class="p">:</span><span class="mf">2.9999</span><span class="p">,((</span><span class="n">B</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span><span class="n">C</span><span class="p">:</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">,(</span><span class="n">G</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,(</span><span class="n">D</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,(</span><span class="n">E</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span><span class="n">F</span><span class="p">:</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">A</span><span class="p">:</span><span class="mf">2.9999</span><span class="p">,((</span><span class="n">B</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span><span class="n">C</span><span class="p">:</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">,(</span><span class="n">G</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,(</span><span class="n">D</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,(</span><span class="n">E</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span><span class="n">F</span><span class="p">:</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">):</span><span class="mf">0.1</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -235,7 +226,7 @@ resulting tree be formatted as Newick.  An example Newick file looks like</p>
 <h3>NeXML<a class="headerlink" href="#nexml" title="Permalink to this headline">¶</a></h3>
 <p>You can provide your tree data as a NeXML file.  You can also request that the
 resulting tree be formatted as NeXML.  An example NeXML file looks like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
 &lt;nex:nexml
     version=&quot;0.9&quot;
     xsi:schemaLocation=&quot;http://www.nexml.org/2009 ../xsd/nexml.xsd&quot;
@@ -272,7 +263,7 @@ resulting tree be formatted as NeXML.  An example NeXML file looks like</p>
 <h3>Nexus<a class="headerlink" href="#nexus" title="Permalink to this headline">¶</a></h3>
 <p>You can provide your tree data as a Nexus file.  You can also request that the
 resulting tree be formatted as Nexus.  An example Nexus file looks like</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#NEXUS</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#NEXUS</span>
 
 <span class="n">BEGIN</span> <span class="n">TAXA</span><span class="p">;</span>
     <span class="n">DIMENSIONS</span> <span class="n">NTAX</span><span class="o">=</span><span class="mi">7</span><span class="p">;</span>
@@ -327,13 +318,13 @@ generate plots of the ancestral distributions by providing a directory to the
   <p class="topless"><a href="../pages/data_formats.html"
                         title="next chapter">Data Formats</a></p>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -355,13 +346,13 @@ generate plots of the ancestral distributions by providing a directory to the
         <li class="right" >
           <a href="analyses.html" title="Analyses"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 2.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="analyses.html" >Analyses</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, BiotaPhy Team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>
