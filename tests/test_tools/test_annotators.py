@@ -6,8 +6,8 @@ Note:
 import numpy as np
 import pytest
 
-from analyses.lm_objects.matrix import Matrix
-from analyses.lm_objects.tree import TreeWrapper
+from lmpy import Matrix, TreeWrapper
+
 import analyses.tools.annotators as annotators
 
 

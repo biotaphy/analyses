@@ -13,9 +13,10 @@ except:
 
 import pytest
 
+from lmpy import Matrix
+
 import analyses.helpers.data_readers as dr
 from analyses.helpers.sequence import Sequence
-from analyses.lm_objects.matrix import Matrix
 
 
 # .............................................................................
