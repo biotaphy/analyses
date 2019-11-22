@@ -1,5 +1,6 @@
-## Class for calculating a running SD and mean.
+"""Class for calculating a running SD and mean."""
 import math
+
 
 class RunningStats:
 
@@ -34,4 +35,3 @@ class RunningStats:
 
     def standard_deviation(self):
         return math.sqrt(self.variance())
-
