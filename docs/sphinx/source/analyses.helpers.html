@@ -1,30 +1,22 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>analyses.helpers package &#8212; BiotaPhy Analyses 1.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>analyses.helpers package &#8212; BiotaPhy Analyses 2.0.0 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -34,7 +26,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 2.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -51,37 +43,34 @@
 <div class="section" id="module-analyses.helpers.data_readers">
 <span id="analyses-helpers-data-readers-module"></span><h2>analyses.helpers.data_readers module<a class="headerlink" href="#module-analyses.helpers.data_readers" title="Permalink to this headline">¶</a></h2>
 <p>Module containing tools for reading alignment files in various formats.</p>
-<div class="admonition-todo admonition" id="index-0">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>FASTA reader?</li>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>FASTA reader?</p></li>
 </ul>
 </div>
 <dl class="exception">
 <dt id="analyses.helpers.data_readers.AlignmentIOError">
-<em class="property">exception </em><code class="descclassname">analyses.helpers.data_readers.</code><code class="descname">AlignmentIOError</code><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#AlignmentIOError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.AlignmentIOError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+<em class="property">exception </em><code class="sig-prename descclassname">analyses.helpers.data_readers.</code><code class="sig-name descname">AlignmentIOError</code><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#AlignmentIOError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.AlignmentIOError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 <p>Wrapper class for alignment errors.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="analyses.helpers.data_readers.create_sequence_list_from_dict">
-<code class="descclassname">analyses.helpers.data_readers.</code><code class="descname">create_sequence_list_from_dict</code><span class="sig-paren">(</span><em>values_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#create_sequence_list_from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.create_sequence_list_from_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">analyses.helpers.data_readers.</code><code class="sig-name descname">create_sequence_list_from_dict</code><span class="sig-paren">(</span><em class="sig-param">values_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#create_sequence_list_from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.create_sequence_list_from_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a list of sequences from a dictionary</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>values_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – A dictionary of taxon name keys and a list of
-values for each value.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>values_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – A dictionary of taxon name keys and a list of
+values for each value.</p>
+</dd>
+</dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last">
-<li><p class="first">The dictionary should have structure:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<p class="admonition-title">Note</p>
+<ul>
+<li><p>The dictionary should have structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;</span><span class="si">{taxon_name}</span><span class="s2">&quot;</span> <span class="p">:</span> <span class="p">[{</span><span class="n">values</span><span class="p">}]</span>
 <span class="p">}</span>
 </pre></div>
@@ -89,80 +78,91 @@ values for each value.</td>
 </li>
 </ul>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of Sequence objects and None for headers.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="#analyses.helpers.data_readers.AlignmentIOError" title="analyses.helpers.data_readers.AlignmentIOError"><code class="xref py py-exc docutils literal"><span class="pre">AlignmentIOError</span></code></a> – If a dictionary value is not a list.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of Sequence objects and None for headers.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#analyses.helpers.data_readers.AlignmentIOError" title="analyses.helpers.data_readers.AlignmentIOError"><strong>AlignmentIOError</strong></a> – If a dictionary value is not a list.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="analyses.helpers.data_readers.get_character_matrix_from_sequences_list">
-<code class="descclassname">analyses.helpers.data_readers.</code><code class="descname">get_character_matrix_from_sequences_list</code><span class="sig-paren">(</span><em>sequences</em>, <em>var_headers=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#get_character_matrix_from_sequences_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.get_character_matrix_from_sequences_list" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">analyses.helpers.data_readers.</code><code class="sig-name descname">get_character_matrix_from_sequences_list</code><span class="sig-paren">(</span><em class="sig-param">sequences</em>, <em class="sig-param">var_headers=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#get_character_matrix_from_sequences_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.get_character_matrix_from_sequences_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a list of sequences into a character matrix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sequences</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of <code class="xref py py-obj docutils literal"><span class="pre">Sequence</span></code>) – A list of Sequence objects
-to be converted.</li>
-<li><strong>var_headers</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of headers, optional) – If provided, uses these
-as variable headers for the columns in the matrix.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sequences</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Sequence</span></code>) – A list of Sequence objects
+to be converted.</p></li>
+<li><p><strong>var_headers</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of headers, optional) – If provided, uses these
+as variable headers for the columns in the matrix.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A matrix of sequence data.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="analyses.lm_objects.html#analyses.lm_objects.matrix.Matrix" title="analyses.lm_objects.matrix.Matrix">Matrix</a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A matrix of sequence data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="analyses.helpers.data_readers.load_alignment_from_filename">
+<code class="sig-prename descclassname">analyses.helpers.data_readers.</code><code class="sig-name descname">load_alignment_from_filename</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#load_alignment_from_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.load_alignment_from_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to load an alignment from a file path by guessing schema</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The file location containing the alignment</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – Raised with the method needed to load the alignment
+    cannot be determined.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Containing a list of sequences and headers</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="analyses.helpers.data_readers.read_csv_alignment_flo">
-<code class="descclassname">analyses.helpers.data_readers.</code><code class="descname">read_csv_alignment_flo</code><span class="sig-paren">(</span><em>csv_flo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#read_csv_alignment_flo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.read_csv_alignment_flo" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">analyses.helpers.data_readers.</code><code class="sig-name descname">read_csv_alignment_flo</code><span class="sig-paren">(</span><em class="sig-param">csv_flo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#read_csv_alignment_flo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.read_csv_alignment_flo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads a CSV file-like object and return a list of sequences and headers.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>csv_flo</strong> (<em>file-like</em>) – A file-like object with CSV alignment data.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of Sequence objects and headers.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="#analyses.helpers.data_readers.AlignmentIOError" title="analyses.helpers.data_readers.AlignmentIOError"><code class="xref py py-exc docutils literal"><span class="pre">AlignmentIOError</span></code></a> – If the number of columns is inconsistent across the
-sequences.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>csv_flo</strong> (<em>file-like</em>) – A file-like object with CSV alignment data.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of Sequence objects and headers.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#analyses.helpers.data_readers.AlignmentIOError" title="analyses.helpers.data_readers.AlignmentIOError"><strong>AlignmentIOError</strong></a> – If the number of columns is inconsistent across the
+    sequences.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="analyses.helpers.data_readers.read_json_alignment_flo">
-<code class="descclassname">analyses.helpers.data_readers.</code><code class="descname">read_json_alignment_flo</code><span class="sig-paren">(</span><em>json_flo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#read_json_alignment_flo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.read_json_alignment_flo" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">analyses.helpers.data_readers.</code><code class="sig-name descname">read_json_alignment_flo</code><span class="sig-paren">(</span><em class="sig-param">json_flo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#read_json_alignment_flo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.read_json_alignment_flo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a JSON file-like object and return a list of sequences and headers.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>json_flo</strong> (<em>file-like</em>) – A file-like object with JSON alignment data.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>json_flo</strong> (<em>file-like</em>) – A file-like object with JSON alignment data.</p>
+</dd>
+</dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last">
-<li><p class="first">File should have structure:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<p class="admonition-title">Note</p>
+<ul>
+<li><p>File should have structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;headers&quot;</span> <span class="p">:</span> <span class="p">[{</span><span class="n">header_names</span><span class="p">}],</span>
     <span class="s2">&quot;values&quot;</span> <span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
@@ -176,75 +176,67 @@ sequences.</td>
 </li>
 </ul>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of Sequence objects and headers.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="#analyses.helpers.data_readers.AlignmentIOError" title="analyses.helpers.data_readers.AlignmentIOError"><code class="xref py py-exc docutils literal"><span class="pre">AlignmentIOError</span></code></a> – If headers are provided but they are not a list.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of Sequence objects and headers.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#analyses.helpers.data_readers.AlignmentIOError" title="analyses.helpers.data_readers.AlignmentIOError"><strong>AlignmentIOError</strong></a> – If headers are provided but they are not a list.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="analyses.helpers.data_readers.read_phylip_alignment_flo">
-<code class="descclassname">analyses.helpers.data_readers.</code><code class="descname">read_phylip_alignment_flo</code><span class="sig-paren">(</span><em>phylip_flo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#read_phylip_alignment_flo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.read_phylip_alignment_flo" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">analyses.helpers.data_readers.</code><code class="sig-name descname">read_phylip_alignment_flo</code><span class="sig-paren">(</span><em class="sig-param">phylip_flo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#read_phylip_alignment_flo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.read_phylip_alignment_flo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads a phylip alignment file-like object and return the sequences.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>phylip_flo</strong> (<em>file-like</em>) – The phylip file-like object.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phylip_flo</strong> (<em>file-like</em>) – The phylip file-like object.</p>
+</dd>
+</dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li><dl class="first docutils">
-<dt>We assume that the phylip files are extended and not strict (in terms</dt>
-<dd>of how many characters for taxon names).</dd>
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>We assume that the phylip files are extended and not strict (in terms</dt><dd><p>of how many characters for taxon names).</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>The phylip file is in the format::</dt>
-<dd>numoftaxa numofsites
+<li><dl class="simple">
+<dt>The phylip file is in the format::</dt><dd><p>numoftaxa numofsites
 seqlabel sequence
-seqlabel sequence</dd>
+seqlabel sequence</p>
+</dd>
 </dl>
 </li>
 </ul>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of Sequence objects.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="#analyses.helpers.data_readers.AlignmentIOError" title="analyses.helpers.data_readers.AlignmentIOError"><code class="xref py py-exc docutils literal"><span class="pre">AlignmentIOError</span></code></a> – If there is a problem creating sequences.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of Sequence objects.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#analyses.helpers.data_readers.AlignmentIOError" title="analyses.helpers.data_readers.AlignmentIOError"><strong>AlignmentIOError</strong></a> – If there is a problem creating sequences.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="analyses.helpers.data_readers.read_table_alignment_flo">
-<code class="descclassname">analyses.helpers.data_readers.</code><code class="descname">read_table_alignment_flo</code><span class="sig-paren">(</span><em>table_flo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#read_table_alignment_flo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.read_table_alignment_flo" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">analyses.helpers.data_readers.</code><code class="sig-name descname">read_table_alignment_flo</code><span class="sig-paren">(</span><em class="sig-param">table_flo</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/data_readers.html#read_table_alignment_flo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.data_readers.read_table_alignment_flo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads a table from a file-like object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_flo</strong> (<em>file-like</em>) – A file-like object containing table data.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of Sequence objects.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="#analyses.helpers.data_readers.AlignmentIOError" title="analyses.helpers.data_readers.AlignmentIOError"><code class="xref py py-exc docutils literal"><span class="pre">AlignmentIOError</span></code></a> – If there is a problem creating sequences.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table_flo</strong> (<em>file-like</em>) – A file-like object containing table data.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of Sequence objects.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#analyses.helpers.data_readers.AlignmentIOError" title="analyses.helpers.data_readers.AlignmentIOError"><strong>AlignmentIOError</strong></a> – If there is a problem creating sequences.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -253,115 +245,131 @@ seqlabel sequence</dd>
 <p>Module containing sequence class.</p>
 <dl class="class">
 <dt id="analyses.helpers.sequence.Sequence">
-<em class="property">class </em><code class="descclassname">analyses.helpers.sequence.</code><code class="descname">Sequence</code><span class="sig-paren">(</span><em>name=''</em>, <em>seq=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/sequence.html#Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.sequence.Sequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">analyses.helpers.sequence.</code><code class="sig-name descname">Sequence</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">seq=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/sequence.html#Sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.sequence.Sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Barebones class for sequences.</p>
 <p>This is a barebones class for sequences.  These can be aligned or not and
 can be any type of alphabet.</p>
 <dl class="attribute">
 <dt id="analyses.helpers.sequence.Sequence.name">
-<code class="descname">name</code><a class="headerlink" href="#analyses.helpers.sequence.Sequence.name" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str</em> – A name for this sequence.</p>
+<code class="sig-name descname">name</code><a class="headerlink" href="#analyses.helpers.sequence.Sequence.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A name for this sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="analyses.helpers.sequence.Sequence.seq">
-<code class="descname">seq</code><a class="headerlink" href="#analyses.helpers.sequence.Sequence.seq" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str</em> – A sequence string.</p>
+<code class="sig-name descname">seq</code><a class="headerlink" href="#analyses.helpers.sequence.Sequence.seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sequence string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="analyses.helpers.sequence.Sequence.qualstr">
-<code class="descname">qualstr</code><a class="headerlink" href="#analyses.helpers.sequence.Sequence.qualstr" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str</em> – A string of sequence characters.</p>
+<code class="sig-name descname">qualstr</code><a class="headerlink" href="#analyses.helpers.sequence.Sequence.qualstr" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string of sequence characters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="analyses.helpers.sequence.Sequence.qualarr">
-<code class="descname">qualarr</code><a class="headerlink" href="#analyses.helpers.sequence.Sequence.qualarr" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list</em> – A list of offset code points.</p>
+<code class="sig-name descname">qualarr</code><a class="headerlink" href="#analyses.helpers.sequence.Sequence.qualarr" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of offset code points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="analyses.helpers.sequence.Sequence.cont_values">
-<code class="descname">cont_values</code><a class="headerlink" href="#analyses.helpers.sequence.Sequence.cont_values" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list</em> – A list of continuous values for a sequence.</p>
+<code class="sig-name descname">cont_values</code><a class="headerlink" href="#analyses.helpers.sequence.Sequence.cont_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of continuous values for a sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="analyses.helpers.sequence.Sequence.get_fasta">
-<code class="descname">get_fasta</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/sequence.html#Sequence.get_fasta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.sequence.Sequence.get_fasta" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_fasta</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/sequence.html#Sequence.get_fasta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.sequence.Sequence.get_fasta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a fasta string.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="analyses.helpers.sequence.Sequence.get_fastq">
-<code class="descname">get_fastq</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/sequence.html#Sequence.get_fastq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.sequence.Sequence.get_fastq" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_fastq</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/sequence.html#Sequence.get_fastq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.sequence.Sequence.get_fastq" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a fastq string.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="analyses.helpers.sequence.Sequence.set_cont_values">
-<code class="descname">set_cont_values</code><span class="sig-paren">(</span><em>values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/sequence.html#Sequence.set_cont_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.sequence.Sequence.set_cont_values" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_cont_values</code><span class="sig-paren">(</span><em class="sig-param">values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/sequence.html#Sequence.set_cont_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.sequence.Sequence.set_cont_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the continuous values for the sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of values.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a>) – A list of values.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="analyses.helpers.sequence.Sequence.set_qualarr">
-<code class="descname">set_qualarr</code><span class="sig-paren">(</span><em>qual</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/sequence.html#Sequence.set_qualarr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.sequence.Sequence.set_qualarr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_qualarr</code><span class="sig-paren">(</span><em class="sig-param">qual</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/sequence.html#Sequence.set_qualarr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.sequence.Sequence.set_qualarr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the qualarr attribute.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>qual</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>) – A list of code point integers.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>qual</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – A list of code point integers.</p>
+</dd>
+</dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>An offset of 33 is assumed.</li>
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>An offset of 33 is assumed.</p></li>
 </ul>
 </div>
-<div class="admonition-todo admonition" id="index-1">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>Should this reset both or neither?</li>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>Should this reset both or neither?</p></li>
 </ul>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="analyses.helpers.sequence.Sequence.set_qualstr">
-<code class="descname">set_qualstr</code><span class="sig-paren">(</span><em>qual</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/sequence.html#Sequence.set_qualstr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.sequence.Sequence.set_qualstr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_qualstr</code><span class="sig-paren">(</span><em class="sig-param">qual</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/helpers/sequence.html#Sequence.set_qualstr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.helpers.sequence.Sequence.set_qualstr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the qualstr attribute.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>qual</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – A new string to use for qualstr.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>qual</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – A new string to use for qualstr.</p>
+</dd>
+</dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>An offset of 33 is assumed.</li>
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>An offset of 33 is assumed.</p></li>
 </ul>
 </div>
-<div class="admonition-todo admonition" id="index-2">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>Should this reset both or neither?</li>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>Should this reset both or neither?</p></li>
 </ul>
 </div>
 </dd></dl>
@@ -381,13 +389,13 @@ can be any type of alphabet.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -403,12 +411,12 @@ can be any type of alphabet.</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 2.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, BiotaPhy Team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

@@ -13,9 +13,10 @@ import dendropy
 import numpy as np
 import pytest
 
+from lmpy import TreeWrapper
+
 from analyses.ancestral_state import anc_dp
 import analyses.helpers.data_readers as data_readers
-from analyses.lm_objects.tree import TreeWrapper
 
 
 # .............................................................................
@@ -171,7 +172,7 @@ class Test_calculate_continuous_ancestral_states(object):
                     results.append(np.array(node_result, dtype=float))
 
         # Look for all results (only maximum likelihood)
-        for row in anc_mtx.data[:, :, 0]:
+        for row in anc_mtx[:, :, 0]:
             found = False
             for i in range(len(results)):
                 # Allow for some wiggle room with decimal precision
@@ -345,11 +346,11 @@ class Test_ancestral_distribution(object):
         print(std_err_results)
 
         # Look for all results (ml and std err results should match rows)
-        for row_idx in range(anc_mtx.data.shape[0]):
+        for row_idx in range(anc_mtx.shape[0]):
             found = False
             # Get rows from data
-            ml_row = anc_mtx.data[row_idx, :, 0]
-            std_err_row = anc_mtx.data[row_idx, :, 1]
+            ml_row = anc_mtx[row_idx, :, 0]
+            std_err_row = anc_mtx[row_idx, :, 1]
 
             for i in range(len(ml_results)):
                 print(ml_results[i])

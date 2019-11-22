@@ -1,30 +1,22 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>analyses.phylo_beta_diversity.phylo_beta_diversity &#8212; BiotaPhy Analyses 1.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>analyses.phylo_beta_diversity.phylo_beta_diversity &#8212; BiotaPhy Analyses 2.0.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -34,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">BiotaPhy Analyses 2.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -55,8 +47,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span>  <span class="c1"># new dependency.</span>
 <span class="kn">import</span> <span class="nn">dendropy</span>
-<span class="kn">from</span> <span class="nn">analyses.lm_objects.matrix</span> <span class="k">import</span> <span class="n">Matrix</span>
-<span class="kn">from</span> <span class="nn">analyses.lm_objects.tree</span> <span class="k">import</span> <span class="n">TreeWrapper</span>
+
+<span class="kn">from</span> <span class="nn">lmpy</span> <span class="k">import</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">TreeWrapper</span>
 
 
 <span class="c1"># .............................................................................</span>
@@ -84,7 +76,7 @@
     <span class="c1"># This loop will calculate the PD value for each sample in &#39;pam&#39;.</span>
     <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsamp</span><span class="p">):</span>
         <span class="c1"># Pull out the data for current sample.</span>
-        <span class="n">my_samp</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">sample</span><span class="p">]</span>
+        <span class="n">my_samp</span> <span class="o">=</span> <span class="n">pam</span><span class="p">[</span><span class="n">sample</span><span class="p">]</span>
 
         <span class="c1"># Pull out which spp are present &amp; which are absent from the sample.</span>
         <span class="c1"># yields lists of strings --&gt; spp names.</span>
@@ -137,9 +129,9 @@
 <span class="sd">            min_not_shared:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Convert pam to float type for later calculations.</span>
-    <span class="n">pam</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">pam</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="c1"># Create matrix of how many spp are shared in each pairwise combo.</span>
-    <span class="n">shared_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">pam</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">pam</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+    <span class="n">shared_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">pam</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">pam</span><span class="p">))</span>
 
     <span class="c1"># Pull out diagonal of shared array.</span>
     <span class="n">my_diag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">shared_array</span><span class="p">)</span>
@@ -199,8 +191,8 @@
     <span class="c1"># 1 == spp present in at least 1 sample; 0 == spp absent from both samples.</span>
     <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">combin</span><span class="p">)):</span>
         <span class="c1"># Assign each site&#39;s data to new variable for convenience.</span>
-        <span class="n">site0</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">combin</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="n">site1</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">combin</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">site0</span> <span class="o">=</span> <span class="n">pam</span><span class="p">[</span><span class="n">combin</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">site1</span> <span class="o">=</span> <span class="n">pam</span><span class="p">[</span><span class="n">combin</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
 
         <span class="c1"># Is each spp present in at least 1 sample.</span>
         <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">site0</span><span class="p">)):</span>
@@ -222,11 +214,11 @@
     <span class="c1"># I.e. treats each sample separately.</span>
     <span class="n">sum_pd_pair</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">combin</span><span class="p">)):</span>
-        <span class="n">tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">combin</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">combin</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="p">[</span><span class="n">combin</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">pd</span><span class="p">[</span><span class="n">combin</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">sum_pd_pair</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
 
     <span class="c1"># PD of all communities combined.</span>
-    <span class="n">com_tot_multi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pam</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">com_tot_multi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pam</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># Convert to presence/ absence (i.e. 1,0).</span>
     <span class="n">com_tot_multi</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">com_tot_multi</span><span class="p">]</span>
     <span class="c1"># Calculate the PD.</span>
@@ -236,7 +228,7 @@
 
     <span class="c1"># Contribution of PD that is not shared beteen two sites:</span>
     <span class="c1"># pull out just PD values.</span>
-    <span class="n">pd_sites</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">get_row_headers</span><span class="p">()),</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">pd_sites</span> <span class="o">=</span> <span class="n">pd</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">get_row_headers</span><span class="p">()),</span> <span class="mi">0</span><span class="p">]</span>
     <span class="c1"># create list of all pairwise combinations.</span>
     <span class="n">pd_combos</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">pd_sites</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 
@@ -250,7 +242,7 @@
         <span class="n">site2</span> <span class="o">=</span> <span class="n">pd_combos</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># PD site 2</span>
 
         <span class="c1"># Pull out the PD of the 2 sites combined.</span>
-        <span class="n">pdpair</span> <span class="o">=</span> <span class="n">pd_tot_pair</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">pdpair</span> <span class="o">=</span> <span class="n">pd_tot_pair</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="c1"># Pull out the sum of the separate PD values.</span>
         <span class="n">sum_pair</span> <span class="o">=</span> <span class="n">sum_pd_pair</span><span class="p">[</span><span class="n">pair</span><span class="p">]</span>
 
@@ -339,7 +331,7 @@
         <span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="n">pam</span><span class="o">.</span><span class="n">get_row_headers</span><span class="p">()</span>  <span class="c1"># Column headers</span>
     <span class="p">}</span>
 
-    <span class="n">num_sites</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get the number of sites in the PAM</span>
+    <span class="n">num_sites</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get the number of sites in the PAM</span>
 
     <span class="c1"># Note: For ease of development, use these numpy arrays for the</span>
     <span class="c1">#    computations.  They will be wrapped into a Matrix object when they are</span>
@@ -357,9 +349,9 @@
     <span class="n">core_calc</span> <span class="o">=</span> <span class="n">core_PD_calc</span><span class="p">(</span><span class="n">pam</span><span class="p">,</span> <span class="n">tree</span><span class="p">)</span>  <span class="c1"># Matrix object.</span>
 
     <span class="c1"># This loop will populate arrays with all beta diversity metrics.</span>
-    <span class="k">for</span> <span class="n">my_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">core_calc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">my_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">core_calc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
         <span class="c1"># Pull out the phylogentic core numeric values.</span>
-        <span class="n">my_dat</span> <span class="o">=</span> <span class="n">core_calc</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">my_row</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">my_dat</span> <span class="o">=</span> <span class="n">core_calc</span><span class="p">[</span><span class="n">my_row</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
         <span class="c1"># Get index values for placing into output arrays.</span>
         <span class="n">my_dim</span> <span class="o">=</span> <span class="n">core_calc</span><span class="o">.</span><span class="n">get_row_headers</span><span class="p">()[</span><span class="n">my_row</span><span class="p">]</span>
 
@@ -453,7 +445,7 @@
         <span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="n">pam</span><span class="o">.</span><span class="n">get_row_headers</span><span class="p">()</span>  <span class="c1"># Column headers</span>
     <span class="p">}</span>
 
-    <span class="n">num_sites</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get the number of sites in the PAM</span>
+    <span class="n">num_sites</span> <span class="o">=</span> <span class="n">pam</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get the number of sites in the PAM</span>
 
     <span class="c1"># Note: For ease of development, use these numpy arrays for the</span>
     <span class="c1">#    computations.  They will be wrapped into a Matrix object when they are</span>
@@ -469,9 +461,9 @@
     <span class="n">core_calc</span> <span class="o">=</span> <span class="n">core_PD_calc</span><span class="p">(</span><span class="n">pam</span><span class="p">,</span> <span class="n">tree</span><span class="p">)</span>
 
     <span class="c1"># This loop will populate arrays with beta diversity metrics.</span>
-    <span class="k">for</span> <span class="n">my_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">core_calc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">my_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">core_calc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
 
-        <span class="n">my_dat</span> <span class="o">=</span> <span class="n">core_calc</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">my_row</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">my_dat</span> <span class="o">=</span> <span class="n">core_calc</span><span class="p">[</span><span class="n">my_row</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
         <span class="n">my_dim</span> <span class="o">=</span> <span class="n">core_calc</span><span class="o">.</span><span class="n">get_row_headers</span><span class="p">()[</span><span class="n">my_row</span><span class="p">]</span>
 
         <span class="n">phylo_beta_sim_data</span><span class="p">[</span><span class="n">my_dim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">my_dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
@@ -533,13 +525,13 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -555,13 +547,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">BiotaPhy Analyses 2.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, BiotaPhy Team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

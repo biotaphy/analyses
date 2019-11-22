@@ -6,8 +6,7 @@ import sys
 import numpy as np
 import scipy.linalg as la
 
-from analyses.lm_objects.matrix import Matrix
-from analyses.lm_objects.tree import TreeWrapper
+from lmpy import Matrix, TreeWrapper
 
 
 # .............................................................................
@@ -113,12 +112,12 @@ def calculate_continuous_ancestral_states(tree, char_mtx, sum_to_one=False,
     char_mtx = char_mtx.slice(keep_rows)
 
     # Standardize character matrix if requested
-    tip_count, num_vars = char_mtx.data.shape
+    tip_count, num_vars = char_mtx.shape
     if sum_to_one:
         for i in range(tip_count):
-            sc = float(1.0) / np.sum(char_mtx.data[i])
+            sc = float(1.0) / np.sum(char_mtx[i])
             for j in range(num_vars):
-                char_mtx.data[i, j] *= sc
+                char_mtx[i, j] *= sc
 
     # Initialize data matrix
     num_nodes = len(tree.nodes())
@@ -147,7 +146,7 @@ def calculate_continuous_ancestral_states(tree, char_mtx, sum_to_one=False,
             # Tip
             node_index_lookup[label] = tip_i
             row_headers.append(label)
-            data[tip_i, :, 0] = char_mtx.data[tip_lookup[label]]
+            data[tip_i, :, 0] = char_mtx[tip_lookup[label]]
             tip_i += 1
         else:
             node_index_lookup[label] = node_i

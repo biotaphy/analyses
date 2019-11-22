@@ -8,8 +8,8 @@ with open('LICENSE') as f:
     license = f.read()
 
 setup(
-    name='ancestral_reconstruction',
-    version='1.0.0',
+    name='biotaphy_analyses',
+    version='2.0.0',
     description='Biotaphy package for various computations',
     long_description=readme,
     author='Biotaphy Team',

@@ -1,30 +1,22 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>analyses.phylo_beta_diversity package &#8212; BiotaPhy Analyses 1.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>analyses.phylo_beta_diversity package &#8212; BiotaPhy Analyses 2.0.0 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -34,7 +26,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 2.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,220 +44,196 @@
 <span id="analyses-phylo-beta-diversity-phylo-beta-diversity-module"></span><h2>analyses.phylo_beta_diversity.phylo_beta_diversity module<a class="headerlink" href="#module-analyses.phylo_beta_diversity.phylo_beta_diversity" title="Permalink to this headline">¶</a></h2>
 <p>Module containing code for calculating phylogenetic beta diversity</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li><dl class="first docutils">
-<dt>Numpy and Scipy may have the methods needed for these computations.  Feel</dt>
-<dd>free to take advantage of those to libraries as they are already
-dependencies.</dd>
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Numpy and Scipy may have the methods needed for these computations.  Feel</dt><dd><p>free to take advantage of those to libraries as they are already
+dependencies.</p>
+</dd>
 </dl>
 </li>
 </ul>
 </div>
 <dl class="function">
 <dt id="analyses.phylo_beta_diversity.phylo_beta_diversity.calculate_phylo_beta_diversity_jaccard">
-<code class="descclassname">analyses.phylo_beta_diversity.phylo_beta_diversity.</code><code class="descname">calculate_phylo_beta_diversity_jaccard</code><span class="sig-paren">(</span><em>pam</em>, <em>tree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/phylo_beta_diversity/phylo_beta_diversity.html#calculate_phylo_beta_diversity_jaccard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.phylo_beta_diversity.phylo_beta_diversity.calculate_phylo_beta_diversity_jaccard" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">analyses.phylo_beta_diversity.phylo_beta_diversity.</code><code class="sig-name descname">calculate_phylo_beta_diversity_jaccard</code><span class="sig-paren">(</span><em class="sig-param">pam</em>, <em class="sig-param">tree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/phylo_beta_diversity/phylo_beta_diversity.html#calculate_phylo_beta_diversity_jaccard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.phylo_beta_diversity.phylo_beta_diversity.calculate_phylo_beta_diversity_jaccard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates phylogenetic beta diversity for the jaccard index family.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pam</strong> (<code class="xref py py-obj docutils literal"><span class="pre">Matrix</span></code>) – A Lifemapper Matrix object with presence absence
-values (site rows by species columns).</li>
-<li><strong>tree</strong> (<code class="xref py py-obj docutils literal"><span class="pre">TreeWrapper</span></code>) – A TreeWrapper object for a wrapped Dendropy
-phylogenetic tree.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pam</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix</span></code>) – A Lifemapper Matrix object with presence absence
+values (site rows by species columns).</p></li>
+<li><p><strong>tree</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeWrapper</span></code>) – A TreeWrapper object for a wrapped Dendropy
+phylogenetic tree.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><dl class="docutils">
-<dt>Phylogenetic beta diversity matrics (species by species)</dt>
-<dd><ul class="first last simple">
-<li>beta_jtu: ADD DESCRIPTION</li>
-<li>phylo_beta_jtu: ADD DESCRIPTION</li>
-<li>beta_jne: ADD DESCRIPTION</li>
-<li>phylo_beta_jne: ADD DESCRIPTION</li>
-<li>beta_jac: ADD DESCRIPTION</li>
-<li>phylo_beta_jac: ADD DESCRIPTION</li>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Phylogenetic beta diversity matrics (species by species)</dt><dd><ul class="simple">
+<li><p>beta_jtu: ADD DESCRIPTION</p></li>
+<li><p>phylo_beta_jtu: ADD DESCRIPTION</p></li>
+<li><p>beta_jne: ADD DESCRIPTION</p></li>
+<li><p>phylo_beta_jne: ADD DESCRIPTION</p></li>
+<li><p>beta_jac: ADD DESCRIPTION</p></li>
+<li><p>phylo_beta_jac: ADD DESCRIPTION</p></li>
 </ul>
 </dd>
 </dl>
 </p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li><dl class="first docutils">
-<dt>It looks like the scipy.spatial.distance.jaccard method may be useful</dt>
-<dd>here.</dd>
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>It looks like the scipy.spatial.distance.jaccard method may be useful</dt><dd><p>here.</p>
+</dd>
 </dl>
 </li>
 </ul>
 </div>
-<div class="admonition-todo admonition" id="index-0">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>Fill in method documentation</li>
-<li>Fill in method</li>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>Fill in method documentation</p></li>
+<li><p>Fill in method</p></li>
 </ul>
 </div>
 </dd></dl>
 
 <dl class="function">
 <dt id="analyses.phylo_beta_diversity.phylo_beta_diversity.calculate_phylo_beta_diversity_sorensen">
-<code class="descclassname">analyses.phylo_beta_diversity.phylo_beta_diversity.</code><code class="descname">calculate_phylo_beta_diversity_sorensen</code><span class="sig-paren">(</span><em>pam</em>, <em>tree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/phylo_beta_diversity/phylo_beta_diversity.html#calculate_phylo_beta_diversity_sorensen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.phylo_beta_diversity.phylo_beta_diversity.calculate_phylo_beta_diversity_sorensen" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">analyses.phylo_beta_diversity.phylo_beta_diversity.</code><code class="sig-name descname">calculate_phylo_beta_diversity_sorensen</code><span class="sig-paren">(</span><em class="sig-param">pam</em>, <em class="sig-param">tree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/phylo_beta_diversity/phylo_beta_diversity.html#calculate_phylo_beta_diversity_sorensen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.phylo_beta_diversity.phylo_beta_diversity.calculate_phylo_beta_diversity_sorensen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates phylogenetic beta diversity for the sorensen index family.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pam</strong> (<code class="xref py py-obj docutils literal"><span class="pre">Matrix</span></code>) – A Lifemapper Matrix object with presence absence
-values.</li>
-<li><strong>tree</strong> (<code class="xref py py-obj docutils literal"><span class="pre">TreeWrapper</span></code>) – A TreeWrapper object for a wrapped Dendropy
-phylogenetic tree.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pam</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix</span></code>) – A Lifemapper Matrix object with presence absence
+values.</p></li>
+<li><p><strong>tree</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeWrapper</span></code>) – A TreeWrapper object for a wrapped Dendropy
+phylogenetic tree.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><dl class="docutils">
-<dt>Phylogenetic beta diversity matrics (species by species)</dt>
-<dd><ul class="first last simple">
-<li>beta_sim: ADD DESCRIPTION</li>
-<li>phylo_beta_sim: ADD DESCRIPTION</li>
-<li>beta_sne: ADD DESCRIPTION</li>
-<li>phylo_beta_sne: ADD DESCRIPTION</li>
-<li>beta_sor: ADD DESCRIPTION</li>
-<li>phylo_beta_sor: ADD DESCRIPTION</li>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Phylogenetic beta diversity matrics (species by species)</dt><dd><ul class="simple">
+<li><p>beta_sim: ADD DESCRIPTION</p></li>
+<li><p>phylo_beta_sim: ADD DESCRIPTION</p></li>
+<li><p>beta_sne: ADD DESCRIPTION</p></li>
+<li><p>phylo_beta_sne: ADD DESCRIPTION</p></li>
+<li><p>beta_sor: ADD DESCRIPTION</p></li>
+<li><p>phylo_beta_sor: ADD DESCRIPTION</p></li>
 </ul>
 </dd>
 </dl>
 </p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition-todo admonition" id="index-1">
-<p class="first admonition-title">Todo</p>
-<ul class="last simple">
-<li>Fill in method documentation</li>
-<li>Fill in method</li>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>Fill in method documentation</p></li>
+<li><p>Fill in method</p></li>
 </ul>
 </div>
 </dd></dl>
 
 <dl class="function">
 <dt id="analyses.phylo_beta_diversity.phylo_beta_diversity.core_Beta_calc">
-<code class="descclassname">analyses.phylo_beta_diversity.phylo_beta_diversity.</code><code class="descname">core_Beta_calc</code><span class="sig-paren">(</span><em>pam</em>, <em>tree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/phylo_beta_diversity/phylo_beta_diversity.html#core_Beta_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.phylo_beta_diversity.phylo_beta_diversity.core_Beta_calc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">analyses.phylo_beta_diversity.phylo_beta_diversity.</code><code class="sig-name descname">core_Beta_calc</code><span class="sig-paren">(</span><em class="sig-param">pam</em>, <em class="sig-param">tree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/phylo_beta_diversity/phylo_beta_diversity.html#core_Beta_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.phylo_beta_diversity.phylo_beta_diversity.core_Beta_calc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates an array of core metrics to asses beta diversity components.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>(</strong> (<a class="reference internal" href="analyses.lm_objects.html#module-analyses.lm_objects.tree" title="analyses.lm_objects.tree"><em>tree</em></a>) – obj:’Matrix’): A Lifemapper Matrix object with presence absence
-values.</li>
-<li><strong>(</strong> – obj:’TreeWrapper’): A TreeWrapper object for a wrapped Dendropy
-phylogenetic tree.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong> (<em>tree</em>) – obj:’Matrix’): A Lifemapper Matrix object with presence absence
+values.</p></li>
+<li><p><strong>(</strong> – obj:’TreeWrapper’): A TreeWrapper object for a wrapped Dendropy
+phylogenetic tree.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of arrays, see Details.</p>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>Details:</dt>
-<dd><p class="first">In general, the metrics returned represent different contributions
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of arrays, see Details.</p>
+</dd>
+</dl>
+<dl>
+<dt>Details:</dt><dd><p>In general, the metrics returned represent different contributions
 to beta diversity arising from how communities are combined together.
 Metrics:</p>
-<blockquote class="last">
-<div>shared_array: spp shared in each pairwise comm. combinations.
+<blockquote>
+<div><p>shared_array: spp shared in each pairwise comm. combinations.
 not_shared_array: spp. not shared btwn pairwise comm. combinations.
 sum_not_shared:
 max_not_shared:
-min_not_shared:</div></blockquote>
+min_not_shared:</p>
+</div></blockquote>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="analyses.phylo_beta_diversity.phylo_beta_diversity.core_PD_calc">
-<code class="descclassname">analyses.phylo_beta_diversity.phylo_beta_diversity.</code><code class="descname">core_PD_calc</code><span class="sig-paren">(</span><em>pam</em>, <em>tree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/phylo_beta_diversity/phylo_beta_diversity.html#core_PD_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.phylo_beta_diversity.phylo_beta_diversity.core_PD_calc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">analyses.phylo_beta_diversity.phylo_beta_diversity.</code><code class="sig-name descname">core_PD_calc</code><span class="sig-paren">(</span><em class="sig-param">pam</em>, <em class="sig-param">tree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/phylo_beta_diversity/phylo_beta_diversity.html#core_PD_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.phylo_beta_diversity.phylo_beta_diversity.core_PD_calc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates array of core metrics to asses components of beta diversity.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>(</strong> (<a class="reference internal" href="analyses.lm_objects.html#module-analyses.lm_objects.tree" title="analyses.lm_objects.tree"><em>tree</em></a>) – obj:’Matrix’): A Lifemapper Matrix object with presence absence
-values.</li>
-<li><strong>(</strong> – obj:’TreeWrapper’): A TreeWrapper object for a wrapped Dendropy
-phylogenetic tree.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong> (<em>tree</em>) – obj:’Matrix’): A Lifemapper Matrix object with presence absence
+values.</p></li>
+<li><p><strong>(</strong> – obj:’TreeWrapper’): A TreeWrapper object for a wrapped Dendropy
+phylogenetic tree.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Matrix object. Cols=core metrics; Rows=Pairwise comparisons.</p>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>Details:</dt>
-<dd><p class="first">In general, the metrics returned represent different contributions to
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix object. Cols=core metrics; Rows=Pairwise comparisons.</p>
+</dd>
+</dl>
+<dl>
+<dt>Details:</dt><dd><p>In general, the metrics returned represent different contributions to
 PD arising from how communities are combined together.
 Metrics:</p>
-<blockquote class="last">
-<div>min_not_shared: smallest dist. from ind. samples to their combo.
+<blockquote>
+<div><p>min_not_shared: smallest dist. from ind. samples to their combo.
 max_not_shared: largest dist. from ind. samples to their combo.
 sum_not_shared: total addition to PD from both comm.
-shared: combined contribution to PD that comm. make jointly.</div></blockquote>
+shared: combined contribution to PD that comm. make jointly.</p>
+</div></blockquote>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="analyses.phylo_beta_diversity.phylo_beta_diversity.get_species_index_lookup">
-<code class="descclassname">analyses.phylo_beta_diversity.phylo_beta_diversity.</code><code class="descname">get_species_index_lookup</code><span class="sig-paren">(</span><em>pam</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/phylo_beta_diversity/phylo_beta_diversity.html#get_species_index_lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.phylo_beta_diversity.phylo_beta_diversity.get_species_index_lookup" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">analyses.phylo_beta_diversity.phylo_beta_diversity.</code><code class="sig-name descname">get_species_index_lookup</code><span class="sig-paren">(</span><em class="sig-param">pam</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/phylo_beta_diversity/phylo_beta_diversity.html#get_species_index_lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.phylo_beta_diversity.phylo_beta_diversity.get_species_index_lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a lookup dictionary for species in a matrix</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pam</strong> (<code class="xref py py-obj docutils literal"><span class="pre">Matrix</span></code>) – A Lifemapper Matrix object with presence absence
-values.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dictionary of species keys with matrix index values.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pam</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix</span></code>) – A Lifemapper Matrix object with presence absence
+values.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary of species keys with matrix index values.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="analyses.phylo_beta_diversity.phylo_beta_diversity.pdnew">
-<code class="descclassname">analyses.phylo_beta_diversity.phylo_beta_diversity.</code><code class="descname">pdnew</code><span class="sig-paren">(</span><em>pam</em>, <em>tree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/phylo_beta_diversity/phylo_beta_diversity.html#pdnew"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.phylo_beta_diversity.phylo_beta_diversity.pdnew" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">analyses.phylo_beta_diversity.phylo_beta_diversity.</code><code class="sig-name descname">pdnew</code><span class="sig-paren">(</span><em class="sig-param">pam</em>, <em class="sig-param">tree</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/analyses/phylo_beta_diversity/phylo_beta_diversity.html#pdnew"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyses.phylo_beta_diversity.phylo_beta_diversity.pdnew" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a lookup dictionary for PD of sites in a matrix</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pam</strong> (<code class="xref py py-obj docutils literal"><span class="pre">Matrix</span></code>) – A Lifemapper Matrix object with presence absence
-values.</li>
-<li><strong>tree</strong> (<code class="xref py py-obj docutils literal"><span class="pre">TreeWrapper</span></code>) – A TreeWrapper object for a wrapped Dendropy
-phylogenetic tree.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pam</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix</span></code>) – A Lifemapper Matrix object with presence absence
+values.</p></li>
+<li><p><strong>tree</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeWrapper</span></code>) – A TreeWrapper object for a wrapped Dendropy
+phylogenetic tree.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Matrix object w/ PD values &amp; spp. rch for each community in sample.
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix object w/ PD values &amp; spp. rch for each community in sample.
 Col1 = PD; Col2 = SR; Rows = Indvidual samples from pam.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -281,13 +249,13 @@ Col1 = PD; Col2 = SR; Rows = Indvidual samples from pam.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -303,12 +271,12 @@ Col1 = PD; Col2 = SR; Rows = Indvidual samples from pam.</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 1.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">BiotaPhy Analyses 2.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, BiotaPhy Team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>
